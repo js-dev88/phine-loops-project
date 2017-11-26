@@ -19,7 +19,7 @@
               <finalName>projetHaddadSaussier</finalName>
               <transformers>
                 <transformer>
-                  <mainClass>org.bitbucket.jsdev88.phine_loops.main.Test</mainClass>
+                  <mainClass>org.bitbucket.jsdev88.phine_loops.main.Main</mainClass>
                 </transformer>
               </transformers>
             </configuration>
