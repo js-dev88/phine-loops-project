@@ -38,6 +38,11 @@
             </goals>
             <configuration>
               <finalName>projetHaddadSaussier</finalName> 
+                            <transformers>
+                <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
+                  <mainClass>org.bitbucket.jsdev88.phine_loops.main.Test</mainClass>
+                </transformer>
+              </transformers>
             </configuration>
           </execution>
         </executions>
