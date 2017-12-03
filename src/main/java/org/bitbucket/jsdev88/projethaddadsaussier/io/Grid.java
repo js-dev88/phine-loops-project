@@ -1,4 +1,4 @@
-package org.bitbucket.jsdev88.projethaddadsaussier.main;
+package org.bitbucket.jsdev88.projethaddadsaussier.io;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -6,16 +6,19 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import org.bitbucket.jsdev88.projethaddadsaussier.utils.Pieces;
+
 
 public class Grid {
 	private Integer width;
 	private Integer height;
 	private Integer nbcc;
-	private ArrayList<Pieces> pieces;
+	private Pieces[][] pieces;
 	
 	public Grid(Integer width, Integer height){
 		this.width = width;
 		this.height = height;
+		pieces = new Pieces[width][height];
 	}
 	
 	//Consctructor with specified number of connected component 
@@ -23,6 +26,7 @@ public class Grid {
 		this.width = width;
 		this.height = height;
 		this.nbcc = nbcc;
+		pieces = new Pieces[width][height];
 	}
 	
 	
@@ -32,7 +36,6 @@ public class Grid {
 	 * @return a File that contains a grid filled with pieces (a level)
 	 */
 	private void generateLevel(String fileName) throws IOException{
-		pieces = new ArrayList<>();
 		FileOutputStream file = null;
 		
 		//Generate a solution

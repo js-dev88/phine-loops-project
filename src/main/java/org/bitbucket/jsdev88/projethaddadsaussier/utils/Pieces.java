@@ -1,4 +1,4 @@
-package org.bitbucket.jsdev88.projethaddadsaussier.main;
+package org.bitbucket.jsdev88.projethaddadsaussier.utils;
 
 public interface Pieces {
 	static Integer posX = 0;
