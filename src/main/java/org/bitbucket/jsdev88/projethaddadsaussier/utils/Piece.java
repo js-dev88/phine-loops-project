@@ -1,10 +1,12 @@
 package org.bitbucket.jsdev88.projethaddadsaussier.utils;
 
+
 public class Piece {
 	private int posX;
 	private int posY;
 	private PieceType type;
 	private Orientation orientation;
+
 	
 	public Piece(int posX, int posY, PieceType type, Orientation orientation) {
 		this.posX = posX;
@@ -13,6 +15,8 @@ public class Piece {
 		this.orientation = orientation;
 	}
 	
+	
+
 	public Piece(int posX, int posY, int typeOrdinal, int orientationOrdinal) {
 		this.posX = posX;
 		this.posY = posY;
@@ -37,12 +41,16 @@ public class Piece {
 		return orientation;
 	}
 	
+	
 	/**
-	 * Turn the piece 90° on the right
+	 * Turn the piece 90° on the right and redefine the connectors's position
 	 */
 	public void turn(){
 		orientation = orientation.turn();
+	
 	}
+	
+	
 	
 	
 	
