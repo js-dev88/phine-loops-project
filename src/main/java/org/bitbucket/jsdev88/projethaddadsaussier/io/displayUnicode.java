@@ -2,6 +2,7 @@ package org.bitbucket.jsdev88.projethaddadsaussier.io;
 
 import java.util.EnumSet;
 import java.util.HashMap;
+import java.util.Map.Entry;
 
 import org.bitbucket.jsdev88.projethaddadsaussier.utils.Orientation;
 import org.bitbucket.jsdev88.projethaddadsaussier.utils.PieceType;
@@ -42,30 +43,20 @@ public class displayUnicode {
 		EnumSet<Orientation> orientationSet = EnumSet.allOf(Orientation.class);
 		for(PieceType pt : pieceTypeSet){
 			unicodeTable.put(pt, new HashMap<Orientation,String>());
-			for(Orientation o : orientationSet){
-				unicodeTable.get(pt).put(o, null);
-			}
 		}
+		
 		unicodeTable.get(PieceType.VOID).put(Orientation.NORTH," ");
-		unicodeTable.get(PieceType.VOID).put(Orientation.EAST," ");
-		unicodeTable.get(PieceType.VOID).put(Orientation.SOUTH," ");
-		unicodeTable.get(PieceType.VOID).put(Orientation.WEST," ");
 		unicodeTable.get(PieceType.ONECONN).put(Orientation.NORTH,"\u2579");
 		unicodeTable.get(PieceType.ONECONN).put(Orientation.EAST,"\u257A");
 		unicodeTable.get(PieceType.ONECONN).put(Orientation.SOUTH,"\u257B");
 		unicodeTable.get(PieceType.ONECONN).put(Orientation.WEST,"\u2578");
 		unicodeTable.get(PieceType.BAR).put(Orientation.NORTH,"\u2502");
 		unicodeTable.get(PieceType.BAR).put(Orientation.EAST,"\u257A");
-		unicodeTable.get(PieceType.BAR).put(Orientation.SOUTH,"\u2502");
-		unicodeTable.get(PieceType.BAR).put(Orientation.WEST,"\u2500");
 		unicodeTable.get(PieceType.TTYPE).put(Orientation.NORTH,"\u2534");
 		unicodeTable.get(PieceType.TTYPE).put(Orientation.EAST,"\u251C");
 		unicodeTable.get(PieceType.TTYPE).put(Orientation.SOUTH,"\u252C");
 		unicodeTable.get(PieceType.TTYPE).put(Orientation.WEST,"\u2524");
 		unicodeTable.get(PieceType.FOURCONN).put(Orientation.NORTH,"\u253C");
-		unicodeTable.get(PieceType.FOURCONN).put(Orientation.EAST,"\u253C");
-		unicodeTable.get(PieceType.FOURCONN).put(Orientation.SOUTH,"\u253C");
-		unicodeTable.get(PieceType.FOURCONN).put(Orientation.WEST,"\u253C");
 		unicodeTable.get(PieceType.LTYPE).put(Orientation.NORTH,"\u2514");
 		unicodeTable.get(PieceType.LTYPE).put(Orientation.EAST,"\u250C");
 		unicodeTable.get(PieceType.LTYPE).put(Orientation.SOUTH,"\u2510");
@@ -89,11 +80,10 @@ public class displayUnicode {
 	 */
 	public static void main(String[] args) {
 		EnumSet<PieceType> pieceTypeSet = EnumSet.allOf(PieceType.class);
-		EnumSet<Orientation> orientationSet = EnumSet.allOf(Orientation.class);
 		displayUnicode.buildTable();
-		for(PieceType pt : pieceTypeSet){
-			for(Orientation o : orientationSet){
-				System.out.println(unicodeTable.get(pt).get(o));
+		for(Entry<PieceType, HashMap<Orientation, String>> pt : unicodeTable.entrySet()){
+			for(Entry<Orientation, String> o : pt.getValue().entrySet()){
+				System.out.println(o.getValue());
 			}
 		}
 		System.out.println(displayUnicode.getUnicodeOfPiece(PieceType.ONECONN,Orientation.NORTH));
