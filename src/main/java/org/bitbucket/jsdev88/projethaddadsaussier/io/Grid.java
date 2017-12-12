@@ -6,19 +6,19 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 
-import org.bitbucket.jsdev88.projethaddadsaussier.utils.Pieces;
+import org.bitbucket.jsdev88.projethaddadsaussier.utils.Piece;
 
 
 public class Grid {
 	private Integer width;
 	private Integer height;
 	private Integer nbcc;
-	private Pieces[][] pieces;
+	private Piece[][] pieces;
 	
 	public Grid(Integer width, Integer height){
 		this.width = width;
 		this.height = height;
-		pieces = new Pieces[width][height];
+		pieces = new Piece[width][height];
 	}
 	
 	//Consctructor with specified number of connected component 
@@ -26,7 +26,7 @@ public class Grid {
 		this.width = width;
 		this.height = height;
 		this.nbcc = nbcc;
-		pieces = new Pieces[width][height];
+		pieces = new Piece[width][height];
 	}
 	
 	
