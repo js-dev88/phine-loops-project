@@ -1,30 +1,22 @@
 package org.bitbucket.jsdev88.projethaddadsaussier.io;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.util.ArrayList;
-
-import org.bitbucket.jsdev88.projethaddadsaussier.utils.Orientation;
 import org.bitbucket.jsdev88.projethaddadsaussier.utils.Piece;
-import org.bitbucket.jsdev88.projethaddadsaussier.utils.PieceType;
 
 
 public class Grid {
-	private Integer width;
-	private Integer height;
-	private Integer nbcc;
+	private int width;
+	private int height;
+	private int nbcc;
 	private Piece[][] pieces;
 	
-	public Grid(Integer width, Integer height){
+	public Grid(int width, int height){
 		this.width = width;
 		this.height = height;
 		pieces = new Piece[width][height];
 	}
 	
 	//Consctructor with specified number of connected component 
-	public Grid(Integer width, Integer height, Integer nbcc){
+	public Grid(int width, int height, int nbcc){
 		this.width = width;
 		this.height = height;
 		this.nbcc = nbcc;
@@ -35,7 +27,7 @@ public class Grid {
 		return width;
 	}
 
-	public void setWidth(Integer width) {
+	public void setWidth(int width) {
 		this.width = width;
 	}
 
@@ -43,7 +35,7 @@ public class Grid {
 		return height;
 	}
 
-	public void setHeight(Integer height) {
+	public void setHeight(int height) {
 		this.height = height;
 	}
 
@@ -51,7 +43,7 @@ public class Grid {
 		return nbcc;
 	}
 
-	public void setNbcc(Integer nbcc) {
+	public void setNbcc(int nbcc) {
 		this.nbcc = nbcc;
 	}
 
@@ -67,7 +59,7 @@ public class Grid {
 	public String toString() {
 		String s ="";
 		for(int i=0; i< height; i++){
-			for(int j=0; j< width; i++){
+			for(int j=0; j< width; j++){
 				s+= displayUnicode.getUnicodeOfPiece(pieces[i][j].getType(),pieces[i][j].getOrientation());
 			}
 			s+= "\n";
@@ -75,8 +67,6 @@ public class Grid {
 		return s;
 	}
 	
-	
-
 	
 	
 }

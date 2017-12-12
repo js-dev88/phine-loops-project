@@ -45,7 +45,7 @@ public class Main {
 		}
 
 		try {
-			if (cmd.hasOption("g")) {
+			if (cmd.hasOption("g")) { //call the generator
 				System.out.println("Running phineloop generator.");
 				String[] gridformat = cmd.getOptionValue("g").split("x");
 				width = Integer.parseInt(gridformat[0]);
@@ -54,7 +54,7 @@ public class Main {
 					throw new ParseException("Missing mandatory --output argument.");
 				outputFile = cmd.getOptionValue("o");
 
-				if (cmd.hasOption("x")) {
+				if (cmd.hasOption("x")) {//call the nbcc option
 					try {
 						String nbcc = cmd.getOptionValue("x");
 						Generator.generateLevel(outputFile, new Grid(width, height,Integer.valueOf(nbcc)));

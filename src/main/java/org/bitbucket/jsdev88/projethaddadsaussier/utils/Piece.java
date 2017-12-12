@@ -37,6 +37,30 @@ public class Piece {
 		return type;
 	}
 
+	public void setPosX(int posX) {
+		this.posX = posX;
+	}
+
+
+
+	public void setPosY(int posY) {
+		this.posY = posY;
+	}
+
+
+
+	public void setType(PieceType type) {
+		this.type = type;
+	}
+
+
+
+	public void setOrientation(int ordinal) {
+		this.orientation = Orientation.getValueFromOrdinal(ordinal);
+	}
+
+
+
 	public Orientation getOrientation() {
 		return orientation;
 	}
