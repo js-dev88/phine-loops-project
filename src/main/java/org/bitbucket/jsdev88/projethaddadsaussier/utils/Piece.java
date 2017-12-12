@@ -1,20 +1,21 @@
 package org.bitbucket.jsdev88.projethaddadsaussier.utils;
 
+import java.util.ArrayList;
 
 public class Piece {
 	private int posX;
 	private int posY;
 	private PieceType type;
 	private Orientation orientation;
-
+	private ArrayList<Connector> listConnector;
 	
 	public Piece(int posX, int posY, PieceType type, Orientation orientation) {
 		this.posX = posX;
 		this.posY = posY;
 		this.type = type;
 		this.orientation = orientation;
+		this.listConnector = type.createConnectors(posX, posY, orientation, new ArrayList<>());
 	}
-	
 	
 
 	public Piece(int posX, int posY, int typeOrdinal, int orientationOrdinal) {
@@ -40,17 +41,16 @@ public class Piece {
 	public Orientation getOrientation() {
 		return orientation;
 	}
-	
-	
+
+	public ArrayList<Connector> getListConnector() {
+		return listConnector;
+	}
 	/**
-	 * Turn the piece 90° on the right and redefine the connectors's position
+	 * Turn the piece 90° on the right
 	 */
 	public void turn(){
 		orientation = orientation.turn();
-	
 	}
-	
-	
 	
 	
 	
