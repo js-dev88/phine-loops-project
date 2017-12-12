@@ -19,7 +19,7 @@
               <finalName>projetHaddadSaussier</finalName>
               <transformers>
                 <transformer>
-                  <mainClass>org.bitbucket.jsdev88.phine_loops.main.Main</mainClass>
+                  <mainClass>org.bitbucket.jsdev88.projethaddadsaussier.main.Main</mainClass>
                 </transformer>
               </transformers>
             </configuration>
@@ -28,6 +28,20 @@
       </plugin>
     </plugins>
   </build>
+  <dependencies>
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <version>4.12</version>
+      <scope>test</scope>
+      <exclusions>
+        <exclusion>
+          <artifactId>hamcrest-core</artifactId>
+          <groupId>org.hamcrest</groupId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+  </dependencies>
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <maven.compiler.source>1.8</maven.compiler.source>

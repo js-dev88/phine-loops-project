@@ -6,7 +6,9 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import org.bitbucket.jsdev88.projethaddadsaussier.utils.Orientation;
 import org.bitbucket.jsdev88.projethaddadsaussier.utils.Piece;
+import org.bitbucket.jsdev88.projethaddadsaussier.utils.PieceType;
 
 
 public class Grid {
@@ -28,58 +30,53 @@ public class Grid {
 		this.nbcc = nbcc;
 		pieces = new Piece[width][height];
 	}
-	
-	
-	/**
-	 * @param output file name 
-	 * @throws IOException - if an I/O error occurs.
-	 * @return a File that contains a grid filled with pieces (a level)
-	 */
-	private void generateLevel(String fileName) throws IOException{
-		FileOutputStream file = null;
-		
-		//Generate a solution
-		generateSolution();
-		//Then we have to mix the solution to generate a level that is solvable 
-		
-		//Then we write the level on a file
-		try {
-			file = new FileOutputStream(new File(fileName));
-		} catch (FileNotFoundException e) {
-			/* if the file exists but is a directory rather than a regular file, 
-			   does not exist but cannot be created, 
-			   or cannot be opened for any other reason */
-			e.printStackTrace();
-		}
-		
-		file.write(this.width);
-		file.write(this.height);
-	
-		
-		file.close();
-			
+
+	public Integer getWidth() {
+		return width;
+	}
+
+	public void setWidth(Integer width) {
+		this.width = width;
+	}
+
+	public Integer getHeight() {
+		return height;
+	}
+
+	public void setHeight(Integer height) {
+		this.height = height;
+	}
+
+	public Integer getNbcc() {
+		return nbcc;
+	}
+
+	public void setNbcc(Integer nbcc) {
+		this.nbcc = nbcc;
+	}
+
+	public Piece[][] getPieces() {
+		return pieces;
+	}
+
+	public void setPieces(Piece[][] pieces) {
+		this.pieces = pieces;
 	}
 	
-	private void generateSolution(){
-		if(nbcc != null){
-			//Generate a solution with a specific number of connected component
-			for(int i = 0 ; i < this.width ; i++){
-				for(int j = 0 ; j < this.height ; j++){
-					//For each case, we choose a random piece (could be no piece)
-					//We have to look to the position of the neighboor pieces
-				}
+	@Override
+	public String toString() {
+		String s ="";
+		for(int i=0; i< height; i++){
+			for(int j=0; j< width; i++){
+				s+= displayUnicode.getUnicodeOfPiece(pieces[i][j].getType(),pieces[i][j].getOrientation());
 			}
+			s+= "\n";
 		}
-		else{
-			//Genrate a solution with a random number of connected component
-			for(int i = 0 ; i < this.width ; i++){
-				for(int j = 0 ; j < this.height ; j++){
-					//For each case, we choose a random piece (could be no piece)
-					//We have to look to the position of the neighboor pieces
-				}
-			}
-		}
+		return s;
 	}
+	
+	
+
 	
 	
 }
