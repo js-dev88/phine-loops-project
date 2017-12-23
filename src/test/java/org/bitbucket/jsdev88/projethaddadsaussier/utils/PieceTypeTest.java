@@ -11,5 +11,11 @@ public class PieceTypeTest {
 		Piece p = new Piece(0,0,1,0);
 		assertTrue(p.getType().getNbConnectors() == 1);
 	}
-
+	
+	@Test
+	public void getOrientationTest() {
+		Piece p = new Piece(0,0,PieceType.VOID,Orientation.EAST);
+		assertTrue(p.getType().getOrientation(Orientation.EAST) == Orientation.NORTH);
+	}
+	
 }

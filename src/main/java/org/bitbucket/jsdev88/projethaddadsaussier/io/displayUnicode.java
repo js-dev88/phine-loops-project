@@ -51,7 +51,7 @@ public class displayUnicode {
 		unicodeTable.get(PieceType.ONECONN).put(Orientation.SOUTH,"\u257B");
 		unicodeTable.get(PieceType.ONECONN).put(Orientation.WEST,"\u2578");
 		unicodeTable.get(PieceType.BAR).put(Orientation.NORTH,"\u2502");
-		unicodeTable.get(PieceType.BAR).put(Orientation.EAST,"\u257A");
+		unicodeTable.get(PieceType.BAR).put(Orientation.EAST,"\u2500");
 		unicodeTable.get(PieceType.TTYPE).put(Orientation.NORTH,"\u2534");
 		unicodeTable.get(PieceType.TTYPE).put(Orientation.EAST,"\u251C");
 		unicodeTable.get(PieceType.TTYPE).put(Orientation.SOUTH,"\u252C");
@@ -83,7 +83,7 @@ public class displayUnicode {
 		displayUnicode.buildTable();
 		for(Entry<PieceType, HashMap<Orientation, String>> pt : unicodeTable.entrySet()){
 			for(Entry<Orientation, String> o : pt.getValue().entrySet()){
-				System.out.println(o.getValue());
+				System.out.println("Piece : "+pt.getKey()+ " Orientation : "+o.getKey()+" Unicode : "+  o.getValue());
 			}
 		}
 		System.out.println(displayUnicode.getUnicodeOfPiece(PieceType.ONECONN,Orientation.NORTH));

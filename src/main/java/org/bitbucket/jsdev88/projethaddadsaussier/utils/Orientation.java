@@ -22,8 +22,8 @@ public enum Orientation {
 	  * @return the corresponding value
 	  */
 	 public static Orientation getValueFromOrdinal(Integer ordinal) throws IllegalArgumentException{
-		 if( ordinal < 0 || ordinal > 4){
-			 throw new IllegalArgumentException("Ordinal of Orientation is out of bound");
+		 if( ordinal < 0 || ordinal >= 4){
+			 throw new IllegalArgumentException("Ordinal of Orientation is out of bound : "+ordinal);
 		 }
 		 return values()[ordinal]; 
 

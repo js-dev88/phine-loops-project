@@ -1,18 +1,21 @@
 package org.bitbucket.jsdev88.projethaddadsaussier.utils;
 
+import java.util.LinkedList;
 
 public class Piece {
 	private int posX;
 	private int posY;
 	private PieceType type;
 	private Orientation orientation;
+	private LinkedList<Orientation> connectors;
 
 	
 	public Piece(int posX, int posY, PieceType type, Orientation orientation) {
 		this.posX = posX;
 		this.posY = posY;
 		this.type = type;
-		this.orientation = orientation;
+		this.orientation = type.getOrientation(orientation);
+		this.connectors = type.getConectorsList(orientation);
 	}
 	
 	
@@ -21,7 +24,8 @@ public class Piece {
 		this.posX = posX;
 		this.posY = posY;
 		this.type = PieceType.getValueFromOrdinal(typeOrdinal);
-		this.orientation = Orientation.getValueFromOrdinal(orientationOrdinal);
+		this.orientation = type.getOrientation(Orientation.getValueFromOrdinal(orientationOrdinal));
+		this.connectors = type.getConectorsList(Orientation.getValueFromOrdinal(orientationOrdinal));
 	}
 	
 	
@@ -56,7 +60,7 @@ public class Piece {
 
 
 	public void setOrientation(int ordinal) {
-		this.orientation = Orientation.getValueFromOrdinal(ordinal);
+		this.orientation = type.getOrientation(Orientation.getValueFromOrdinal(ordinal));
 	}
 
 
@@ -71,7 +75,7 @@ public class Piece {
 	 */
 	public void turn(){
 		orientation = orientation.turn();
-	
+		connectors = type.getConectorsList(orientation);
 	}
 	
 	

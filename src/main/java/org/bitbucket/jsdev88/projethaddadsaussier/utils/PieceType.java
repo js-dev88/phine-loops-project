@@ -1,5 +1,6 @@
 package org.bitbucket.jsdev88.projethaddadsaussier.utils;
 
+import java.util.LinkedList;
 
 /**
  * 
@@ -8,13 +9,95 @@ package org.bitbucket.jsdev88.projethaddadsaussier.utils;
  */
 public enum PieceType {
 	
-	VOID(0), ONECONN(1), BAR(2), TTYPE(3), FOURCONN(4), LTYPE(2);
+	VOID(0) {
+		@Override
+		public LinkedList<Orientation> getConectorsList(Orientation orientation) {
+			return this.getConnectors();
+		}
+
+		@Override
+		public Orientation getOrientation(Orientation orientation) {
+			return Orientation.NORTH;
+		}
+	}, ONECONN(1) {
+		@Override
+		public LinkedList<Orientation> getConectorsList(Orientation orientation) {
+			this.getConnectors().add(orientation);
+			return this.getConnectors();
+			
+		}
+
+		@Override
+		public Orientation getOrientation(Orientation orientation) {
+			return orientation;
+		}
+	}, BAR(2) {
+		@Override
+		public LinkedList<Orientation> getConectorsList(Orientation orientation) {
+			this.getConnectors().add(orientation);
+			this.getConnectors().add(Orientation.getValueFromOrdinal((orientation.ordinal()+2) % 4));	
+			return this.getConnectors();
+		}
+
+		@Override
+		public Orientation getOrientation(Orientation orientation) {
+			if(orientation == Orientation.SOUTH)
+				return Orientation.NORTH;
+			if(orientation == Orientation.WEST)
+				return Orientation.EAST;
+			return orientation;
+		}
+	}, TTYPE(3) {
+		@Override
+		public LinkedList<Orientation> getConectorsList(Orientation orientation) {
+			this.getConnectors().add(Orientation.getValueFromOrdinal((orientation.ordinal()+3) % 4));
+			this.getConnectors().add(orientation);
+			this.getConnectors().add(Orientation.getValueFromOrdinal((orientation.ordinal()+1) % 4));	
+			return this.getConnectors();
+			
+		}
+
+		@Override
+		public Orientation getOrientation(Orientation orientation) {
+			return orientation;
+		}
+	}, FOURCONN(4) {
+		@Override
+		public LinkedList<Orientation> getConectorsList(Orientation orientation) {
+			this.getConnectors().add(orientation);
+			this.getConnectors().add(Orientation.getValueFromOrdinal((orientation.ordinal()+1) % 4));
+			this.getConnectors().add(Orientation.getValueFromOrdinal((orientation.ordinal()+1) % 4));	
+			this.getConnectors().add(Orientation.getValueFromOrdinal((orientation.ordinal()+1) % 4));	
+			return this.getConnectors();
+			
+		}
+
+		@Override
+		public Orientation getOrientation(Orientation orientation) {
+			return Orientation.NORTH;
+		}
+	}, LTYPE(2) {
+		@Override
+		public LinkedList<Orientation> getConectorsList(Orientation orientation) {
+			this.getConnectors().add(orientation);
+			this.getConnectors().add(Orientation.getValueFromOrdinal((orientation.ordinal()+1) % 4));
+			return this.getConnectors();
+			
+		}
+
+		@Override
+		public Orientation getOrientation(Orientation orientation) {
+			return orientation;
+		}
+	};
 
 	private final int nbConnectors;
+	private LinkedList<Orientation> connectors;
 
 
 	private PieceType(int nbConnectors) {
 		this.nbConnectors = nbConnectors;
+		this.connectors = new LinkedList<>();
 	}
 	/**
 	 * 
@@ -24,6 +107,22 @@ public enum PieceType {
 		return nbConnectors;
 	}
 	
+	public LinkedList<Orientation> getConnectors() {
+		return connectors;
+	}
+	
+	/**
+	 * 
+	 * @param orientation 
+	 * @return Linked List of the piece's connectors
+	 */
+	public abstract LinkedList<Orientation> getConectorsList(Orientation orientation);
+	/**
+	 * get the orientation available for the type
+	 * @param orientation 
+	 * @return
+	 */
+	public abstract Orientation getOrientation(Orientation orientation);
 
 	/**
 	 * Standardize the access of the value from the ordinal of the enum
@@ -39,5 +138,7 @@ public enum PieceType {
 		return values()[ordinal];
 
 	}
+	
+	
 
 }

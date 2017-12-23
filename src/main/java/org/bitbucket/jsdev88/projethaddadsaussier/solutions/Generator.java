@@ -45,10 +45,11 @@ public class Generator {
 	}
 	
 	public static Grid generateSolution(Grid grid){
-		Random r = new Random();
+		Random rdType = new Random();
+		Random rdOrientation = new Random();
 		for(int i = 0 ; i < grid.getWidth() ; i++){
 			for(int j = 0 ; j < grid.getHeight() ; j++){
-				grid.getPieces()[i][j] = new Piece(i,j,1,0);
+				grid.getPieces()[i][j] = new Piece(i,j,rdType.nextInt(6),rdOrientation.nextInt(4));
 			}
 		}
 		/*if(grid.getNbcc() != null){
