@@ -214,8 +214,31 @@ public class Generator {
 				}
 			}
 		}else{
-			//TODO
-			inputGrid.setPiece(line, column, new Piece(line, column, 0, 0));
+			if (inputGrid.getPiece(line -1, column).hasBottomConnector()) {
+				setPossiblePieceType(new int[] { 1, 2, 3, 5 }, p);
+				switch (p.getType()) {
+				case ONECONN:
+					p.setOrientation(0);
+					break;
+				case BAR : p.setOrientation(0);
+					break;
+				case LTYPE: p.setOrientation(3);
+					break;
+				default: p.setOrientation(3);
+					break;
+				}
+			}else{
+				setPossiblePieceType(new int[] { 0,1, 5}, p);
+				switch (p.getType()) {
+				case ONECONN:
+					p.setOrientation(rdOrientation.nextInt(2) + 2);
+					break;
+				case LTYPE: p.setOrientation(2);
+					break;
+				default: 
+					break;
+				}
+			}
 		}
 		inputGrid.setPiece(line, column, p);
 		
