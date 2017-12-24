@@ -62,6 +62,8 @@ public class Generator {
 						affectPiece2Corner(i, j, new Piece(i, j), inputGrid);
 					} else if (inputGrid.isBorderLine(i, j)) {
 						affectPiece2BorderLine(i, j, new Piece(i, j), inputGrid);
+					} else if (inputGrid.isBorderColumn(i, j)){
+						affectPiece2BorderColumn(i, j, new Piece(i, j), inputGrid);
 					} else {
 						//TODO
 						inputGrid.setPiece(i, j, new Piece(i, j, 0, 0));
@@ -173,7 +175,53 @@ public class Generator {
 		inputGrid.setPiece(line, column, p);
 		
 	}
-
+	
+	
+	/**
+	 * Affect piece which is on a border column (and not in the corner)
+	 * 
+	 * @param line
+	 * @param column
+	 * @param p piece instance (i,j) with no type or orientation
+	 *            
+	 */
+	public static void affectPiece2BorderColumn(int line, int column, Piece p, Grid inputGrid) {
+		Random rdOrientation = new Random();
+		if(column == 0 && line > 0 && line < inputGrid.getWidth()-1){
+			if (inputGrid.getPiece(line -1, column).hasBottomConnector()) {
+				setPossiblePieceType(new int[] { 1, 2, 3, 5 }, p);
+				switch (p.getType()) {
+				case ONECONN:
+					p.setOrientation(0);
+					break;
+				case BAR : p.setOrientation(0);
+					break;
+				case LTYPE: p.setOrientation(0);
+					break;
+				default: p.setOrientation(1);
+					break;
+				}
+			}else{
+				setPossiblePieceType(new int[] { 0,1, 5}, p);
+				switch (p.getType()) {
+				case ONECONN:
+					p.setOrientation(rdOrientation.nextInt(2) + 1);
+					break;
+				case LTYPE: p.setOrientation(1);
+					break;
+				default: 
+					break;
+				}
+			}
+		}else{
+			//TODO
+			inputGrid.setPiece(line, column, new Piece(line, column, 0, 0));
+		}
+		inputGrid.setPiece(line, column, p);
+		
+	}
+	
+	
 	public static void setPossiblePieceType(int[] cornerPossibleType, Piece p) {
 		Random rdType = new Random();
 		int type = rdType.nextInt(cornerPossibleType.length);

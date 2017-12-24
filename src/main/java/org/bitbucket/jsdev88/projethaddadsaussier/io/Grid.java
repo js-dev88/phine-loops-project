@@ -101,6 +101,16 @@ public class Grid {
 
 	}
 	
+	public boolean isBorderColumn(int line, int column) {
+		if (column == 0 && line > 0 && line < this.getWidth()-1) {
+			return true;
+		} else if (column == this.getHeight() - 1 && line > 0 && line < this.getWidth()-1) {
+			return true;
+		}
+		return false;
+
+	}
+	
 	
 
 	@Override
