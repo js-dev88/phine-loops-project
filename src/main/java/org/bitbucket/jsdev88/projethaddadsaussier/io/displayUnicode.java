@@ -40,7 +40,6 @@ public class displayUnicode {
 	 */
 	private static void buildTable(){
 		EnumSet<PieceType> pieceTypeSet = EnumSet.allOf(PieceType.class);
-		EnumSet<Orientation> orientationSet = EnumSet.allOf(Orientation.class);
 		for(PieceType pt : pieceTypeSet){
 			unicodeTable.put(pt, new HashMap<Orientation,String>());
 		}
@@ -79,7 +78,6 @@ public class displayUnicode {
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		EnumSet<PieceType> pieceTypeSet = EnumSet.allOf(PieceType.class);
 		displayUnicode.buildTable();
 		for(Entry<PieceType, HashMap<Orientation, String>> pt : unicodeTable.entrySet()){
 			for(Entry<Orientation, String> o : pt.getValue().entrySet()){

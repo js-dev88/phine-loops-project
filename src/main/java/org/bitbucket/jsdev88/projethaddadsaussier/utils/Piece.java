@@ -10,6 +10,14 @@ public class Piece {
 	private LinkedList<Orientation> connectors;
 
 	
+	public Piece(int posX, int posY) {
+		this.posX = posX;
+		this.posY = posY;
+		this.type = PieceType.VOID;
+		this.orientation = type.getOrientation(Orientation.NORTH);
+		this.connectors = type.getConectorsList(Orientation.NORTH);
+
+	}
 	public Piece(int posX, int posY, PieceType type, Orientation orientation) {
 		this.posX = posX;
 		this.posY = posY;
@@ -19,7 +27,6 @@ public class Piece {
 	}
 	
 	
-
 	public Piece(int posX, int posY, int typeOrdinal, int orientationOrdinal) {
 		this.posX = posX;
 		this.posY = posY;
@@ -61,6 +68,7 @@ public class Piece {
 
 	public void setOrientation(int ordinal) {
 		this.orientation = type.getOrientation(Orientation.getValueFromOrdinal(ordinal));
+		this.connectors = type.getConectorsList(Orientation.getValueFromOrdinal(ordinal));
 	}
 
 
@@ -69,6 +77,48 @@ public class Piece {
 		return orientation;
 	}
 	
+	public LinkedList<Orientation> getConnectors() {
+		return connectors;
+	}
+
+	public void setConnectors(Orientation orientation) {
+		this.connectors = type.getConectorsList(orientation);
+	}
+	
+	
+	public  boolean hasTopConnector(){
+		for(Orientation ori : this.getConnectors()){
+			if(ori == Orientation.NORTH){
+				return true;
+			}	
+		}
+		return false;
+	}
+	public  boolean hasRightConnector(){
+		for(Orientation ori : this.getConnectors()){
+			if(ori == Orientation.EAST){
+				return true;
+			}	
+		}
+		return false;
+	}
+	
+	public  boolean hasBottomConnector(){
+		for(Orientation ori : this.getConnectors()){
+			if(ori == Orientation.SOUTH){
+				return true;
+			}	
+		}
+		return false;
+	}
+	public  boolean hasLeftConnector(){
+		for(Orientation ori : this.getConnectors()){
+			if(ori == Orientation.WEST){
+				return true;
+			}	
+		}
+		return false;
+	}
 	
 	/**
 	 * Turn the piece 90° on the right and redefine the connectors's position
@@ -77,6 +127,12 @@ public class Piece {
 		orientation = orientation.turn();
 		connectors = type.getConectorsList(orientation);
 	}
+
+
+
+	
+	
+	
 	
 	
 	

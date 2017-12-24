@@ -12,7 +12,8 @@ public enum PieceType {
 	VOID(0) {
 		@Override
 		public LinkedList<Orientation> getConectorsList(Orientation orientation) {
-			return this.getConnectors();
+			 this.getConnectors().add(orientation);
+			 return this.getConnectors();
 		}
 
 		@Override

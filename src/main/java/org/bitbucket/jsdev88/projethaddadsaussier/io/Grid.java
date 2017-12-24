@@ -1,22 +1,23 @@
 package org.bitbucket.jsdev88.projethaddadsaussier.io;
 
-import org.bitbucket.jsdev88.projethaddadsaussier.utils.Piece;
 
+
+import org.bitbucket.jsdev88.projethaddadsaussier.utils.Piece;
 
 public class Grid {
 	private int width;
 	private int height;
-	private int nbcc;
+	private int nbcc = -1;
 	private Piece[][] pieces;
-	
-	public Grid(int width, int height){
+
+	public Grid(int width, int height) {
 		this.width = width;
 		this.height = height;
 		pieces = new Piece[width][height];
 	}
-	
-	//Consctructor with specified number of connected component 
-	public Grid(int width, int height, int nbcc){
+
+	// Consctructor with specified number of connected component
+	public Grid(int width, int height, int nbcc) {
 		this.width = width;
 		this.height = height;
 		this.nbcc = nbcc;
@@ -47,26 +48,71 @@ public class Grid {
 		this.nbcc = nbcc;
 	}
 
-	public Piece[][] getPieces() {
+	public Piece getPiece(int line, int column) {
+		return this.pieces[line][column];
+	}
+
+	public void setPiece(int line, int column, Piece piece) {
+		this.pieces[line][column] = piece;
+	}
+
+	public Piece[][] getAllPieces() {
 		return pieces;
 	}
 
-	public void setPieces(Piece[][] pieces) {
-		this.pieces = pieces;
+	/**
+	 * Check if a case is a corner
+	 * 
+	 * @param line
+	 * @param column
+	 * @return true if the case is a corner
+	 */
+	public boolean isCorner(int line, int column) {
+		if (line == 0) {
+			if (column == 0)
+				return true;
+			if (column == this.getHeight() - 1)
+				return true;
+			return false;
+		} else if (line == this.getWidth() - 1) {
+			if (column == 0)
+				return true;
+			if (column == this.getHeight() - 1)
+				return true;
+			return false;
+		} else {
+			return false;
+		}
+	}
+	/**
+	 * Check if a case is member of the first or the last line
+	 * 
+	 * @param line
+	 * @param column
+	 * @return true if the case is a corner
+	 */
+	public boolean isBorderLine(int line, int column) {
+		if (line == 0 && column > 0 && column < this.getHeight()-1) {
+			return true;
+		} else if (line == this.getWidth() - 1 && column > 0 && column < this.getHeight()-1) {
+			return true;
+		}
+		return false;
+
 	}
 	
+	
+
 	@Override
 	public String toString() {
-		String s ="";
-		for(int i=0; i< height; i++){
-			for(int j=0; j< width; j++){
-				s+= displayUnicode.getUnicodeOfPiece(pieces[i][j].getType(),pieces[i][j].getOrientation());
+		String s = "";
+		for (int i = 0; i < height; i++) {
+			for (int j = 0; j < width; j++) {
+				s += displayUnicode.getUnicodeOfPiece(pieces[i][j].getType(), pieces[i][j].getOrientation());
 			}
-			s+= "\n";
+			s += "\n";
 		}
 		return s;
 	}
-	
-	
-	
+
 }
