@@ -90,10 +90,11 @@ public class Generator {
 		Random rdOrientation = new Random();
 
 		if (line == 0 && column == 0) {
+			//Avoid pieces with NORTH & EST Orientation 
 			setPossiblePieceType(new int[] { 0, 1, 5 }, p);
 			switch (p.getType()) {
 			case ONECONN:
-				p.setOrientation(rdOrientation.nextInt(2));
+				p.setOrientation(rdOrientation.nextInt(2)); //@Julien, on veut pas plutôt un random entre 1 et 2 plutot qu'entre 0 et 1 ici ?
 				break;
 			case LTYPE:
 				p.setOrientation(1);
@@ -102,6 +103,7 @@ public class Generator {
 			}
 
 		} else if (line == 0 && column == inputGrid.getWidth() - 1) {
+			//If the piece of the penultimate column has a right connector, we only choose a piece with WEST possible orientation 
 			if (inputGrid.getPiece(line, column - 1).hasRightConnector()) {
 				setPossiblePieceType(new int[] {1, 5}, p);
 				switch (p.getType()) {
