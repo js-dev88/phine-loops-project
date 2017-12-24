@@ -142,6 +142,7 @@ public class Generator {
 	 */
 	public static void affectPiece2BorderLine(int line, int column, Piece p, Grid inputGrid) {
 		Random rdOrientation = new Random();
+		//Case first line
 		if(line == 0 && column > 0 && column < inputGrid.getHeight()-1){
 			if (inputGrid.getPiece(line, column - 1).hasRightConnector()) {
 				setPossiblePieceType(new int[] { 1, 2, 3, 5 }, p);
@@ -168,9 +169,33 @@ public class Generator {
 					break;
 				}
 			}
+		// Case last line
 		}else{
-			//TODO
-			inputGrid.setPiece(line, column, new Piece(line, column, 0, 0));
+			if (inputGrid.getPiece(line, column - 1).hasRightConnector()) {
+				setPossiblePieceType(new int[] { 1, 2, 3, 5 }, p);
+				switch (p.getType()) {
+				case ONECONN:
+					p.setOrientation(3);
+					break;
+				case BAR : p.setOrientation(1);
+					break;
+				case LTYPE: p.setOrientation(3);
+					break;
+				default: p.setOrientation(0);
+					break;
+				}
+			}else{
+				setPossiblePieceType(new int[] { 0,1, 5}, p);
+				switch (p.getType()) {
+				case ONECONN:
+					p.setOrientation(rdOrientation.nextInt(2));
+					break;
+				case LTYPE: p.setOrientation(0);
+					break;
+				default: 
+					break;
+				}
+			}
 		}
 		inputGrid.setPiece(line, column, p);
 		
@@ -187,6 +212,7 @@ public class Generator {
 	 */
 	public static void affectPiece2BorderColumn(int line, int column, Piece p, Grid inputGrid) {
 		Random rdOrientation = new Random();
+		//Case first column
 		if(column == 0 && line > 0 && line < inputGrid.getWidth()-1){
 			if (inputGrid.getPiece(line -1, column).hasBottomConnector()) {
 				setPossiblePieceType(new int[] { 1, 2, 3, 5 }, p);
@@ -213,6 +239,7 @@ public class Generator {
 					break;
 				}
 			}
+		//Case last column
 		}else{
 			if (inputGrid.getPiece(line -1, column).hasBottomConnector()) {
 				setPossiblePieceType(new int[] { 1, 2, 3, 5 }, p);
