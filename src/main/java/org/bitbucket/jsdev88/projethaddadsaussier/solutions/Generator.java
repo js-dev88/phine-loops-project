@@ -3,8 +3,6 @@ package org.bitbucket.jsdev88.projethaddadsaussier.solutions;
 import java.io.*;
 
 import java.util.Random;
-
-import org.bitbucket.jsdev88.projethaddadsaussier.io.GUI;
 import org.bitbucket.jsdev88.projethaddadsaussier.io.Grid;
 import org.bitbucket.jsdev88.projethaddadsaussier.utils.Piece;
 import org.bitbucket.jsdev88.projethaddadsaussier.utils.PieceType;
