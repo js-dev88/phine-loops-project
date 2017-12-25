@@ -94,7 +94,7 @@ public class Generator {
 
 		if (line == 0 && column == 0) {
 			//Avoid pieces with NORTH & EST Orientation 
-			setPossiblePieceType(new int[] { 0, 1, 5 }, p);
+			setPossiblePieceType(new PieceType[] {PieceType.VOID, PieceType.ONECONN, PieceType.LTYPE }, p);
 			switch (p.getType()) {
 			case ONECONN:
 				p.setOrientation(rdOrientation.nextInt(2)+1); //well done :) ?
@@ -108,7 +108,7 @@ public class Generator {
 		} else if (line == 0 && column == inputGrid.getHeight() - 1) {
 			//If the piece of the penultimate column has a right connector, we only choose a piece with WEST possible orientation 
 			if (inputGrid.getPiece(line, column - 1).hasRightConnector()) {
-				setPossiblePieceType(new int[] {1, 5}, p);
+				setPossiblePieceType(new PieceType[] {PieceType.ONECONN, PieceType.LTYPE}, p);
 				switch (p.getType()) {
 				case ONECONN: p.setOrientation(3);
 					break;
@@ -117,7 +117,7 @@ public class Generator {
 					break;
 				}
 			} else {
-				setPossiblePieceType(new int[] { 0, 1 }, p);
+				setPossiblePieceType(new PieceType[] {PieceType.VOID, PieceType.ONECONN }, p);
 				switch (p.getType()) {
 				case ONECONN:
 					p.setOrientation(2);
@@ -130,7 +130,7 @@ public class Generator {
 		}else if (line == inputGrid.getWidth() - 1 && column == 0) {
 			//check if the upper case has a south connector and adjust
 			if (inputGrid.getPiece(line-1, column).hasBottomConnector()) {
-				setPossiblePieceType(new int[] {1, 5}, p);
+				setPossiblePieceType(new PieceType[] {PieceType.ONECONN, PieceType.LTYPE}, p);
 				switch (p.getType()) {
 				case ONECONN: p.setOrientation(0);
 					break;
@@ -139,7 +139,7 @@ public class Generator {
 					break;
 				}
 			} else {
-				setPossiblePieceType(new int[] { 0, 1 }, p);
+				setPossiblePieceType(new PieceType[] {PieceType.VOID, PieceType.ONECONN }, p);
 				switch (p.getType()) {
 				case ONECONN:
 					p.setOrientation(1);
@@ -184,7 +184,7 @@ public class Generator {
 		if(line == 0 && column > 0 && column < inputGrid.getHeight()-1){
 			
 			if (inputGrid.getPiece(line, column - 1).hasRightConnector()) {
-				setPossiblePieceType(new int[] { 1, 2, 3, 5 }, p);
+				setPossiblePieceType(new PieceType[] { PieceType.ONECONN, PieceType.BAR, PieceType.TTYPE,PieceType.LTYPE }, p);
 				switch (p.getType()) {
 				case ONECONN:
 					p.setOrientation(3);
@@ -197,7 +197,7 @@ public class Generator {
 					break;
 				}
 			}else{
-				setPossiblePieceType(new int[] { 0,1, 5}, p);
+				setPossiblePieceType(new PieceType[] {PieceType.VOID, PieceType.ONECONN, PieceType.LTYPE}, p);
 				switch (p.getType()) {
 				case ONECONN:
 					p.setOrientation(rdOrientation.nextInt(2) + 1);
@@ -211,27 +211,32 @@ public class Generator {
 		// Case last line
 		}else{
 			if (inputGrid.getPiece(line, column - 1).hasRightConnector()) {
-				setPossiblePieceType(new int[] { 1, 2, 3, 5 }, p);
+				if(inputGrid.getPiece(line-1, column).hasBottomConnector()){
+					setPossiblePieceType(new PieceType[] {PieceType.TTYPE, PieceType.LTYPE}, p);
+					switch (p.getType()) {
+					case LTYPE : p.setOrientation(3);
+						break;
+					default: p.setOrientation(0);
+						break;
+					}
+				}else{
+					setPossiblePieceType(new PieceType[] {PieceType.ONECONN, PieceType.BAR}, p);
+					switch (p.getType()) {
+					case ONECONN: p.setOrientation(3);
+						break;
+					default: p.setOrientation(1);
+						break;
+					}
+				}
+			}else if(inputGrid.getPiece(line-1, column).hasBottomConnector()){
+				setPossiblePieceType(new PieceType[] {PieceType.ONECONN,PieceType.LTYPE}, p);
+				p.setOrientation(0);
+			}else{
+				setPossiblePieceType(new PieceType[] {PieceType.VOID, PieceType.ONECONN}, p);
 				switch (p.getType()) {
-				case ONECONN:
-					p.setOrientation(3);
-					break;
-				case BAR : p.setOrientation(1);
-					break;
-				case LTYPE: p.setOrientation(3);
+				case ONECONN : p.setOrientation(1);
 					break;
 				default: p.setOrientation(0);
-					break;
-				}
-			}else{
-				setPossiblePieceType(new int[] { 0,1, 5}, p);
-				switch (p.getType()) {
-				case ONECONN:
-					p.setOrientation(rdOrientation.nextInt(2));
-					break;
-				case LTYPE: p.setOrientation(0);
-					break;
-				default: 
 					break;
 				}
 			}
@@ -255,7 +260,7 @@ public class Generator {
 		//Case first column
 		if(column == 0 && line > 0 && line < inputGrid.getWidth()-1){
 			if (inputGrid.getPiece(line -1, column).hasBottomConnector()) {
-				setPossiblePieceType(new int[] { 1, 2, 3, 5 }, p);
+				setPossiblePieceType(new PieceType[] {PieceType.ONECONN, PieceType.BAR, PieceType.TTYPE,PieceType.LTYPE}, p);
 				switch (p.getType()) {
 				case ONECONN:
 					p.setOrientation(0);
@@ -268,7 +273,7 @@ public class Generator {
 					break;
 				}
 			}else{
-				setPossiblePieceType(new int[] { 0,1, 5}, p);
+				setPossiblePieceType(new PieceType[] {PieceType.VOID, PieceType.ONECONN, PieceType.LTYPE}, p);
 				switch (p.getType()) {
 				case ONECONN:
 					p.setOrientation(rdOrientation.nextInt(2) + 1);
@@ -282,27 +287,28 @@ public class Generator {
 		//Case last column
 		}else{
 			if (inputGrid.getPiece(line -1, column).hasBottomConnector()) {
-				setPossiblePieceType(new int[] { 1, 2, 3, 5 }, p);
-				switch (p.getType()) {
-				case ONECONN:
+				if(inputGrid.getPiece(line, column-1).hasRightConnector()){
+					setPossiblePieceType(new PieceType[] {PieceType.TTYPE,PieceType.LTYPE}, p);
+					p.setOrientation(3);
+				}else{
+					setPossiblePieceType(new PieceType[] {PieceType.ONECONN, PieceType.BAR}, p);
 					p.setOrientation(0);
+				}
+			}else if(inputGrid.getPiece(line, column-1).hasRightConnector()){
+				setPossiblePieceType(new PieceType[] {PieceType.ONECONN, PieceType.LTYPE}, p);
+				switch (p.getType()) {
+				case ONECONN:p.setOrientation(3);
 					break;
-				case BAR : p.setOrientation(0);
-					break;
-				case LTYPE: p.setOrientation(3);
-					break;
-				default: p.setOrientation(3);
+				default: p.setOrientation(2);
 					break;
 				}
 			}else{
-				setPossiblePieceType(new int[] { 0,1,5}, p);
+				setPossiblePieceType(new PieceType[] {PieceType.VOID, PieceType.ONECONN}, p);
 				switch (p.getType()) {
 				case ONECONN:
-					p.setOrientation(rdOrientation.nextInt(2) + 2);
+					p.setOrientation(2);
 					break;
-				case LTYPE: p.setOrientation(2);
-					break;
-				default: 
+				default: p.setOrientation(0);
 					break;
 				}
 			}
@@ -322,7 +328,7 @@ public class Generator {
 		Random rdOrientation = new Random();
 		if (inputGrid.getPiece(line-1, column).hasBottomConnector()) {
 			if(inputGrid.getPiece(line, column-1).hasRightConnector()){
-				setPossiblePieceType(new int[] {3, 4, 5}, p);
+				setPossiblePieceType(new PieceType[] {PieceType.TTYPE, PieceType.FOURCONN, PieceType.LTYPE}, p);
 				switch (p.getType()) {
 				case TTYPE : if(rdOrientation.nextInt(2) == 0)p.setOrientation(0);
 							 else p.setOrientation(3);
@@ -333,7 +339,7 @@ public class Generator {
 					break;
 				}
 			}else{
-				setPossiblePieceType(new int[] {1, 2, 3, 5}, p);
+				setPossiblePieceType(new PieceType[] {PieceType.ONECONN, PieceType.BAR, PieceType.TTYPE,PieceType.LTYPE}, p);
 				switch (p.getType()) {
 				case TTYPE : p.setOrientation(1);
 					break;
@@ -342,7 +348,7 @@ public class Generator {
 				}
 			}
 		}else if(inputGrid.getPiece(line, column-1).hasRightConnector()){
-			setPossiblePieceType(new int[] {1, 2, 3, 5}, p);
+			setPossiblePieceType(new PieceType[] {PieceType.ONECONN, PieceType.BAR, PieceType.TTYPE,PieceType.LTYPE}, p);
 			switch (p.getType()) {
 			case ONECONN : p.setOrientation(3);
 				break;
@@ -352,7 +358,7 @@ public class Generator {
 				break;
 			}
 		}else{
-			setPossiblePieceType(new int[] {0, 1, 5}, p);
+			setPossiblePieceType(new PieceType[] {PieceType.VOID, PieceType.ONECONN, PieceType.LTYPE}, p);
 			switch (p.getType()) {
 			case ONECONN : p.setOrientation(rdOrientation.nextInt(2)+1);
 				break;
@@ -365,13 +371,22 @@ public class Generator {
 		inputGrid.setPiece(line, column, p);
 	}
 	
-	
-	public static void setPossiblePieceType(int[] cornerPossibleType, Piece p) {
+	/**
+	 * Choose randomly a possible piece type and set the type to the piece
+	 * @param PossibleType
+	 * @param p
+	 */
+	public static void setPossiblePieceType(PieceType[] PossibleType, Piece p) {
 		Random rdType = new Random();
-		int type = rdType.nextInt(cornerPossibleType.length);
-		p.setType(PieceType.getValueFromOrdinal(cornerPossibleType[type]));
+		int type = rdType.nextInt(PossibleType.length);
+		p.setType(PossibleType[type]);
 	}
-
+	
+	/**
+	 * Shuffles the grid to build the level
+	 * @param grid
+	 * @return
+	 */
 	public static Grid shuffle(Grid grid) {
 		Random r = new Random();
 		for (Piece[] i : grid.getAllPieces()) {
@@ -384,7 +399,7 @@ public class Generator {
 
 	public static void main(String[] args) {
 		try {
-			generateLevel("txt.txt", new Grid(8, 8));
+			generateLevel("txt.txt", new Grid(100, 100));
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

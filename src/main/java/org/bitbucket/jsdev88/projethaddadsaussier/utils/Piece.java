@@ -26,12 +26,12 @@ public class Piece {
 		this.connectors = type.setConnectorsList(orientation);
 	}
 
-	public Piece(int posX, int posY, int typeOrdinal, int orientationOrdinal) {
+	public Piece(int posX, int posY, int typeValue, int orientationValue) {
 		this.posX = posX;
 		this.posY = posY;
-		this.type = PieceType.getValueFromOrdinal(typeOrdinal);
-		this.orientation = type.getOrientation(Orientation.getValueFromOrdinal(orientationOrdinal));
-		this.connectors = type.setConnectorsList(Orientation.getValueFromOrdinal(orientationOrdinal));
+		this.type = PieceType.getTypefromValue(typeValue);
+		this.orientation = type.getOrientation(Orientation.getOrifromValue(orientationValue));
+		this.connectors = type.setConnectorsList(Orientation.getOrifromValue(orientationValue));
 	}
 
 	public int getPosX() {
@@ -58,8 +58,8 @@ public class Piece {
 		this.type = type;
 	}
 
-	public void setOrientation(int ordinal) {
-		this.orientation = type.getOrientation(Orientation.getValueFromOrdinal(ordinal));
+	public void setOrientation(int orientationValue) {
+		this.orientation = type.getOrientation(Orientation.getOrifromValue(orientationValue));
 		this.connectors = type.setConnectorsList(this.orientation);
 	}
 
@@ -112,7 +112,7 @@ public class Piece {
 	 * Turn the piece 90° on the right and redefine the connectors's position
 	 */
 	public void turn() {
-		this.orientation = type.getOrientation(orientation.turn());
+		this.orientation = type.getOrientation(orientation.turn90());
 		this.connectors = type.setConnectorsList(orientation);
 	}
 

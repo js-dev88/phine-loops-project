@@ -8,7 +8,7 @@ public class PieceTypeTest {
 
 	@Test
 	public void getNbConnectorsTest() {
-		Piece p = new Piece(0,0,1,0);
+		Piece p = new Piece(0,0,PieceType.getTypefromValue(1),Orientation.getOrifromValue(0));
 		assertTrue(p.getType().getNbConnectors() == 1);
 	}
 	

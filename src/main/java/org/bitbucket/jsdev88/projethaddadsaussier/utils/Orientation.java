@@ -1,31 +1,50 @@
 package org.bitbucket.jsdev88.projethaddadsaussier.utils;
+
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * 
  * Orientation of the piece enum
  * 
  */
 public enum Orientation {
-	NORTH,EAST,SOUTH,WEST;
+	//Each orientation has a specific value and we can easily add a new orientation
+	NORTH(0),EAST(1),SOUTH(2),WEST(3);
+	
+	private final int value;
+	
+		public int getValue() {
+			return value;
+		}
+
+		private Orientation(int value) {
+			this.value = value;
+		}
+		
+		private static final HashMap<Integer, Orientation> mapValues = new HashMap<>();
+		static {
+			for (Orientation ori : values()) {
+				mapValues.put(ori.getValue(), ori);
+			}
+		}
+		//we can retrieve an orientation from the value
+		public static Orientation getOrifromValue(int value) {
+			final Orientation ori = (Orientation) mapValues.get(value);
+			if (ori != null) {
+				return ori;
+			}
+			throw new IllegalArgumentException("Orientation unknown : " + ori);
+		}
 	 
 	/**
 	 * Turn the piece of 90° on the right
 	 * @return the next value of the enum
 	 * Source https://codereview.stackexchange.com/questions/42817/direction-enum-class
 	 */
-	 public Orientation turn() {
-	        return values()[(ordinal() + 1) % 4];
+	 public Orientation turn90() {
+	        return values()[(getValue() + 1) % 4];
 	 }
 	 
-	 /**
-	  * Standardize the access of the value from the ordinal of the enum
-	  * @param ordinal value of the orientation
-	  * @return the corresponding value
-	  */
-	 public static Orientation getValueFromOrdinal(Integer ordinal) throws IllegalArgumentException{
-		 if( ordinal < 0 || ordinal >= 4){
-			 throw new IllegalArgumentException("Ordinal of Orientation is out of bound : "+ordinal);
-		 }
-		 return values()[ordinal]; 
-
-	 }
+	
 }

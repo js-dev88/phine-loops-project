@@ -1,5 +1,6 @@
 package org.bitbucket.jsdev88.projethaddadsaussier.utils;
 
+import java.util.HashMap;
 import java.util.LinkedList;
 
 /**
@@ -8,8 +9,8 @@ import java.util.LinkedList;
  * 
  */
 public enum PieceType {
-	
-	VOID(0) {
+	//Each Type has a number of connectors and a specific value
+	VOID(0,0) {
 		@Override
 		public LinkedList<Orientation> setConnectorsList(Orientation orientation) {
 			 LinkedList<Orientation> conList = new LinkedList<>();
@@ -21,7 +22,7 @@ public enum PieceType {
 		public Orientation getOrientation(Orientation orientation) {
 			return Orientation.NORTH;
 		}
-	}, ONECONN(1) {
+	}, ONECONN(1,1) {
 		@Override
 		public LinkedList<Orientation> setConnectorsList(Orientation orientation) {
 			LinkedList<Orientation> conList = new LinkedList<>();
@@ -34,12 +35,12 @@ public enum PieceType {
 		public Orientation getOrientation(Orientation orientation) {
 			return orientation;
 		}
-	}, BAR(2) {
+	}, BAR(2,2) {
 		@Override
 		public LinkedList<Orientation> setConnectorsList(Orientation orientation) {
 			LinkedList<Orientation> conList = new LinkedList<>();
 			conList.add(orientation);
-			conList.add(Orientation.getValueFromOrdinal((orientation.ordinal()+2) % 4));	
+			conList.add(Orientation.getOrifromValue((orientation.getValue()+2) % 4));	
 			return conList;
 		}
 
@@ -51,13 +52,13 @@ public enum PieceType {
 				return Orientation.EAST;
 			return orientation;
 		}
-	}, TTYPE(3) {
+	}, TTYPE(3,3) {
 		@Override
 		public LinkedList<Orientation> setConnectorsList(Orientation orientation) {
 			LinkedList<Orientation> conList = new LinkedList<>();
-			conList.add(Orientation.getValueFromOrdinal((orientation.ordinal()+3) % 4));
+			conList.add(Orientation.getOrifromValue((orientation.getValue()+3) % 4));
 			conList.add(orientation);
-			conList.add(Orientation.getValueFromOrdinal((orientation.ordinal()+1) % 4));	
+			conList.add(Orientation.getOrifromValue((orientation.getValue()+1) % 4));	
 			return conList;
 			
 		}
@@ -66,14 +67,14 @@ public enum PieceType {
 		public Orientation getOrientation(Orientation orientation) {
 			return orientation;
 		}
-	}, FOURCONN(4) {
+	}, FOURCONN(4,4) {
 		@Override
 		public LinkedList<Orientation> setConnectorsList(Orientation orientation) {
 			LinkedList<Orientation> conList = new LinkedList<>();
 			conList.add(orientation);
-			conList.add(Orientation.getValueFromOrdinal((orientation.ordinal()+1) % 4));
-			conList.add(Orientation.getValueFromOrdinal((orientation.ordinal()+2) % 4));	
-			conList.add(Orientation.getValueFromOrdinal((orientation.ordinal()+3) % 4));	
+			conList.add(Orientation.getOrifromValue((orientation.getValue()+1) % 4));
+			conList.add(Orientation.getOrifromValue((orientation.getValue()+2) % 4));	
+			conList.add(Orientation.getOrifromValue((orientation.getValue()+3) % 4));	
 			return conList;
 			
 		}
@@ -82,12 +83,12 @@ public enum PieceType {
 		public Orientation getOrientation(Orientation orientation) {
 			return Orientation.NORTH;
 		}
-	}, LTYPE(2) {
+	}, LTYPE(2,5) {
 		@Override
 		public LinkedList<Orientation> setConnectorsList(Orientation orientation) {
 			LinkedList<Orientation> conList = new LinkedList<>();
 			conList.add(orientation);
-			conList.add(Orientation.getValueFromOrdinal((orientation.ordinal()+1) % 4));
+			conList.add(Orientation.getOrifromValue((orientation.getValue()+1) % 4));
 			return conList;
 			
 		}
@@ -99,10 +100,12 @@ public enum PieceType {
 	};
 
 	private final int nbConnectors;
+	private final int value;
 
 
-	private PieceType(int nbConnectors) {
+	private PieceType(int nbConnectors, int value) {
 		this.nbConnectors = nbConnectors;
+		this.value = value;
 	}
 	/**
 	 * 
@@ -112,37 +115,40 @@ public enum PieceType {
 		return nbConnectors;
 	}
 	
+	public int getValue(){
+		return value;
+	}
+	
 	
 	/**
-	 * 
+	 * Set the list of possible connectors from a specific orientatiob
 	 * @param orientation 
 	 * @return Linked List of the piece's connectors
 	 */
 	public abstract LinkedList<Orientation> setConnectorsList(Orientation orientation);
+	
 	/**
 	 * get the orientation available for the type
 	 * @param orientation 
 	 * @return
 	 */
 	public abstract Orientation getOrientation(Orientation orientation);
-
-	/**
-	 * Standardize the access of the value from the ordinal of the enum
-	 * 
-	 * @param ordinal
-	 *            value of the orientation
-	 * @return the corresponding value
-	 */
-	public static PieceType getValueFromOrdinal(Integer ordinal) throws IllegalArgumentException {
-		if (ordinal < 0 || ordinal > 5) {
-			throw new IllegalArgumentException("Ordinal of Orientation is out of bound");
+	
+	
+	private static final HashMap<Integer, PieceType> mapValues = new HashMap<>();
+	static {
+		for (PieceType pt : values()) {
+			mapValues.put(pt.getValue(), pt);
 		}
-		return values()[ordinal];
-
 	}
-
-
 	
-	
+	//we can retrieve a type from the value
+	public static PieceType getTypefromValue(int value) {
+		final PieceType pt = (PieceType) mapValues.get(value);
+		if (pt != null) {
+			return pt;
+		}
+		throw new IllegalArgumentException("Type unknown : " + pt);
+	}
 
 }

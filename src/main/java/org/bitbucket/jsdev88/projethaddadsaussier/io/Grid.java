@@ -16,7 +16,7 @@ public class Grid {
 		pieces = new Piece[width][height];
 	}
 
-	// Consctructor with specified number of connected component
+	// Constructor with specified number of connected component
 	public Grid(int width, int height, int nbcc) {
 		this.width = width;
 		this.height = height;
