@@ -11,9 +11,10 @@ public enum PieceType {
 	
 	VOID(0) {
 		@Override
-		public LinkedList<Orientation> getConectorsList(Orientation orientation) {
-			 this.getConnectors().add(orientation);
-			 return this.getConnectors();
+		public LinkedList<Orientation> setConnectorsList(Orientation orientation) {
+			 LinkedList<Orientation> conList = new LinkedList<>();
+			 conList.add(orientation);
+			 return conList;
 		}
 
 		@Override
@@ -22,9 +23,10 @@ public enum PieceType {
 		}
 	}, ONECONN(1) {
 		@Override
-		public LinkedList<Orientation> getConectorsList(Orientation orientation) {
-			this.getConnectors().add(orientation);
-			return this.getConnectors();
+		public LinkedList<Orientation> setConnectorsList(Orientation orientation) {
+			LinkedList<Orientation> conList = new LinkedList<>();
+			conList.add(orientation);
+			return conList;
 			
 		}
 
@@ -34,10 +36,11 @@ public enum PieceType {
 		}
 	}, BAR(2) {
 		@Override
-		public LinkedList<Orientation> getConectorsList(Orientation orientation) {
-			this.getConnectors().add(orientation);
-			this.getConnectors().add(Orientation.getValueFromOrdinal((orientation.ordinal()+2) % 4));	
-			return this.getConnectors();
+		public LinkedList<Orientation> setConnectorsList(Orientation orientation) {
+			LinkedList<Orientation> conList = new LinkedList<>();
+			conList.add(orientation);
+			conList.add(Orientation.getValueFromOrdinal((orientation.ordinal()+2) % 4));	
+			return conList;
 		}
 
 		@Override
@@ -50,11 +53,12 @@ public enum PieceType {
 		}
 	}, TTYPE(3) {
 		@Override
-		public LinkedList<Orientation> getConectorsList(Orientation orientation) {
-			this.getConnectors().add(Orientation.getValueFromOrdinal((orientation.ordinal()+3) % 4));
-			this.getConnectors().add(orientation);
-			this.getConnectors().add(Orientation.getValueFromOrdinal((orientation.ordinal()+1) % 4));	
-			return this.getConnectors();
+		public LinkedList<Orientation> setConnectorsList(Orientation orientation) {
+			LinkedList<Orientation> conList = new LinkedList<>();
+			conList.add(Orientation.getValueFromOrdinal((orientation.ordinal()+3) % 4));
+			conList.add(orientation);
+			conList.add(Orientation.getValueFromOrdinal((orientation.ordinal()+1) % 4));	
+			return conList;
 			
 		}
 
@@ -64,12 +68,13 @@ public enum PieceType {
 		}
 	}, FOURCONN(4) {
 		@Override
-		public LinkedList<Orientation> getConectorsList(Orientation orientation) {
-			this.getConnectors().add(orientation);
-			this.getConnectors().add(Orientation.getValueFromOrdinal((orientation.ordinal()+1) % 4));
-			this.getConnectors().add(Orientation.getValueFromOrdinal((orientation.ordinal()+1) % 4));	
-			this.getConnectors().add(Orientation.getValueFromOrdinal((orientation.ordinal()+1) % 4));	
-			return this.getConnectors();
+		public LinkedList<Orientation> setConnectorsList(Orientation orientation) {
+			LinkedList<Orientation> conList = new LinkedList<>();
+			conList.add(orientation);
+			conList.add(Orientation.getValueFromOrdinal((orientation.ordinal()+1) % 4));
+			conList.add(Orientation.getValueFromOrdinal((orientation.ordinal()+2) % 4));	
+			conList.add(Orientation.getValueFromOrdinal((orientation.ordinal()+3) % 4));	
+			return conList;
 			
 		}
 
@@ -79,10 +84,11 @@ public enum PieceType {
 		}
 	}, LTYPE(2) {
 		@Override
-		public LinkedList<Orientation> getConectorsList(Orientation orientation) {
-			this.getConnectors().add(orientation);
-			this.getConnectors().add(Orientation.getValueFromOrdinal((orientation.ordinal()+1) % 4));
-			return this.getConnectors();
+		public LinkedList<Orientation> setConnectorsList(Orientation orientation) {
+			LinkedList<Orientation> conList = new LinkedList<>();
+			conList.add(orientation);
+			conList.add(Orientation.getValueFromOrdinal((orientation.ordinal()+1) % 4));
+			return conList;
 			
 		}
 
@@ -93,12 +99,10 @@ public enum PieceType {
 	};
 
 	private final int nbConnectors;
-	private LinkedList<Orientation> connectors;
 
 
 	private PieceType(int nbConnectors) {
 		this.nbConnectors = nbConnectors;
-		this.connectors = new LinkedList<>();
 	}
 	/**
 	 * 
@@ -108,16 +112,13 @@ public enum PieceType {
 		return nbConnectors;
 	}
 	
-	public LinkedList<Orientation> getConnectors() {
-		return connectors;
-	}
 	
 	/**
 	 * 
 	 * @param orientation 
 	 * @return Linked List of the piece's connectors
 	 */
-	public abstract LinkedList<Orientation> getConectorsList(Orientation orientation);
+	public abstract LinkedList<Orientation> setConnectorsList(Orientation orientation);
 	/**
 	 * get the orientation available for the type
 	 * @param orientation 
@@ -139,6 +140,8 @@ public enum PieceType {
 		return values()[ordinal];
 
 	}
+
+
 	
 	
 

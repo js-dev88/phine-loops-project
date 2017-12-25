@@ -65,9 +65,10 @@ public class Generator {
 					} else if (inputGrid.isBorderColumn(i, j)){
 						affectPiece2BorderColumn(i, j, new Piece(i, j), inputGrid);
 					} else {
-						//TODO
-						inputGrid.setPiece(i, j, new Piece(i, j, 0, 0));
+						affectCentralPieces(i, j, new Piece(i, j), inputGrid);
 					}
+					/* DEBUG */
+					System.out.println("type :" +inputGrid.getPiece(i, j).getType()+"conc :"+inputGrid.getPiece(i, j) +"\n");
 
 				}
 			}
@@ -96,7 +97,7 @@ public class Generator {
 			setPossiblePieceType(new int[] { 0, 1, 5 }, p);
 			switch (p.getType()) {
 			case ONECONN:
-				p.setOrientation(rdOrientation.nextInt(2)); //@Julien, on veut pas plutôt un random entre 1 et 2 plutot qu'entre 0 et 1 ici ?
+				p.setOrientation(rdOrientation.nextInt(2)+1); //well done :) ?
 				break;
 			case LTYPE:
 				p.setOrientation(1);
@@ -104,7 +105,7 @@ public class Generator {
 				break;
 			}
 
-		} else if (line == 0 && column == inputGrid.getWidth() - 1) {
+		} else if (line == 0 && column == inputGrid.getHeight() - 1) {
 			//If the piece of the penultimate column has a right connector, we only choose a piece with WEST possible orientation 
 			if (inputGrid.getPiece(line, column - 1).hasRightConnector()) {
 				setPossiblePieceType(new int[] {1, 5}, p);
@@ -115,7 +116,6 @@ public class Generator {
 				default:
 					break;
 				}
-				p.setOrientation(3);
 			} else {
 				setPossiblePieceType(new int[] { 0, 1 }, p);
 				switch (p.getType()) {
@@ -127,6 +127,44 @@ public class Generator {
 				}
 			}
 
+		}else if (line == inputGrid.getWidth() - 1 && column == 0) {
+			//check if the upper case has a south connector and adjust
+			if (inputGrid.getPiece(line-1, column).hasBottomConnector()) {
+				setPossiblePieceType(new int[] {1, 5}, p);
+				switch (p.getType()) {
+				case ONECONN: p.setOrientation(0);
+					break;
+				case LTYPE : p.setOrientation(0);
+				default:
+					break;
+				}
+			} else {
+				setPossiblePieceType(new int[] { 0, 1 }, p);
+				switch (p.getType()) {
+				case ONECONN:
+					p.setOrientation(1);
+					break;
+				default:
+					break;
+				}
+			}
+		}else{
+			//bottom right case must adjust to the upper case and the left case
+			if (inputGrid.getPiece(line-1, column).hasBottomConnector()) {
+				if(inputGrid.getPiece(line, column-1).hasRightConnector()){
+					p.setType(PieceType.LTYPE);
+					p.setOrientation(3);
+				}else{
+					p.setType(PieceType.ONECONN);
+					p.setOrientation(0);
+				}
+			}else if(inputGrid.getPiece(line, column-1).hasRightConnector()){
+				p.setType(PieceType.ONECONN);
+				p.setOrientation(3);
+			}else{
+				p.setType(PieceType.VOID);
+				p.setOrientation(0);
+			}
 		}
 		inputGrid.setPiece(line, column, p);
 
@@ -144,6 +182,7 @@ public class Generator {
 		Random rdOrientation = new Random();
 		//Case first line
 		if(line == 0 && column > 0 && column < inputGrid.getHeight()-1){
+			
 			if (inputGrid.getPiece(line, column - 1).hasRightConnector()) {
 				setPossiblePieceType(new int[] { 1, 2, 3, 5 }, p);
 				switch (p.getType()) {
@@ -165,7 +204,7 @@ public class Generator {
 					break;
 				case LTYPE: p.setOrientation(1);
 					break;
-				default: 
+				default: p.setOrientation(0);
 					break;
 				}
 			}
@@ -208,6 +247,7 @@ public class Generator {
 	 * @param line
 	 * @param column
 	 * @param p piece instance (i,j) with no type or orientation
+	 * @param grid
 	 *            
 	 */
 	public static void affectPiece2BorderColumn(int line, int column, Piece p, Grid inputGrid) {
@@ -255,7 +295,7 @@ public class Generator {
 					break;
 				}
 			}else{
-				setPossiblePieceType(new int[] { 0,1, 5}, p);
+				setPossiblePieceType(new int[] { 0,1,5}, p);
 				switch (p.getType()) {
 				case ONECONN:
 					p.setOrientation(rdOrientation.nextInt(2) + 2);
@@ -269,6 +309,60 @@ public class Generator {
 		}
 		inputGrid.setPiece(line, column, p);
 		
+	}
+	
+	/**
+	 * Affect a central piece : must respect the connectors of the upper and the left piece
+	 * @param line
+	 * @param column
+	 * @param p p piece instance (i,j) with no type or orientation
+	 * @param inputGrid
+	 */
+	public static void affectCentralPieces(int line, int column, Piece p, Grid inputGrid){
+		Random rdOrientation = new Random();
+		if (inputGrid.getPiece(line-1, column).hasBottomConnector()) {
+			if(inputGrid.getPiece(line, column-1).hasRightConnector()){
+				setPossiblePieceType(new int[] {3, 4, 5}, p);
+				switch (p.getType()) {
+				case TTYPE : if(rdOrientation.nextInt(2) == 0)p.setOrientation(0);
+							 else p.setOrientation(3);
+					break;
+				case LTYPE : p.setOrientation(3);
+					break;
+				default: p.setOrientation(0);
+					break;
+				}
+			}else{
+				setPossiblePieceType(new int[] {1, 2, 3, 5}, p);
+				switch (p.getType()) {
+				case TTYPE : p.setOrientation(1);
+					break;
+				default: p.setOrientation(0);
+					break;
+				}
+			}
+		}else if(inputGrid.getPiece(line, column-1).hasRightConnector()){
+			setPossiblePieceType(new int[] {1, 2, 3, 5}, p);
+			switch (p.getType()) {
+			case ONECONN : p.setOrientation(3);
+				break;
+			case BAR : p.setOrientation(1);
+				break;
+			default: p.setOrientation(2);
+				break;
+			}
+		}else{
+			setPossiblePieceType(new int[] {0, 1, 5}, p);
+			switch (p.getType()) {
+			case ONECONN : p.setOrientation(rdOrientation.nextInt(2)+1);
+				break;
+			case LTYPE : p.setOrientation(1);
+				break;
+			default: p.setOrientation(0);
+				break;
+			}
+		}
+		inputGrid.setPiece(line, column, p);
 	}
 	
 	
