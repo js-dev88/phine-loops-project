@@ -4,6 +4,7 @@ import java.io.*;
 
 import java.util.Random;
 
+import org.bitbucket.jsdev88.projethaddadsaussier.io.GUI;
 import org.bitbucket.jsdev88.projethaddadsaussier.io.Grid;
 import org.bitbucket.jsdev88.projethaddadsaussier.utils.Piece;
 import org.bitbucket.jsdev88.projethaddadsaussier.utils.PieceType;
@@ -23,6 +24,7 @@ public class Generator {
 		// Generate a solution
 		filledGrid = generateSolution(inputGrid);
 		/* DEBUG */
+		//GUI.startGUI(filledGrid);
 		System.out.println(filledGrid.toString());
 		shuffle(filledGrid);
 		// Then we write the level on a file
@@ -42,6 +44,7 @@ public class Generator {
 		}
 
 		/* DEBUG */
+		//GUI.startGUI(filledGrid);
 		System.out.println(filledGrid.toString());
 
 	}
@@ -67,8 +70,6 @@ public class Generator {
 					} else {
 						affectCentralPieces(i, j, new Piece(i, j), inputGrid);
 					}
-					/* DEBUG */
-					System.out.println("type :" +inputGrid.getPiece(i, j).getType()+"conc :"+inputGrid.getPiece(i, j) +"\n");
 
 				}
 			}
@@ -399,7 +400,7 @@ public class Generator {
 
 	public static void main(String[] args) {
 		try {
-			generateLevel("txt.txt", new Grid(100, 100));
+			generateLevel("txt.txt", new Grid(10, 10));
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
