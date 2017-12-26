@@ -9,6 +9,11 @@ import java.awt.Insets;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+
+import org.bitbucket.jsdev88.projethaddadsaussier.utils.Orientation;
+import org.bitbucket.jsdev88.projethaddadsaussier.utils.Piece;
+import org.bitbucket.jsdev88.projethaddadsaussier.utils.PieceType;
+
 import java.awt.BorderLayout;
 import javax.swing.JLabel;
 import javax.swing.GroupLayout;
@@ -25,7 +30,7 @@ public class GUI {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					GUI window = new GUI(new Grid(10,10));
+					GUI window = new GUI(grid);
 					window.frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -70,12 +75,65 @@ public class GUI {
 		/* On ajoute le composant au panel en précisant le GridBagConstraints */
 		for(int i =0; i < grid.getWidth(); i++){
 			for(int j = 0; j< grid.getHeight(); j++){
+				Piece p = grid.getPiece(i, j);
+				ImageIcon img;
+				if(p.getType().equals(PieceType.ONECONN)){
+					if(p.getOrientation().equals(Orientation.NORTH)){
+						img = new ImageIcon(GUI.class.getResource("/org/bitbucket/jsdev88/projethaddadsaussier/io/10.png"));
+					}
+					else if((p.getOrientation().equals(Orientation.EAST))){
+						img = new ImageIcon(GUI.class.getResource("/org/bitbucket/jsdev88/projethaddadsaussier/io/11.png"));
+					}else if((p.getOrientation().equals(Orientation.SOUTH))){
+						img = new ImageIcon(GUI.class.getResource("/org/bitbucket/jsdev88/projethaddadsaussier/io/12.png"));
+					}else{//WEST
+						img = new ImageIcon(GUI.class.getResource("/org/bitbucket/jsdev88/projethaddadsaussier/io/13.png"));
+					}
+				}
+				else if(p.getType().equals(PieceType.BAR)){
+					if(p.getOrientation().equals(Orientation.NORTH)){//NORTH-OUEST
+						img = new ImageIcon(GUI.class.getResource("/org/bitbucket/jsdev88/projethaddadsaussier/io/20.png"));
+					}
+					else{//EAST-WEST
+						img = new ImageIcon(GUI.class.getResource("/org/bitbucket/jsdev88/projethaddadsaussier/io/21.png"));
+					}
+				}
+				else if(p.getType().equals(PieceType.TTYPE)){
+					if(p.getOrientation().equals(Orientation.NORTH)){
+						img = new ImageIcon(GUI.class.getResource("/org/bitbucket/jsdev88/projethaddadsaussier/io/30.png"));
+					}
+					else if((p.getOrientation().equals(Orientation.EAST))){
+						img = new ImageIcon(GUI.class.getResource("/org/bitbucket/jsdev88/projethaddadsaussier/io/31.png"));
+					}else if((p.getOrientation().equals(Orientation.SOUTH))){
+						img = new ImageIcon(GUI.class.getResource("/org/bitbucket/jsdev88/projethaddadsaussier/io/32.png"));
+					}else{//WEST
+						img = new ImageIcon(GUI.class.getResource("/org/bitbucket/jsdev88/projethaddadsaussier/io/33.png"));
+					}
+				}
+				else if(p.getType().equals(PieceType.LTYPE)){
+					if(p.getOrientation().equals(Orientation.NORTH)){
+						img = new ImageIcon(GUI.class.getResource("/org/bitbucket/jsdev88/projethaddadsaussier/io/50.png"));
+					}
+					else if((p.getOrientation().equals(Orientation.EAST))){
+						img = new ImageIcon(GUI.class.getResource("/org/bitbucket/jsdev88/projethaddadsaussier/io/51.png"));
+					}else if((p.getOrientation().equals(Orientation.SOUTH))){
+						img = new ImageIcon(GUI.class.getResource("/org/bitbucket/jsdev88/projethaddadsaussier/io/52.png"));
+					}else{//WEST
+						img = new ImageIcon(GUI.class.getResource("/org/bitbucket/jsdev88/projethaddadsaussier/io/53.png"));
+					}
+				}
+				else if(p.getType().equals(PieceType.FOURCONN)){
+						img = new ImageIcon(GUI.class.getResource("/org/bitbucket/jsdev88/projethaddadsaussier/io/40.png"));
+				}
+				else{//VOID
+					img = new ImageIcon(GUI.class.getResource("/org/bitbucket/jsdev88/projethaddadsaussier/io/background.png"));
+				}
 				lblcase = new JLabel("");
-				lblcase.setIcon(new ImageIcon(GUI.class.getResource("/org/bitbucket/jsdev88/projethaddadsaussier/io/ONECONNECT.png")));
+				lblcase.setIcon(img);
 				lblBackGround.add(lblcase, gc);
 				gc.gridx = i;
 				gc.gridy = j;
 			}
+			
 			
 		}
 		
