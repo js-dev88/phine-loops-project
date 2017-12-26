@@ -2,18 +2,20 @@ package org.bitbucket.jsdev88.projethaddadsaussier.io;
 
 
 
+import org.bitbucket.jsdev88.projethaddadsaussier.utils.Orientation;
 import org.bitbucket.jsdev88.projethaddadsaussier.utils.Piece;
+import org.bitbucket.jsdev88.projethaddadsaussier.utils.PieceType;
 
 public class Grid {
-	private int width;
-	private int height;
+	private int width;  //j
+	private int height; //i
 	private int nbcc = -1;
 	private Piece[][] pieces;
 
 	public Grid(int width, int height) {
 		this.width = width;
 		this.height = height;
-		pieces = new Piece[width][height];
+		pieces = new Piece[height][width];
 	}
 
 	// Constructor with specified number of connected component
@@ -21,7 +23,7 @@ public class Grid {
 		this.width = width;
 		this.height = height;
 		this.nbcc = nbcc;
-		pieces = new Piece[width][height];
+		pieces = new Piece[height][width];
 	}
 
 	public Integer getWidth() {
@@ -71,13 +73,13 @@ public class Grid {
 		if (line == 0) {
 			if (column == 0)
 				return true;
-			if (column == this.getHeight() - 1)
+			if (column == this.getWidth() - 1)
 				return true;
 			return false;
-		} else if (line == this.getWidth() - 1) {
+		} else if (line == this.getHeight() - 1) {
 			if (column == 0)
 				return true;
-			if (column == this.getHeight() - 1)
+			if (column == this.getWidth() - 1)
 				return true;
 			return false;
 		} else {
@@ -92,25 +94,71 @@ public class Grid {
 	 * @return true if the case is a corner
 	 */
 	public boolean isBorderLine(int line, int column) {
-		if (line == 0 && column > 0 && column < this.getHeight()-1) {
+		if (line == 0 && column > 0 && column < this.getWidth()-1) {
 			return true;
-		} else if (line == this.getWidth() - 1 && column > 0 && column < this.getHeight()-1) {
+		} else if (line == this.getHeight() - 1 && column > 0 && column < this.getWidth()-1) {
 			return true;
 		}
 		return false;
 
 	}
-	
+	/**
+	 * Check if a case is member of the first or the last column
+	 * 
+	 * @param line
+	 * @param column
+	 * @return true if the case is a corner
+	 */
 	public boolean isBorderColumn(int line, int column) {
-		if (column == 0 && line > 0 && line < this.getWidth()-1) {
+		if (column == 0 && line > 0 && line < this.getHeight()-1) {
 			return true;
-		} else if (column == this.getHeight() - 1 && line > 0 && line < this.getWidth()-1) {
+		} else if (column == this.getWidth() - 1 && line > 0 && line < this.getHeight()-1) {
 			return true;
 		}
 		return false;
 
 	}
 	
+	/**
+	 * Check if a piece is connected
+	 * 
+	 * @param line
+	 * @param column
+	 * @return true if a connector of a piece is connected
+	 */
+	public boolean isConnected(Piece p, Orientation ori){
+		int oppPieceY = ori.getOpposedPieceCoordinates(p)[0];//i
+		int oppPieceX = ori.getOpposedPieceCoordinates(p)[1];//j
+		
+		try{
+			for(Orientation oppConnector :this.getPiece(oppPieceY,  oppPieceX).getConnectors()){
+				if(oppConnector == ori.getOpposedOrientation()){
+				return true;
+				}
+			}
+		}catch(ArrayIndexOutOfBoundsException e){
+			return false;
+		}
+		return false;
+	}
+	
+	/**
+	 * Check if a piece is connected
+	 * 
+	 * @param line
+	 * @param column
+	 * @return true if a connector of a piece is connected
+	 */
+	public boolean isTotallyConnected(Piece p){
+		if(p.getType() != PieceType.VOID){
+			for(Orientation connector : p.getConnectors()){
+				if(!this.isConnected(p, connector)){
+					return false;
+				}
+			}
+		}
+		return true;
+	}
 	
 
 	@Override

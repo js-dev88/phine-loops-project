@@ -17,34 +17,51 @@ public class Generator {
 	 * @throws IOException
 	 *             - if an I/O error occurs.
 	 * @return a File that contains a grid filled with pieces (a level)
+	 * @throws FileNotFoundException 
+	 * @throws UnsupportedEncodingException 
 	 */
 	public static void generateLevel(String fileName, Grid inputGrid) throws IOException {
 		// Generate a solution
 		filledGrid = generateSolution(inputGrid);
 		/* DEBUG */
+		writeGridOnFile("Solution.txt", inputGrid);
 		//GUI.startGUI(filledGrid);
 		System.out.println(filledGrid.toString());
 		shuffle(filledGrid);
 		// Then we write the level on a file
-
-		try (Writer writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(fileName), "utf-8"))) {
-			writer.write(String.valueOf(filledGrid.getWidth()));
-			writer.write(System.lineSeparator());
-			writer.write(String.valueOf(filledGrid.getHeight()));
-			writer.write(System.lineSeparator());
-			for (int i = 0; i < filledGrid.getWidth(); i++) {
-				for (int j = 0; j < filledGrid.getHeight(); j++) {
-					writer.write(filledGrid.getPiece(i, j).getType().ordinal() + " "
-							+ filledGrid.getPiece(i, j).getOrientation().ordinal());
-					writer.write(System.lineSeparator());
-				}
-			}
-		}
-
-		/* DEBUG */
+		writeGridOnFile(fileName, inputGrid);
 		//GUI.startGUI(filledGrid);
 		System.out.println(filledGrid.toString());
 
+	}
+	
+	/**
+	 * Write a  normalized file at the root of the jar
+	 * @param fileName from the command line
+	 * @param inputGrid
+	 * @throws IOException 
+	 * @throws FileNotFoundException 
+	 * @throws UnsupportedEncodingException 
+	 */
+	public static void writeGridOnFile(String fileName, Grid inputGrid) throws IOException{
+		
+		try (Writer writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(fileName), "utf-8"))) {
+			writer.write(String.valueOf(inputGrid.getWidth()));
+			writer.write(System.lineSeparator());
+			writer.write(String.valueOf(inputGrid.getHeight()));
+			writer.write(System.lineSeparator());
+			for (int i = 0; i < inputGrid.getHeight(); i++) {
+				for (int j = 0; j < inputGrid.getWidth(); j++) {
+					writer.write(inputGrid.getPiece(i, j).getType().ordinal() + " "
+							+ inputGrid.getPiece(i, j).getOrientation().ordinal());
+					writer.write(System.lineSeparator());
+				}
+			}
+		} catch (UnsupportedEncodingException e) {
+			System.out.println("Error when encoding the file");
+		} catch (FileNotFoundException e) {
+			System.out.println("File not found");
+		}
 	}
 
 	/**
@@ -56,8 +73,8 @@ public class Generator {
 	public static Grid generateSolution(Grid inputGrid) {
 		if (inputGrid.getNbcc() == -1) {// Generate a solution with a random
 										// number of connected component
-			for (int i = 0; i < inputGrid.getWidth(); i++) {
-				for (int j = 0; j < inputGrid.getHeight(); j++) {
+			for (int i = 0; i < inputGrid.getHeight(); i++) {
+				for (int j = 0; j < inputGrid.getWidth(); j++) {
 					// check corners and use the tab of possible pieces
 					if (inputGrid.isCorner(i, j)) {
 						affectPiece2Corner(i, j, new Piece(i, j), inputGrid);
@@ -85,8 +102,7 @@ public class Generator {
 	 * 
 	 * @param line
 	 * @param column
-	 * @param p
-	 *            piece instance (i,j) there is no type or orientation
+	 * @param p piece instance (i,j) there is no type or orientation
 	 */
 	public static void affectPiece2Corner(int line, int column, Piece p, Grid inputGrid) {
 		Random rdOrientation = new Random();
@@ -96,7 +112,7 @@ public class Generator {
 			setPossiblePieceType(new PieceType[] {PieceType.VOID, PieceType.ONECONN, PieceType.LTYPE }, p);
 			switch (p.getType()) {
 			case ONECONN:
-				p.setOrientation(rdOrientation.nextInt(2)+1); //well done :) ?
+				p.setOrientation(rdOrientation.nextInt(2)+1); 
 				break;
 			case LTYPE:
 				p.setOrientation(1);
@@ -104,7 +120,7 @@ public class Generator {
 				break;
 			}
 
-		} else if (line == 0 && column == inputGrid.getHeight() - 1) {
+		} else if (line == 0 && column == inputGrid.getWidth() - 1) {
 			//If the piece of the penultimate column has a right connector, we only choose a piece with WEST possible orientation 
 			if (inputGrid.getPiece(line, column - 1).hasRightConnector()) {
 				setPossiblePieceType(new PieceType[] {PieceType.ONECONN, PieceType.LTYPE}, p);
@@ -126,7 +142,7 @@ public class Generator {
 				}
 			}
 
-		}else if (line == inputGrid.getWidth() - 1 && column == 0) {
+		}else if (line == inputGrid.getHeight() - 1 && column == 0) {
 			//check if the upper case has a south connector and adjust
 			if (inputGrid.getPiece(line-1, column).hasBottomConnector()) {
 				setPossiblePieceType(new PieceType[] {PieceType.ONECONN, PieceType.LTYPE}, p);
@@ -180,7 +196,7 @@ public class Generator {
 	public static void affectPiece2BorderLine(int line, int column, Piece p, Grid inputGrid) {
 		Random rdOrientation = new Random();
 		//Case first line
-		if(line == 0 && column > 0 && column < inputGrid.getHeight()-1){
+		if(line == 0 && column > 0 && column < inputGrid.getWidth()-1){
 			
 			if (inputGrid.getPiece(line, column - 1).hasRightConnector()) {
 				setPossiblePieceType(new PieceType[] { PieceType.ONECONN, PieceType.BAR, PieceType.TTYPE,PieceType.LTYPE }, p);
@@ -257,7 +273,7 @@ public class Generator {
 	public static void affectPiece2BorderColumn(int line, int column, Piece p, Grid inputGrid) {
 		Random rdOrientation = new Random();
 		//Case first column
-		if(column == 0 && line > 0 && line < inputGrid.getWidth()-1){
+		if(column == 0 && line > 0 && line < inputGrid.getHeight()-1){
 			if (inputGrid.getPiece(line -1, column).hasBottomConnector()) {
 				setPossiblePieceType(new PieceType[] {PieceType.ONECONN, PieceType.BAR, PieceType.TTYPE,PieceType.LTYPE}, p);
 				switch (p.getType()) {
@@ -398,10 +414,14 @@ public class Generator {
 
 	public static void main(String[] args) {
 		try {
-			generateLevel("txt.txt", new Grid(10, 10));
+			generateLevel("NotSolution.txt", new Grid(5, 8));
+		} catch (UnsupportedEncodingException e) {
+			System.out.println("Error when encoding the file");
+		} catch (FileNotFoundException e) {
+			System.out.println("File not found");
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			System.out.println("Can't generate the file");
 		}
+		
 	}
 }
