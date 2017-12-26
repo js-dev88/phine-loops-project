@@ -27,7 +27,7 @@ public class GUITEST {
 	/**
 	 * Launch the application.
 	 */
-	public static void startGUI(Grid grid) {
+	public static void startGUITEST(Grid grid) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
@@ -55,7 +55,7 @@ public class GUITEST {
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setBounds(100,100,grid.getWidth()*70,grid.getHeight()*70);
 		//JLabel lblBackGround = new JLabel("");
-		//lblBackGround.setIcon(new ImageIcon(GUI.class.getResource("/org/bitbucket/jsdev88/projethaddadsaussier/io/background.png")));
+		//lblBackGround.setIcon(new ImageIcon(GUITEST.class.getResource("/org/bitbucket/jsdev88/projethaddadsaussier/io/background.png")));
 		//frame.getContentPane().add(lblBackGround, BorderLayout.CENTER);
 		
 		frame.setLayout(new GridLayout(grid.getHeight(),grid.getWidth()));
@@ -70,53 +70,53 @@ public class GUITEST {
 				ImageIcon img;
 				if(p.getType().equals(PieceType.ONECONN)){
 					if(p.getOrientation().equals(Orientation.NORTH)){
-						img = new ImageIcon(GUI.class.getResource("/org/bitbucket/jsdev88/projethaddadsaussier/io/10.png"));
+						img = new ImageIcon(GUITEST.class.getResource("/org/bitbucket/jsdev88/projethaddadsaussier/io/10.png"));
 					}
 					else if((p.getOrientation().equals(Orientation.EAST))){
-						img = new ImageIcon(GUI.class.getResource("/org/bitbucket/jsdev88/projethaddadsaussier/io/11.png"));
+						img = new ImageIcon(GUITEST.class.getResource("/org/bitbucket/jsdev88/projethaddadsaussier/io/11.png"));
 					}else if((p.getOrientation().equals(Orientation.SOUTH))){
-						img = new ImageIcon(GUI.class.getResource("/org/bitbucket/jsdev88/projethaddadsaussier/io/12.png"));
+						img = new ImageIcon(GUITEST.class.getResource("/org/bitbucket/jsdev88/projethaddadsaussier/io/12.png"));
 					}else{//WEST
-						img = new ImageIcon(GUI.class.getResource("/org/bitbucket/jsdev88/projethaddadsaussier/io/13.png"));
+						img = new ImageIcon(GUITEST.class.getResource("/org/bitbucket/jsdev88/projethaddadsaussier/io/13.png"));
 					}
 				}
 				else if(p.getType().equals(PieceType.BAR)){
 					if(p.getOrientation().equals(Orientation.NORTH)){//NORTH-OUEST
-						img = new ImageIcon(GUI.class.getResource("/org/bitbucket/jsdev88/projethaddadsaussier/io/20.png"));
+						img = new ImageIcon(GUITEST.class.getResource("/org/bitbucket/jsdev88/projethaddadsaussier/io/20.png"));
 					}
 					else{//EAST-WEST
-						img = new ImageIcon(GUI.class.getResource("/org/bitbucket/jsdev88/projethaddadsaussier/io/21.png"));
+						img = new ImageIcon(GUITEST.class.getResource("/org/bitbucket/jsdev88/projethaddadsaussier/io/21.png"));
 					}
 				}
 				else if(p.getType().equals(PieceType.TTYPE)){
 					if(p.getOrientation().equals(Orientation.NORTH)){
-						img = new ImageIcon(GUI.class.getResource("/org/bitbucket/jsdev88/projethaddadsaussier/io/30.png"));
+						img = new ImageIcon(GUITEST.class.getResource("/org/bitbucket/jsdev88/projethaddadsaussier/io/30.png"));
 					}
 					else if((p.getOrientation().equals(Orientation.EAST))){
-						img = new ImageIcon(GUI.class.getResource("/org/bitbucket/jsdev88/projethaddadsaussier/io/31.png"));
+						img = new ImageIcon(GUITEST.class.getResource("/org/bitbucket/jsdev88/projethaddadsaussier/io/31.png"));
 					}else if((p.getOrientation().equals(Orientation.SOUTH))){
-						img = new ImageIcon(GUI.class.getResource("/org/bitbucket/jsdev88/projethaddadsaussier/io/32.png"));
+						img = new ImageIcon(GUITEST.class.getResource("/org/bitbucket/jsdev88/projethaddadsaussier/io/32.png"));
 					}else{//WEST
-						img = new ImageIcon(GUI.class.getResource("/org/bitbucket/jsdev88/projethaddadsaussier/io/33.png"));
+						img = new ImageIcon(GUITEST.class.getResource("/org/bitbucket/jsdev88/projethaddadsaussier/io/33.png"));
 					}
 				}
 				else if(p.getType().equals(PieceType.LTYPE)){
 					if(p.getOrientation().equals(Orientation.NORTH)){
-						img = new ImageIcon(GUI.class.getResource("/org/bitbucket/jsdev88/projethaddadsaussier/io/50.png"));
+						img = new ImageIcon(GUITEST.class.getResource("/org/bitbucket/jsdev88/projethaddadsaussier/io/50.png"));
 					}
 					else if((p.getOrientation().equals(Orientation.EAST))){
-						img = new ImageIcon(GUI.class.getResource("/org/bitbucket/jsdev88/projethaddadsaussier/io/51.png"));
+						img = new ImageIcon(GUITEST.class.getResource("/org/bitbucket/jsdev88/projethaddadsaussier/io/51.png"));
 					}else if((p.getOrientation().equals(Orientation.SOUTH))){
-						img = new ImageIcon(GUI.class.getResource("/org/bitbucket/jsdev88/projethaddadsaussier/io/52.png"));
+						img = new ImageIcon(GUITEST.class.getResource("/org/bitbucket/jsdev88/projethaddadsaussier/io/52.png"));
 					}else{//WEST
-						img = new ImageIcon(GUI.class.getResource("/org/bitbucket/jsdev88/projethaddadsaussier/io/53.png"));
+						img = new ImageIcon(GUITEST.class.getResource("/org/bitbucket/jsdev88/projethaddadsaussier/io/53.png"));
 					}
 				}
 				else if(p.getType().equals(PieceType.FOURCONN)){
-						img = new ImageIcon(GUI.class.getResource("/org/bitbucket/jsdev88/projethaddadsaussier/io/40.png"));
+						img = new ImageIcon(GUITEST.class.getResource("/org/bitbucket/jsdev88/projethaddadsaussier/io/40.png"));
 				}
 				else{//VOID
-					img = null;//new ImageIcon(GUI.class.getResource("/org/bitbucket/jsdev88/projethaddadsaussier/io/background.png"));
+					img = null;//new ImageIcon(GUITEST.class.getResource("/org/bitbucket/jsdev88/projethaddadsaussier/io/background.png"));
 				}
 				lblcase.setIcon(img);
 				frame.getContentPane().add(lblcase, BorderLayout.CENTER);

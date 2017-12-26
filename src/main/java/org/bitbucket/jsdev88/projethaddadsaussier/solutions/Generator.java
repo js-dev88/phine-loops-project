@@ -4,7 +4,7 @@ import java.io.*;
 
 import java.util.Random;
 
-import org.bitbucket.jsdev88.projethaddadsaussier.io.GUI;
+
 import org.bitbucket.jsdev88.projethaddadsaussier.io.GUITEST;
 import org.bitbucket.jsdev88.projethaddadsaussier.io.Grid;
 import org.bitbucket.jsdev88.projethaddadsaussier.utils.Piece;
@@ -28,7 +28,7 @@ public class Generator {
 		filledGrid = generateSolution(inputGrid);
 		/* DEBUG */
 		writeGridOnFile("Solution.txt", inputGrid);
-		GUITEST.startGUI(filledGrid);
+		GUITEST.startGUITEST(filledGrid);
 		System.out.println(filledGrid.toString());
 		//shuffle(filledGrid);
 		// Then we write the level on a file
