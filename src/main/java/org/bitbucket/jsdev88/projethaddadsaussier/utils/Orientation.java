@@ -1,7 +1,7 @@
 package org.bitbucket.jsdev88.projethaddadsaussier.utils;
 
 import java.util.HashMap;
-import java.util.Map;
+
 
 /**
  * 
@@ -10,9 +10,51 @@ import java.util.Map;
  */
 public enum Orientation {
 	//Each orientation has a specific value and we can easily add a new orientation
-	NORTH(0),EAST(1),SOUTH(2),WEST(3);
+	//For each orientation we have an opposite
+	NORTH(0) {
+		@Override
+		public Orientation getOpposedOrientation() {
+			return SOUTH;
+		}
+
+		@Override
+		public int[] getOpposedPieceCoordinates(Piece p) {
+			return new int[]{p.getPosY()-1,p.getPosX()};
+		}
+	},EAST(1) {
+		@Override
+		public Orientation getOpposedOrientation() {
+			return WEST;
+		}
+
+		@Override
+		public int[] getOpposedPieceCoordinates(Piece p) {
+			return new int[]{p.getPosY(),p.getPosX()+1};
+		}
+	},SOUTH(2) {
+		@Override
+		public Orientation getOpposedOrientation() {
+			return NORTH;
+		}
+
+		@Override
+		public int[] getOpposedPieceCoordinates(Piece p) {
+			return new int[]{p.getPosY()+1,p.getPosX()};
+		}
+	},WEST(3) {
+		@Override
+		public Orientation getOpposedOrientation() {
+			return EAST;
+		}
+
+		@Override
+		public int[] getOpposedPieceCoordinates(Piece p) {
+			return new int[]{p.getPosY(),p.getPosX()-1};
+		}
+	};
 	
 	private final int value;
+	
 	
 		public int getValue() {
 			return value;
@@ -36,6 +78,18 @@ public enum Orientation {
 			}
 			throw new IllegalArgumentException("Orientation unknown : " + ori);
 		}
+		
+		/**
+		 * 
+		 * @return the opposite orientation
+		 */
+		public abstract Orientation getOpposedOrientation();
+		
+		/**
+		 * 
+		 * @return the opposite Piece position
+		 */
+		public abstract int[] getOpposedPieceCoordinates(Piece p);
 	 
 	/**
 	 * Turn the piece of 90° on the right

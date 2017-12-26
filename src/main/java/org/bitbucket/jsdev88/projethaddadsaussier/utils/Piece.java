@@ -3,13 +3,13 @@ package org.bitbucket.jsdev88.projethaddadsaussier.utils;
 import java.util.LinkedList;
 
 public class Piece {
-	private int posX;
-	private int posY;
+	private int posX;//j
+	private int posY;//i
 	private PieceType type;
 	private Orientation orientation;
 	private LinkedList<Orientation> connectors;
 
-	public Piece(int posX, int posY) {
+	public Piece(int posY, int posX) {
 		this.posX = posX;
 		this.posY = posY;
 		this.type = PieceType.VOID;
@@ -18,7 +18,7 @@ public class Piece {
 
 	}
 
-	public Piece(int posX, int posY, PieceType type, Orientation orientation) {
+	public Piece(int posY, int posX, PieceType type, Orientation orientation) {
 		this.posX = posX;
 		this.posY = posY;
 		this.type = type;
@@ -26,7 +26,7 @@ public class Piece {
 		this.connectors = type.setConnectorsList(orientation);
 	}
 
-	public Piece(int posX, int posY, int typeValue, int orientationValue) {
+	public Piece(int posY, int posX, int typeValue, int orientationValue) {
 		this.posX = posX;
 		this.posY = posY;
 		this.type = PieceType.getTypefromValue(typeValue);
@@ -34,7 +34,7 @@ public class Piece {
 		this.connectors = type.setConnectorsList(Orientation.getOrifromValue(orientationValue));
 	}
 
-	public int getPosX() {
+	public int getPosX() { //get j
 		return posX;
 	}
 
@@ -42,7 +42,7 @@ public class Piece {
 		this.posX = posX;
 	}
 
-	public int getPosY() {
+	public int getPosY() { //get i
 		return posY;
 	}
 
@@ -107,6 +107,8 @@ public class Piece {
 		}
 		return false;
 	}
+	
+	
 
 	/**
 	 * Turn the piece 90° on the right and redefine the connectors's position

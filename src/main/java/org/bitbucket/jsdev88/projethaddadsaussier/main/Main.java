@@ -11,6 +11,7 @@ import org.apache.commons.cli.Option.Builder;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 import org.bitbucket.jsdev88.projethaddadsaussier.io.Grid;
+import org.bitbucket.jsdev88.projethaddadsaussier.solutions.Checker;
 import org.bitbucket.jsdev88.projethaddadsaussier.solutions.Generator;
 
 public class Main {
@@ -55,11 +56,18 @@ public class Main {
 				outputFile = cmd.getOptionValue("o");
 
 				if (cmd.hasOption("x")) {//call the nbcc option
-					try {
-						String nbcc = cmd.getOptionValue("x");
-						Generator.generateLevel(outputFile, new Grid(width, height,Integer.valueOf(nbcc)));
-					} catch (IOException e) {
-						System.err.println("Erreur pendant la génération");
+					String nbcc = cmd.getOptionValue("x");
+					if(Integer.valueOf(nbcc)> Math.round((width*height-1 / 2))){
+							System.err.println("Maximum of connected component is limited to height * width /2");
+							HelpFormatter formatter = new HelpFormatter();
+							formatter.printHelp("phineloopgen", options);
+							System.exit(1);
+					}else{
+						try {	
+							Generator.generateLevel(outputFile, new Grid(width, height,Integer.valueOf(nbcc)));
+						} catch (IOException e) {
+							System.err.println("Erreur pendant la génération");
+						}
 					}
 				} else {
 					try {
@@ -89,8 +97,11 @@ public class Main {
 				inputFile = cmd.getOptionValue("c");
 				boolean solved = false;
 
-				// load grid from inputFile and check if it is solved...
-				// ...
+				try {
+					solved = Checker.isSolution(inputFile);
+				} catch (IOException e) {
+					solved = false;
+				}
 				System.out.println("SOLVED: " + solved);
 			} else {
 				throw new ParseException(
