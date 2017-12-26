@@ -3,6 +3,9 @@ package org.bitbucket.jsdev88.projethaddadsaussier.solutions;
 import java.io.*;
 
 import java.util.Random;
+
+import org.bitbucket.jsdev88.projethaddadsaussier.io.GUI;
+import org.bitbucket.jsdev88.projethaddadsaussier.io.GUITEST;
 import org.bitbucket.jsdev88.projethaddadsaussier.io.Grid;
 import org.bitbucket.jsdev88.projethaddadsaussier.utils.Piece;
 import org.bitbucket.jsdev88.projethaddadsaussier.utils.PieceType;
@@ -25,9 +28,9 @@ public class Generator {
 		filledGrid = generateSolution(inputGrid);
 		/* DEBUG */
 		writeGridOnFile("Solution.txt", inputGrid);
-		//GUI.startGUI(filledGrid);
+		GUITEST.startGUI(filledGrid);
 		System.out.println(filledGrid.toString());
-		shuffle(filledGrid);
+		//shuffle(filledGrid);
 		// Then we write the level on a file
 		writeGridOnFile(fileName, inputGrid);
 		//GUI.startGUI(filledGrid);
@@ -414,7 +417,7 @@ public class Generator {
 
 	public static void main(String[] args) {
 		try {
-			generateLevel("NotSolution.txt", new Grid(5, 8));
+			generateLevel("NotSolution.txt", new Grid(3, 3));
 		} catch (UnsupportedEncodingException e) {
 			System.out.println("Error when encoding the file");
 		} catch (FileNotFoundException e) {
