@@ -27,14 +27,14 @@ public class Generator {
 		// Generate a solution
 		filledGrid = generateSolution(inputGrid);
 		/* DEBUG */
-		writeGridOnFile("Solution.txt", inputGrid);
-		GUITEST.startGUITEST(filledGrid);
-		System.out.println(filledGrid.toString());
-		//shuffle(filledGrid);
+		//writeGridOnFile("Solution.txt", inputGrid);
+		//GUITEST.startGUITEST(filledGrid);
+		//System.out.println(filledGrid.toString());
+		shuffle(filledGrid);
 		// Then we write the level on a file
 		writeGridOnFile(fileName, inputGrid);
-		//GUI.startGUI(filledGrid);
-		System.out.println(filledGrid.toString());
+		GUITEST.startGUITEST(filledGrid);
+		//System.out.println(filledGrid.toString());
 
 	}
 	
@@ -417,7 +417,7 @@ public class Generator {
 
 	public static void main(String[] args) {
 		try {
-			generateLevel("NotSolution.txt", new Grid(10, 10));
+			generateLevel("NotSolution.txt", new Grid(4, 4));
 		} catch (UnsupportedEncodingException e) {
 			System.out.println("Error when encoding the file");
 		} catch (FileNotFoundException e) {

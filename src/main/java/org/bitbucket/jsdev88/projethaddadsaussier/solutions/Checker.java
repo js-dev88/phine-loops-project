@@ -50,6 +50,7 @@ public class Checker {
 			throw new IOException("File is not in the correct format");
 		}
 	}
+
 	/**
 	 * Check if a grid is Solution
 	 * @param inputFile String from command line
@@ -58,6 +59,15 @@ public class Checker {
 	 */
 	public static boolean isSolution(String inputFile)throws IOException{
 		Grid grid2Test = buildGrid(inputFile);
+		for(Piece[] linep : grid2Test.getAllPieces()){
+			for(Piece p : linep){
+				if(!grid2Test.isTotallyConnected(p)) return false;
+			}
+		}
+		return true;
+	}
+	
+	public static boolean isSolution(Grid grid2Test){
 		for(Piece[] linep : grid2Test.getAllPieces()){
 			for(Piece p : linep){
 				if(!grid2Test.isTotallyConnected(p)) return false;

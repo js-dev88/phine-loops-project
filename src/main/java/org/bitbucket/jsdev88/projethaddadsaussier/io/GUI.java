@@ -16,7 +16,6 @@ import org.bitbucket.jsdev88.projethaddadsaussier.utils.PieceType;
 
 import java.awt.BorderLayout;
 import javax.swing.JLabel;
-import javax.swing.GroupLayout;
 import javax.swing.ImageIcon;
 
 public class GUI {
