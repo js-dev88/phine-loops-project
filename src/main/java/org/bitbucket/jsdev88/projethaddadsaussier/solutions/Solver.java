@@ -8,6 +8,7 @@ import org.bitbucket.jsdev88.projethaddadsaussier.io.Grid;
 import org.bitbucket.jsdev88.projethaddadsaussier.utils.Orientation;
 import org.bitbucket.jsdev88.projethaddadsaussier.utils.Pair;
 import org.bitbucket.jsdev88.projethaddadsaussier.utils.Piece;
+import org.bitbucket.jsdev88.projethaddadsaussier.utils.PieceType;
 
 public class Solver {
 	public static boolean solveGrid(String inputFile, String ouputFile, String pieceChoiceMethod) throws IOException{
@@ -21,26 +22,35 @@ public class Solver {
 	public static boolean solveIT(Grid grid, String pieceChoiceMethod){
 		Objects.requireNonNull(grid);
 		Stack<Pair<Piece, Orientation>> pile = createStack(grid,pieceChoiceMethod);
-		 while (!pile.isEmpty()) {
-			  Pair<Piece, Orientation> currentPiece= pile.pop();
-			  currentPiece.getKey().setOrientation(currentPiece.getValue().getValue());
-			  grid.setPiece(currentPiece.getKey().getPosY(), currentPiece.getKey().getPosX(),currentPiece.getKey());
-		      
-		      if (Checker.isSolution(grid)) {
-		    	  /*DEBUG*/
-		    	  //System.out.println( pile.toString());
-			      //System.out.println( grid.toString());
-		        return true; 
-		        
-		      }
-		      
-		      addPiece2Stack(grid, pieceChoiceMethod, pile, currentPiece.getKey());
-		      /*DEBUG*/
-		      //System.out.println( pile.toString());
-		      //System.out.println( grid.toString());	   
-		  }
+		if (Checker.isSolution(grid)) return true;
+		if(!grid.allPieceHaveNeighbour()) return false; //=> à améliorer
+		else{
+			while (!pile.isEmpty()) {
+				  Pair<Piece, Orientation> currentPiece= pile.pop();
+				  currentPiece.getKey().setOrientation(currentPiece.getValue().getValue());
+				  grid.setPiece(currentPiece.getKey().getPosY(), currentPiece.getKey().getPosX(),currentPiece.getKey());
+			      
+			      if (Checker.isSolution(grid)) {
+			    	  /*DEBUG*/
+			    	  //System.out.println( pile.toString());
+				      //System.out.println( grid.toString());
+			        return true; 
+			        
+			      }
+			      
+			      addPiece2Stack(grid, pieceChoiceMethod, pile, currentPiece.getKey());
+			      if(pile.contains(null)){
+			    	  return false;
+			      }
+			      /*DEBUG*/
+			     // System.out.println( pile.toString());
+			     // System.out.println( grid.toString());	   
+			  }
+			 
+			return false;
+			
+		}
 		 
-		return false;
 	}
 	
 	public static Stack<Pair<Piece, Orientation>> addPiece2Stack(Grid grid, String pieceChoiceMethod,Stack<Pair<Piece, Orientation>> pile, Piece currentpiece){
@@ -48,12 +58,24 @@ public class Solver {
 		//0 => choose next piece in the grid
 		case "0":
 			        Piece nextPiece = grid.getNextPiece(currentpiece);
+			        if(nextPiece == null){
+			        	break;
+			        }
+			        while(nextPiece.getType() == PieceType.VOID){
+			        	nextPiece =  grid.getNextPiece(nextPiece);
+			         }
 					if(nextPiece != null){
+						
+						boolean isPossible2Connect = false;
 				         for(Orientation ori : nextPiece.getType().getListOfPossibleOri()){
 				        	 nextPiece.setOrientation(ori.getValue());
 				        	 if(grid.hasNeighbour(nextPiece)){
+				        		 isPossible2Connect = true;
 				        		 pile.push(new Pair<Piece,Orientation>(nextPiece,ori));
 				        	 }
+				         }
+				         if(!isPossible2Connect){
+				        	 pile.push(null);
 				         }
 					}
 				
@@ -72,6 +94,9 @@ public class Solver {
 		Stack<Pair<Piece, Orientation>> pile = new Stack<>();
 		switch(pieceChoiceMethod){
 		case "0":Piece p = grid.getPiece(0, 0);
+		         while(p.getType() == PieceType.VOID){
+		        	 p =  grid.getNextPiece(p);
+		         }
 		         for(Orientation ori : p.getType().getListOfPossibleOri()){
 		        	 p.setOrientation(ori.getValue());
 		        	 if(grid.hasNeighbour(p)){
@@ -89,7 +114,7 @@ public class Solver {
 	public static void main(String[] args) {
 		try {
 			
-			System.out.println(solveGrid("shuffledlvl.txt","Solved.txt","0"));
+			System.out.println(solveGrid("NotSolution.txt","Solved.txt","0"));
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

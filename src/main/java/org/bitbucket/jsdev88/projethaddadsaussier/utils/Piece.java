@@ -128,6 +128,8 @@ public class Piece {
 		}
 		return s;
 	}
+	
+	
 	public static void main(String[] args) {
 		Piece p = new Piece (0,0);
 		p.setType(PieceType.LTYPE);

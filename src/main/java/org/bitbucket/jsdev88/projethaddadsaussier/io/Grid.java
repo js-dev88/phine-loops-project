@@ -119,7 +119,7 @@ public class Grid {
 
 	}
 	/**
-	 * Check if a piece has a neighbour for its connectors
+	 * Check if a piece has a neighbour for its connectors for one orientation
 	 * @param p piece
 	 * @return true if there is a neighbour for all connectors
 	 */
@@ -137,12 +137,58 @@ public class Grid {
 		
 	}
 	
+	public int numberOfNeibours(Piece p){
+		int X = p.getPosX();
+		int Y = p.getPosY();
+		int count =0;
+		
+		try{ //NORTH
+			if(getPiece(Y+1,  X).getType() != PieceType.VOID) count ++;
+		}catch(ArrayIndexOutOfBoundsException e){
+			
+		}
+		try{//EAST
+			if(getPiece(Y,  X+1).getType() != PieceType.VOID) count ++;
+		}catch(ArrayIndexOutOfBoundsException e){
+			
+		}
+		try{//SOUTH
+			if(getPiece(Y-1, X ).getType() != PieceType.VOID) count ++;
+		}catch(ArrayIndexOutOfBoundsException e){
+			
+		}
+		try{//WEST
+			if(getPiece(Y,  X-1).getType() != PieceType.VOID) count ++;
+		}catch(ArrayIndexOutOfBoundsException e){
+			
+		}
+		return count;
+	}
+	/**
+	 * Check if all pieces have neighbours even if we don't know the orientation
+	 * @param p
+	 * @return
+	 */
+	public boolean allPieceHaveNeighbour(){
+		Piece[][] tab = this.getAllPieces();
+		for(Piece[] ligne : tab){
+			for(Piece p : ligne){
+			
+				if(p.getType() != PieceType.VOID){
+						if(p.getType().getNbConnectors() > numberOfNeibours(p)){
+						return false;
+					}
+				}
+				
+				
+			}
+		}
+		return true;
+		
+	}
+	
 	public Piece getNextPiece(Piece p){
 		
-		
-		
-		do{
-			
 			int i = p.getPosY();
 			int j = p.getPosX();
 			if(j < this.getWidth()-1){
@@ -155,7 +201,7 @@ public class Grid {
 				}
 				
 			}
-		}while(p.getType() == PieceType.VOID);
+		
 		return p ;
 		
 	}

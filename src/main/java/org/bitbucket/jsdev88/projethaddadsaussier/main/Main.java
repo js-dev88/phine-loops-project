@@ -89,7 +89,7 @@ public class Main {
 				try {
 					solved = Solver.solveGrid(inputFile, outputFile,"0");
 				} catch (IOException e) {
-					System.err.println("the solver has encounter a problem");
+					System.err.println("Check files' name");
 				}
 				// load grid from inputFile, solve it and store result to
 				// outputFile...

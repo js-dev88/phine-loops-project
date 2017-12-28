@@ -415,7 +415,7 @@ public class Generator {
 		return grid;
 	}
 
-	/*public static void main(String[] args) {
+	public static void main(String[] args) {
 		try {
 			generateLevel("NotSolution.txt", new Grid(3, 3));
 		} catch (UnsupportedEncodingException e) {
@@ -426,5 +426,5 @@ public class Generator {
 			System.out.println("Can't generate the file");
 		}
 		
-	}*/
+	}
 }
