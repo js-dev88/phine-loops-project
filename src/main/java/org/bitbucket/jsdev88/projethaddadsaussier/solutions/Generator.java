@@ -415,9 +415,9 @@ public class Generator {
 		return grid;
 	}
 
-	public static void main(String[] args) {
+	/*public static void main(String[] args) {
 		try {
-			generateLevel("NotSolution.txt", new Grid(4, 4));
+			generateLevel("NotSolution.txt", new Grid(3, 3));
 		} catch (UnsupportedEncodingException e) {
 			System.out.println("Error when encoding the file");
 		} catch (FileNotFoundException e) {
@@ -426,5 +426,5 @@ public class Generator {
 			System.out.println("Can't generate the file");
 		}
 		
-	}
+	}*/
 }

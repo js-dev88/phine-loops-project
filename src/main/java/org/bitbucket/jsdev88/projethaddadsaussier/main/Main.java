@@ -13,6 +13,7 @@ import org.apache.commons.cli.ParseException;
 import org.bitbucket.jsdev88.projethaddadsaussier.io.Grid;
 import org.bitbucket.jsdev88.projethaddadsaussier.solutions.Checker;
 import org.bitbucket.jsdev88.projethaddadsaussier.solutions.Generator;
+import org.bitbucket.jsdev88.projethaddadsaussier.solutions.Solver;
 
 public class Main {
 	private static String inputFile = null;
@@ -84,7 +85,12 @@ public class Main {
 					throw new ParseException("Missing mandatory --output argument.");
 				outputFile = cmd.getOptionValue("o");
 				boolean solved = false;
-
+				
+				try {
+					solved = Solver.solveGrid(inputFile, outputFile,"0");
+				} catch (IOException e) {
+					System.err.println("the solver has encounter a problem");
+				}
 				// load grid from inputFile, solve it and store result to
 				// outputFile...
 				// ...

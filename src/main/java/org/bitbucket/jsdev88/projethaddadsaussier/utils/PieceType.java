@@ -1,5 +1,6 @@
 package org.bitbucket.jsdev88.projethaddadsaussier.utils;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
 
@@ -22,6 +23,15 @@ public enum PieceType {
 		public Orientation getOrientation(Orientation orientation) {
 			return Orientation.NORTH;
 		}
+
+		
+
+		@Override
+		public ArrayList<Orientation> getListOfPossibleOri() {
+		    ArrayList<Orientation> posList = new  ArrayList<>();
+		    posList.add(Orientation.NORTH);
+			return posList;
+		}
 	}, ONECONN(1,1) {
 		@Override
 		public LinkedList<Orientation> setConnectorsList(Orientation orientation) {
@@ -34,6 +44,16 @@ public enum PieceType {
 		@Override
 		public Orientation getOrientation(Orientation orientation) {
 			return orientation;
+		}
+
+	
+		@Override
+		public ArrayList<Orientation> getListOfPossibleOri() {
+			 ArrayList<Orientation> posList = new  ArrayList<>();
+			    for(Orientation ori : Orientation.values()){
+			    	posList.add(ori);
+			    }
+				return posList;
 		}
 	}, BAR(2,2) {
 		@Override
@@ -52,6 +72,16 @@ public enum PieceType {
 				return Orientation.EAST;
 			return orientation;
 		}
+
+		
+
+		@Override
+		public ArrayList<Orientation> getListOfPossibleOri() {
+			 ArrayList<Orientation> posList = new  ArrayList<>();
+			 posList.add(Orientation.NORTH);
+			 posList.add(Orientation.EAST);
+			 return posList;
+		}
 	}, TTYPE(3,3) {
 		@Override
 		public LinkedList<Orientation> setConnectorsList(Orientation orientation) {
@@ -66,6 +96,16 @@ public enum PieceType {
 		@Override
 		public Orientation getOrientation(Orientation orientation) {
 			return orientation;
+		}
+
+
+		@Override
+		public ArrayList<Orientation> getListOfPossibleOri() {
+			ArrayList<Orientation> posList = new  ArrayList<>();
+		    for(Orientation ori : Orientation.values()){
+		    	posList.add(ori);
+		    }
+			return posList;
 		}
 	}, FOURCONN(4,4) {
 		@Override
@@ -83,6 +123,16 @@ public enum PieceType {
 		public Orientation getOrientation(Orientation orientation) {
 			return Orientation.NORTH;
 		}
+
+
+		@Override
+		public ArrayList<Orientation> getListOfPossibleOri() {
+			ArrayList<Orientation> posList = new  ArrayList<>();
+		    for(Orientation ori : Orientation.values()){
+		    	posList.add(ori);
+		    }
+			return posList;
+		}
 	}, LTYPE(2,5) {
 		@Override
 		public LinkedList<Orientation> setConnectorsList(Orientation orientation) {
@@ -96,6 +146,15 @@ public enum PieceType {
 		@Override
 		public Orientation getOrientation(Orientation orientation) {
 			return orientation;
+		}
+
+		@Override
+		public ArrayList<Orientation> getListOfPossibleOri() {
+			ArrayList<Orientation> posList = new  ArrayList<>();
+		    for(Orientation ori : Orientation.values()){
+		    	posList.add(ori);
+		    }
+			return posList;
 		}
 	};
 
@@ -134,6 +193,8 @@ public enum PieceType {
 	 */
 	public abstract Orientation getOrientation(Orientation orientation);
 	
+	public abstract ArrayList<Orientation> getListOfPossibleOri();
+		
 	
 	private static final HashMap<Integer, PieceType> mapValues = new HashMap<>();
 	static {

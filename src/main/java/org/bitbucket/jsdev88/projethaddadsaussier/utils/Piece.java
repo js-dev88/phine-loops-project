@@ -109,6 +109,8 @@ public class Piece {
 	}
 	
 	
+	
+	
 
 	/**
 	 * Turn the piece 90° on the right and redefine the connectors's position

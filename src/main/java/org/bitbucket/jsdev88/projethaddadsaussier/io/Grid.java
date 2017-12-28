@@ -118,6 +118,47 @@ public class Grid {
 		return false;
 
 	}
+	/**
+	 * Check if a piece has a neighbour for its connectors
+	 * @param p piece
+	 * @return true if there is a neighbour for all connectors
+	 */
+	public boolean hasNeighbour(Piece p){
+		for(Orientation ori : p.getConnectors()){
+			int oppPieceY = ori.getOpposedPieceCoordinates(p)[0];//i
+			int oppPieceX = ori.getOpposedPieceCoordinates(p)[1];//j
+			try{
+				this.getPiece(oppPieceY,  oppPieceX);
+			}catch(ArrayIndexOutOfBoundsException e){
+				return  false;
+			}
+		}
+		return true;
+		
+	}
+	
+	public Piece getNextPiece(Piece p){
+		
+		
+		
+		do{
+			
+			int i = p.getPosY();
+			int j = p.getPosX();
+			if(j < this.getWidth()-1){
+				p =  this.getPiece(i,j+1);
+			}else{
+				if(i < this.getHeight()-1){
+					p  = this.getPiece(i+1, 0);
+				}else{
+					return null;
+				}
+				
+			}
+		}while(p.getType() == PieceType.VOID);
+		return p ;
+		
+	}
 	
 	/**
 	 * Check if a piece is connected
