@@ -11,8 +11,7 @@ import org.bitbucket.jsdev88.projethaddadsaussier.utils.Piece;
 import org.bitbucket.jsdev88.projethaddadsaussier.utils.PieceType;
 
 public class Solver {
-	private static int lineCheck = 0;
-	private static Piece pieceNotConnected;
+
 	public static boolean solveGrid(String inputFile, String ouputFile, String pieceChoiceMethod) throws IOException{
 		boolean rez = false;
 		Grid grid = Checker.buildGrid(inputFile); //load the file and build the grid
@@ -49,7 +48,7 @@ public class Solver {
 			      //if the grid is not solution,we had the next piece possible orientations on the stack
 			      switch(pieceChoiceMethod){
 			      
-					case "0" :  if(currentPiece.getKey().getPosY() == lineCheck+2){
+					case "0" :  /*if(currentPiece.getKey().getPosY() == lineCheck+2){
 									if(lineIsConnected(lineCheck,grid)){
 										lineCheck++;
 										addPiece2StackLeft2Right(grid, pile, currentPiece.getKey());
@@ -63,7 +62,8 @@ public class Solver {
 									}
 								}else{
 									addPiece2StackLeft2Right(grid, pile, currentPiece.getKey());// create the stack with the first piece (0,0)
-								}
+								}*/
+						addPiece2StackLeft2Right(grid, pile, currentPiece.getKey());
 								
 						break;
 					default :    addPiece2StackLeft2Right(grid, pile, currentPiece.getKey());
@@ -156,7 +156,7 @@ public class Solver {
 		
 	}
 	
-	public static boolean lineIsConnected(int line, Grid grid){
+	/*public static boolean lineIsConnected(int line, Grid grid){
 		Piece[][] pieces  = grid.getAllPieces();
 			for(Piece p : pieces[lineCheck]){
 				if(!grid.isTotallyConnected(p)){
@@ -167,7 +167,7 @@ public class Solver {
 		
 		return true;
 		
-	}
+	}*/
 	public static void main(String[] args) {
 		try {
 			System.out.println(solveGrid("NotSolution.txt","Solved.txt","0"));
