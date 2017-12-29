@@ -18,14 +18,14 @@ public class Solver {
 		Grid grid = Checker.buildGrid(inputFile); //load the file and build the grid
 		rez = solveIT(grid,pieceChoiceMethod); //solve
 		Generator.writeGridOnFile(ouputFile, grid); //write the file
-		return rez; //return the resut
+		return rez; //return the result
 	}
 	
 	public static boolean solveIT(Grid grid, String pieceChoiceMethod){
 		Objects.requireNonNull(grid);
 		
 		if (Checker.isSolution(grid)) return true; //check if the grid is already solution
-		if(!grid.allPieceHaveNeighbour()) return false; //=> à améliorer check if there is a piece with no neighboour
+		if(!grid.allPieceHaveNeighbour()) return false; //=> à améliorer /  check if there is a piece with no neighbor
 		Stack<Pair<Piece, Orientation>> pile;
 		switch(pieceChoiceMethod){
 		case "0" : pile = createStackLeft2Right(grid);// create the stack with the first piece (0,0)
@@ -42,7 +42,7 @@ public class Solver {
 			      if (Checker.isSolution(grid)) {
 			    	  /*DEBUG*/
 			    	  //System.out.println( pile.toString());
-				      System.out.println( grid.toString());
+				      //System.out.println( grid.toString());
 			        return true; 
 			        
 			      }
@@ -76,8 +76,8 @@ public class Solver {
 			    	  return false;
 			      }*/
 			      /*DEBUG*/
-			     System.out.println( pile.toString());
-			      System.out.println( grid.toString());	   
+			     //System.out.println( pile.toString());
+			     // System.out.println( grid.toString());	   
 			  }
 			 
 			return false;
