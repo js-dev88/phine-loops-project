@@ -128,7 +128,10 @@ public class Grid {
 			int oppPieceY = ori.getOpposedPieceCoordinates(p)[0];//i
 			int oppPieceX = ori.getOpposedPieceCoordinates(p)[1];//j
 			try{
-				this.getPiece(oppPieceY,  oppPieceX);
+				if(this.getPiece(oppPieceY,  oppPieceX).getType() == PieceType.VOID){
+					return false;
+				}
+				
 			}catch(ArrayIndexOutOfBoundsException e){
 				return  false;
 			}
@@ -246,6 +249,10 @@ public class Grid {
 		}
 		return true;
 	}
+	
+	
+	
+	
 	
 
 	@Override

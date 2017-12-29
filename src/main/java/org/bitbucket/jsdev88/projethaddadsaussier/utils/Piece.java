@@ -122,7 +122,7 @@ public class Piece {
 
 	@Override
 	public String toString() {
-		String s = "";
+		String s = "["+this.getPosX()+", "+this.getPosY()+"] "+ this.getType()+" ";
 		for (Orientation ori : this.getConnectors()) {
 			s += " " + ori.toString();
 		}
