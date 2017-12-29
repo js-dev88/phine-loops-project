@@ -250,6 +250,24 @@ public class Grid {
 		return true;
 	}
 	
+	public Piece leftNeighbor(Piece p){
+		
+		if(p.getPosX()> 0){
+			if(this.getPiece(p.getPosY(), p.getPosX()-1).getType() != PieceType.VOID){
+				return this.getPiece(p.getPosY(), p.getPosX()-1);
+			}
+		}
+		return null;
+	}
+	public Piece topNeighbor(Piece p){
+		
+		if(p.getPosY()> 0){
+			if(this.getPiece(p.getPosY()-1, p.getPosX()).getType() != PieceType.VOID){
+				return this.getPiece(p.getPosY()-1, p.getPosX());
+			}
+		}
+		return null;
+	}
 	
 	
 	

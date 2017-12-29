@@ -77,7 +77,7 @@ public class Solver {
 			      }*/
 			      /*DEBUG*/
 			     //System.out.println( pile.toString());
-			     // System.out.println( grid.toString());	   
+			      //System.out.println( grid.toString());	   
 			  }
 			 
 			return false;
@@ -88,7 +88,6 @@ public class Solver {
 	
 	public static Stack<Pair<Piece, Orientation>> addPiece2StackLeft2Right(Grid grid,Stack<Pair<Piece, Orientation>> pile, Piece currentpiece){
 			        Piece nextPiece = grid.getNextPiece(currentpiece);
-			       
 			        while(nextPiece != null && nextPiece.getType() == PieceType.VOID){
 			        	nextPiece =  grid.getNextPiece(nextPiece);
 			        }
@@ -99,32 +98,37 @@ public class Solver {
 				        	 //check if it is a possible orientation
 				        	 if(grid.hasNeighbour(nextPiece)){
 				        		//check can connect to the left piece & upper piece
-				        		 if(currentpiece.hasRightConnector()){
-				        			
-				        			 if(nextPiece.getPosY() != 0 && 
-				        					 grid.getPiece(nextPiece.getPosY()-1, nextPiece.getPosX()).hasBottomConnector()){
-				        				 if(nextPiece.getConnectors().contains(Orientation.WEST ) && 
-				        						 nextPiece.getConnectors().contains(Orientation.NORTH)){
+				        		 Piece ln = grid.leftNeighbor(nextPiece);
+				        		 Piece tn = grid.topNeighbor(nextPiece);
+				        		 
+				        		 
+				        			 if(ln != null && ln.hasRightConnector()){
+						        			
+					        			 if(tn != null && tn.hasBottomConnector()){
+					        				 if(nextPiece.getConnectors().contains(Orientation.WEST ) && 
+					        						 nextPiece.getConnectors().contains(Orientation.NORTH)){
+						        				 pile.push(new Pair<Piece,Orientation>(nextPiece,ori));
+						        			 }
+					        			 }else{
+					        				 if(nextPiece.getConnectors().contains(Orientation.WEST)  && !nextPiece.getConnectors().contains(Orientation.NORTH)){
+						        				 pile.push(new Pair<Piece,Orientation>(nextPiece,ori));
+						        			 }
+					        			 }
+					        		 }else if(tn != null && tn.hasBottomConnector()){
+					        			 if(nextPiece.getConnectors().contains(Orientation.NORTH) && !nextPiece.getConnectors().contains(Orientation.WEST)){
 					        				 pile.push(new Pair<Piece,Orientation>(nextPiece,ori));
 					        			 }
-				        			 }else{
-				        				 if(nextPiece.getConnectors().contains(Orientation.WEST)  && !nextPiece.getConnectors().contains(Orientation.NORTH)){
+					        		 }else{
+					        			 if(!nextPiece.getConnectors().contains(Orientation.NORTH) && !nextPiece.getConnectors().contains(Orientation.WEST)){
 					        				 pile.push(new Pair<Piece,Orientation>(nextPiece,ori));
 					        			 }
-				        			 }
-				        		 }else if(nextPiece.getPosY() != 0 && 
-				        				 grid.getPiece(nextPiece.getPosY()-1, nextPiece.getPosX()).hasBottomConnector()){
-				        			 if(nextPiece.getConnectors().contains(Orientation.NORTH) && !nextPiece.getConnectors().contains(Orientation.WEST)){
-				        				 pile.push(new Pair<Piece,Orientation>(nextPiece,ori));
-				        			 }
-				        		 }else{
-				        			 if(!nextPiece.getConnectors().contains(Orientation.NORTH) && !nextPiece.getConnectors().contains(Orientation.WEST)){
-				        				 pile.push(new Pair<Piece,Orientation>(nextPiece,ori));
-				        			 }
-				        			
-				        		 }
-				        		
-				        	 }
+					        			
+					        		 }
+					        		
+					        	
+				        			 
+				        		}
+				        		 
 				         }
 				        
 			        }
