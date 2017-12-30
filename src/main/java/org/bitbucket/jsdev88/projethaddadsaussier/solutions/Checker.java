@@ -67,13 +67,13 @@ public class Checker {
 		return true;
 	}
 	
-	public static boolean isSolution(Grid grid2Test){
+	public static Piece isSolution(Grid grid2Test){
 		for(Piece[] linep : grid2Test.getAllPieces()){
 			for(Piece p : linep){
-				if(!grid2Test.isTotallyConnected(p)) return false;
+				if(!grid2Test.isTotallyConnected(p)) return p;
 			}
 		}
-		return true;
+		return null;
 	}
 	
 }

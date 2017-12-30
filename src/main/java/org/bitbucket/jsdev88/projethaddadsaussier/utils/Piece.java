@@ -8,6 +8,7 @@ public class Piece {
 	private PieceType type;
 	private Orientation orientation;
 	private LinkedList<Orientation> connectors;
+	private boolean isFixed;
 
 	public Piece(int posY, int posX) {
 		this.posX = posX;
@@ -15,6 +16,7 @@ public class Piece {
 		this.type = PieceType.VOID;
 		this.orientation = type.getOrientation(Orientation.NORTH);
 		this.connectors = type.setConnectorsList(Orientation.NORTH);
+		this.isFixed = false;
 
 	}
 
@@ -24,6 +26,7 @@ public class Piece {
 		this.type = type;
 		this.orientation = type.getOrientation(orientation);
 		this.connectors = type.setConnectorsList(orientation);
+		this.isFixed = false;
 	}
 
 	public Piece(int posY, int posX, int typeValue, int orientationValue) {
@@ -32,6 +35,16 @@ public class Piece {
 		this.type = PieceType.getTypefromValue(typeValue);
 		this.orientation = type.getOrientation(Orientation.getOrifromValue(orientationValue));
 		this.connectors = type.setConnectorsList(Orientation.getOrifromValue(orientationValue));
+		this.isFixed = false;
+	}
+
+	public void setFixed(boolean isFixed) {
+		this.isFixed = isFixed;
+	}
+	
+
+	public boolean isFixed() {
+		return isFixed;
 	}
 
 	public int getPosX() { //get j
@@ -122,10 +135,11 @@ public class Piece {
 
 	@Override
 	public String toString() {
-		String s = "["+this.getPosX()+", "+this.getPosY()+"] "+ this.getType()+" ";
+		String s = "["+this.getPosY()+", "+this.getPosX()+"] "+ this.getType()+" ";
 		for (Orientation ori : this.getConnectors()) {
 			s += " " + ori.toString();
 		}
+		s+= " Orientation / "+this.getOrientation();
 		return s;
 	}
 	

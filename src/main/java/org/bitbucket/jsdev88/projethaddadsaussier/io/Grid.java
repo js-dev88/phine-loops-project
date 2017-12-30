@@ -2,6 +2,8 @@ package org.bitbucket.jsdev88.projethaddadsaussier.io;
 
 
 
+import java.util.ArrayList;
+
 import org.bitbucket.jsdev88.projethaddadsaussier.utils.Orientation;
 import org.bitbucket.jsdev88.projethaddadsaussier.utils.Piece;
 import org.bitbucket.jsdev88.projethaddadsaussier.utils.PieceType;
@@ -140,33 +142,74 @@ public class Grid {
 		
 	}
 	
+	public boolean hasFixedNeighbour(Piece p){
+		boolean bool = false;
+		for(Orientation ori : p.getConnectors()){
+			bool =false;
+			int oppPieceY = ori.getOpposedPieceCoordinates(p)[0];//i
+			int oppPieceX = ori.getOpposedPieceCoordinates(p)[1];//j
+			try{
+				Piece neigh = this.getPiece(oppPieceY,  oppPieceX);
+				if(neigh.getType() == PieceType.VOID || !neigh.isFixed()){
+					return false;
+				}
+				if(neigh.isFixed()){
+					for(Orientation oriOppPiece : neigh.getConnectors()){
+						if(ori == oriOppPiece.getOpposedOrientation()){
+							bool = true;
+						}
+					}
+					if(!bool){
+						return false;
+					}
+					
+				}
+			}catch(ArrayIndexOutOfBoundsException e){
+				return  false;
+			}
+		}
+		return bool;
+	}
+	
+	public ArrayList<Piece> listOfNeighbours(Piece p){
+		ArrayList<Piece> lp = new ArrayList<>();
+		for(Orientation ori : p.getConnectors()){
+			int oppPieceY = ori.getOpposedPieceCoordinates(p)[0];//i
+			int oppPieceX = ori.getOpposedPieceCoordinates(p)[1];//j
+			if(this.getPiece(oppPieceY,  oppPieceX).getType() != PieceType.VOID){
+					lp.add(this.getPiece(oppPieceY,  oppPieceX));
+			}
+			
+				
+		}
+		return lp ;
+	}
+	
+	
+	
 	public int numberOfNeibours(Piece p){
 		int X = p.getPosX();
 		int Y = p.getPosY();
 		int count =0;
-		
-		try{ //NORTH
-			if(getPiece(Y+1,  X).getType() != PieceType.VOID) count ++;
-		}catch(ArrayIndexOutOfBoundsException e){
-			
-		}
-		try{//EAST
-			if(getPiece(Y,  X+1).getType() != PieceType.VOID) count ++;
-		}catch(ArrayIndexOutOfBoundsException e){
-			
-		}
-		try{//SOUTH
-			if(getPiece(Y-1, X ).getType() != PieceType.VOID) count ++;
-		}catch(ArrayIndexOutOfBoundsException e){
-			
-		}
-		try{//WEST
-			if(getPiece(Y,  X-1).getType() != PieceType.VOID) count ++;
-		}catch(ArrayIndexOutOfBoundsException e){
-			
-		}
+		if(Y < this.getHeight()-1 && getPiece(Y+1,  X).getType() != PieceType.VOID) count ++;
+		if(X < this.getWidth()-1 && getPiece(Y,  X+1).getType() != PieceType.VOID) count ++;
+		if(Y > 0 && getPiece(Y-1, X ).getType() != PieceType.VOID) count ++;
+		if(X > 0 && getPiece(Y,  X-1).getType() != PieceType.VOID) count ++;
 		return count;
 	}
+	
+	public int numberOfFixedNeibours(Piece p){
+		int X = p.getPosX();
+		int Y = p.getPosY();
+		int count =0;
+		
+		if(Y < this.getHeight()-1 && getPiece(Y+1,  X).getType() != PieceType.VOID && getPiece(Y+1,  X).isFixed()) count ++;
+		if(X < this.getWidth()-1 && getPiece(Y,  X+1).getType() != PieceType.VOID && getPiece(Y,  X+1).isFixed()) count ++;
+		if(Y > 0 && getPiece(Y-1, X ).getType() != PieceType.VOID && getPiece(Y-1, X ).isFixed()) count ++;
+		if(X > 0 && getPiece(Y,  X-1).getType() != PieceType.VOID && getPiece(Y,  X-1).isFixed()) count ++;
+		return count;
+	}
+	
 	/**
 	 * Check if all pieces have neighbours even if we don't know the orientation
 	 * @param p
@@ -219,7 +262,8 @@ public class Grid {
 	public boolean isConnected(Piece p, Orientation ori){
 		int oppPieceY = ori.getOpposedPieceCoordinates(p)[0];//i
 		int oppPieceX = ori.getOpposedPieceCoordinates(p)[1];//j
-		
+		if(p.getType() == PieceType.VOID)
+			return true;
 		try{
 			for(Orientation oppConnector :this.getPiece(oppPieceY,  oppPieceX).getConnectors()){
 				if(oppConnector == ori.getOpposedOrientation()){
@@ -264,6 +308,25 @@ public class Grid {
 		if(p.getPosY()> 0){
 			if(this.getPiece(p.getPosY()-1, p.getPosX()).getType() != PieceType.VOID){
 				return this.getPiece(p.getPosY()-1, p.getPosX());
+			}
+		}
+		return null;
+	}
+	public Piece rightNeighbor(Piece p){
+		
+		if(p.getPosX()< this.getWidth()-1){
+			if(this.getPiece(p.getPosY(), p.getPosX()+1).getType() != PieceType.VOID){
+				return this.getPiece(p.getPosY(), p.getPosX()+1);
+			}
+		}
+		return null;
+	}
+	
+	public Piece bottomNeighbor(Piece p){
+		
+		if(p.getPosY()< this.getHeight()-1){
+			if(this.getPiece(p.getPosY()+1, p.getPosX()).getType() != PieceType.VOID){
+				return this.getPiece(p.getPosY()+1, p.getPosX());
 			}
 		}
 		return null;

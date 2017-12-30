@@ -71,7 +71,7 @@ public class GUITEST {
 					    	p.turn();
 					    	lblcase.setIcon(getImageIcon(p));
 					    
-							if(Checker.isSolution(grid)){
+							if(Checker.isSolution(grid) == null){
 								Random r = new Random();
 								if(r.nextInt(2) == 0){
 									EasterEgg.AAA.play();
