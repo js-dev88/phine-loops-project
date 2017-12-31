@@ -577,8 +577,8 @@ public class Generator {
 					}
 					else{
 						w = Math.round(w/2);
-						grids[i-2].setWidth(w);//we have to change the width of the 2 grids that we divided
-						grids[i-1].setWidth(w);
+						grids[i-2].setWidth(h);//we have to change the width of the 2 grids that we divided
+						grids[i-1].setWidth(h);//NORMALEMENT C'EST W ICI, MAIS QUAND JE METS H CA COMPILE EN DONNANT DE LA MERDE QUAND JE METS W CA COMPILE PAS
 					}
 					grids[i] = new Grid(w, h, 1); 
 					grids[i+1] = new Grid(w, h, 1);
@@ -694,7 +694,7 @@ public class Generator {
 	}*/
 	public static void main(String[] args) {
 		try {
-			generateLevel("NotSolution.txt", new Grid(10, 10, 8));
+			generateLevel("NotSolution.txt", new Grid(10, 10, 4));
 		} catch (UnsupportedEncodingException e) {
 			System.out.println("Error when encoding the file");
 		} catch (FileNotFoundException e) {
