@@ -587,8 +587,22 @@ public class Generator {
 					//DEBUG System.out.println("Grid "+i+" : w = "+w+" / h = "+h);
 					//DEBUG System.out.println("Grid "+(i+1)+" : w = "+w+" / h = "+h);
 				}
-				
-				
+				/* Ici je voulais ajuster la dernière Grid qui devait remplir tout l'espace qui reste, mais bon galere un peu ...
+				int width = widthCount(grids);
+				System.out.println("width = "+width);
+				if(width < inputGrid.getHeight()*inputGrid.getWidth()){
+					int missingCases = (inputGrid.getHeight()*inputGrid.getWidth()) - (width - grids[nbcc-1].getHeight()*grids[nbcc-1].getWidth());
+					System.out.println("missing  cases = "+missingCases);
+					if(w < h){
+						w = missingCases/h;
+						grids[nbcc-1].setWidth(w);
+					}
+					else{
+						h = missingCases/w;
+						grids[nbcc-1].setHeight(h);
+					}
+					System.out.println("grid "+(nbcc-1)+" / height : "+grids[nbcc-1].getHeight()+" width : "+grids[nbcc-1].getWidth());
+				}*/
 			}
 			//FIRST ALGO, don't work for big nbcc ..
 			/*
@@ -666,7 +680,18 @@ public class Generator {
 		System.out.println("tmpi =" + tmpi + " & tmpj = " + tmpj);
 		return new int[] { tmpi, tmpj };
 	}
-
+	
+	/*
+	public static int widthCount(Grid[] grids){
+		int somme = 0;
+		int cpt = 0;
+		for(Grid grid : grids){
+			System.out.println("grid : "+cpt+" / width : "+(grid.getHeight()*grid.getWidth()));
+			somme = somme + (grid.getHeight()*grid.getWidth());
+			cpt++;
+		}
+		return somme;
+	}*/
 	public static void main(String[] args) {
 		try {
 			generateLevel("NotSolution.txt", new Grid(10, 10, 8));
