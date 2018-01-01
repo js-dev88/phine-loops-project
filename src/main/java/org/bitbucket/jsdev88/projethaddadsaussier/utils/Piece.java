@@ -1,5 +1,6 @@
 package org.bitbucket.jsdev88.projethaddadsaussier.utils;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 
 public class Piece {
@@ -8,6 +9,7 @@ public class Piece {
 	private PieceType type;
 	private Orientation orientation;
 	private LinkedList<Orientation> connectors;
+	private ArrayList<Orientation> possibleOrientations;
 	private boolean isFixed;
 
 	public Piece(int posY, int posX) {
@@ -17,6 +19,7 @@ public class Piece {
 		this.orientation = type.getOrientation(Orientation.NORTH);
 		this.connectors = type.setConnectorsList(Orientation.NORTH);
 		this.isFixed = false;
+		this.possibleOrientations = type.getListOfPossibleOri();
 
 	}
 
@@ -27,6 +30,7 @@ public class Piece {
 		this.orientation = type.getOrientation(orientation);
 		this.connectors = type.setConnectorsList(orientation);
 		this.isFixed = false;
+		this.possibleOrientations = type.getListOfPossibleOri();
 	}
 
 	public Piece(int posY, int posX, int typeValue, int orientationValue) {
@@ -36,6 +40,21 @@ public class Piece {
 		this.orientation = type.getOrientation(Orientation.getOrifromValue(orientationValue));
 		this.connectors = type.setConnectorsList(Orientation.getOrifromValue(orientationValue));
 		this.isFixed = false;
+		this.possibleOrientations = type.getListOfPossibleOri();
+	}
+
+	public void setPossibleOrientations(ArrayList<Orientation> possibleOrientations) {
+		this.possibleOrientations = possibleOrientations;
+	}
+	
+	public ArrayList<Orientation> getPossibleOrientations() {
+		return this.possibleOrientations;
+	}
+	
+	public void deleteFromPossibleOrientation(Orientation ori){
+		if(this.possibleOrientations.contains(ori)){
+			this.possibleOrientations.remove(ori);
+		}
 	}
 
 	public void setFixed(boolean isFixed) {
