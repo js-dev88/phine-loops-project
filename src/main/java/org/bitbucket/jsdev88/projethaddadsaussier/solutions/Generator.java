@@ -70,13 +70,13 @@ public class Generator {
 			// Generate a solution
 			filledGrid = generateSolution(inputGrid);
 			/* DEBUG */
-			// writeGridOnFile("Solution.txt", inputGrid);
-			GUITEST.startGUITEST(filledGrid);
+			//writeGridOnFile("Solution.txt", inputGrid);
+			//GUITEST.startGUITEST(filledGrid);
 			// System.out.println(filledGrid.toString());
-			// shuffle(filledGrid);
+			shuffle(filledGrid);
 			// Then we write the level on a file
-			// writeGridOnFile(fileName, inputGrid);
-			// GUITEST.startGUITEST(filledGrid);
+			writeGridOnFile(fileName, filledGrid);
+			//GUITEST.startGUITEST(filledGrid);
 			// System.out.println(filledGrid.toString());
 		}
 
