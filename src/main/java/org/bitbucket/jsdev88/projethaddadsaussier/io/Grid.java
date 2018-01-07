@@ -349,6 +349,30 @@ public class Grid {
 	}
 	
 	/**
+	 * Check if a piece position is valid
+	 * 
+	 * @param line
+	 * @param column
+	 * @return true if a connector of a piece is connected
+	 */
+	public boolean isValidOrientation(int line, int column) {
+		if (line == 0) {
+			if(this.getPiece(line, column).hasTopConnector()) return false;
+		}
+		else if (line == this.getHeight()-1) {
+			if(this.getPiece(line, column).hasBottomConnector()) return false;
+		}
+		else if (column == 0) {
+			if(this.getPiece(line, column).hasLeftConnector()) return false;
+		}
+		else if (column == this.getWidth()-1) {
+			if(this.getPiece(line, column).hasRightConnector()) return false;
+		}
+		return true;
+	}
+	
+	
+	/**
 	 * Find the left neighbor
 	 * @param p
 	 * @return the neighbor or null if no neighbor

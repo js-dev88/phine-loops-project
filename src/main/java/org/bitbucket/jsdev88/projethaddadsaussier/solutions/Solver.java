@@ -529,39 +529,60 @@ public class Solver {
 	 * @param posX, posY (initially 0 & 0 because of naive)
 	 * @return true if the grid is resolved
 	 */
-	public static boolean naiveRecursiveSolver(int posX, int posY, Grid grid){		
+	public static boolean naiveRecursiveSolver(int posX, int posY, Grid grid){	
+		Piece p;
+		
+		if (Checker.isSolution(grid) == null)
+			return true; // check if the grid is already solution
+		if (!grid.allPieceHaveNeighbour())
+			return false; // check if there is a piece with no neighbor
 	
 		if (posX == (grid.getHeight() - 1) && posY == (grid.getWidth() - 1)) {
-			System.out.println(Checker.isSolution(grid));
-			if (Checker.isSolution(grid) == null){
-				return true;
-			}
-		}
-
-		else if (posY == (grid.getWidth() - 1)) {
-			Piece p = grid.getPiece(posX, posY);
+			p = grid.getPiece(posX, posY);
 			int orientationsNumber = switchOrientations(p.getType().getValue());
 			for (int i = 0; i < orientationsNumber; i++) {
-				System.out.println("piece avant :"+p);
 				p.setOrientation(i);
-				System.out.println("piece apres :"+p);
-				naiveRecursiveSolver(posX+1, 0, grid);
+				grid.setPiece(posX, posY, p);
+				if (Checker.isSolution(grid) == null){
+					return true;
+				}
 			}
+			System.out.println(Checker.isSolution(grid)+" je dois retourner false");
+			return false;
 		}
-
-		else {
-			Piece p = grid.getPiece(posX, posY);
-			int orientationsNumber = switchOrientations(p.getType().getValue());
-			for (int i = 0; i < orientationsNumber; i++) {
-				System.out.println("piece avant :"+p);
-				p.setOrientation(i);
-				System.out.println("piece apres :"+p);
-				naiveRecursiveSolver(posX, posY+1, grid);
+		else{
+			if (posY == (grid.getWidth() - 1)) {
+				p = grid.getPiece(posX, posY);
+				int orientationsNumber = switchOrientations(p.getType().getValue());
+				for (int i = 0; i < orientationsNumber; i++) {
+					System.out.println("piece avant 1:"+grid.getPiece(posX, posY));
+					p.setOrientation(i);
+					grid.setPiece(posX, posY, p);
+					System.out.println("piece apres 1:"+grid.getPiece(posX, posY));
+					System.out.println("valide : "+grid.isValidOrientation(posX, posY));
+					if(grid.isValidOrientation(posX, posY)){
+						if(naiveRecursiveSolver(posX+1, 0, grid)) return true;
+					}		
+				}
+				return false;
 			}
-		}
 
-		return false;
-		
+			else {
+				p = grid.getPiece(posX, posY);
+				int orientationsNumber = switchOrientations(p.getType().getValue());
+				for (int i = 0; i < orientationsNumber; i++) {
+					System.out.println("piece avant 2:"+grid.getPiece(posX, posY));
+					p.setOrientation(i);
+					grid.setPiece(posX, posY, p);
+					System.out.println("piece apres 2:"+grid.getPiece(posX, posY));
+					System.out.println("valide : "+grid.isValidOrientation(posX, posY));
+					if(grid.isValidOrientation(posX, posY)){
+						if(naiveRecursiveSolver(posX, posY+1, grid)) return true;
+					}
+				}
+				return false;
+			}
+		}	
 	}
 	
 	/**
