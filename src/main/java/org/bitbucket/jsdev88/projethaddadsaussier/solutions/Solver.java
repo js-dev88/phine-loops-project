@@ -18,7 +18,7 @@ public class Solver {
 		try {
 			long averageTime = 0;
 			for (int i = 0; i < 30; i++) {
-				Generator.generateLevel("NotSolution.txt", new Grid(50, 50));
+				Generator.generateLevel("NotSolution.txt", new Grid(40, 40));
 				long start = System.currentTimeMillis();
 				System.out.println(solveGrid("NotSolution.txt", "Solved.txt", "0"));
 				long stop = System.currentTimeMillis();
@@ -35,13 +35,13 @@ public class Solver {
 			e.printStackTrace();
 		}
 
-		/*
-		 * try { long start = System.currentTimeMillis();
-		 * System.out.println(solveGrid("NotSolution.txt", "Solved.txt", "0"));
-		 * long stop = System.currentTimeMillis(); System.out.println((stop -
-		 * start)); } catch (IOException e) { // TODO Auto-generated catch block
-		 * e.printStackTrace(); }
-		 */
+		
+		  /*try { long start = System.currentTimeMillis();
+		  System.out.println(solveGrid("NotSolution.txt", "Solved.txt", "0"));
+		  long stop = System.currentTimeMillis(); System.out.println((stop -
+		  start)); } catch (IOException e) { // TODO Auto-generated catch block
+		 e.printStackTrace(); }*/
+		 
 
 	}
 
@@ -105,7 +105,7 @@ public class Solver {
 
 			/* DEBUG */
 			// System.out.println( pile.toString());
-			// System.out.println(grid.toString());
+			//System.out.println(grid.toString());
 		}
 
 		return false;
@@ -158,6 +158,25 @@ public class Solver {
 				return pile;
 			}
 		}
+		
+		Piece tn = grid.topNeighbor(currentpiece);
+		Piece ln = grid.leftNeighbor(currentpiece);
+		Piece rn = grid.rightNeighbor(currentpiece);
+		Piece bn = grid.bottomNeighbor(currentpiece);
+		
+		if(currentpiece.hasRightConnector() && rn != null && !rn.hasLeftConnector() && rn.isFixed()){
+			return pile;
+		}
+		if(currentpiece.hasLeftConnector() && ln != null && !ln.hasRightConnector()){
+			return pile;
+		}
+		if(currentpiece.hasTopConnector() && tn != null && !tn.hasBottomConnector()){
+			return pile;
+		}
+		if(currentpiece.hasBottomConnector() && bn != null && !bn.hasTopConnector() && bn.isFixed()){
+			return pile;
+		}
+		
 		Piece nextPiece = grid.getNextPiece(currentpiece);
 
 		while (nextPiece != null && (nextPiece.getType() == PieceType.VOID || nextPiece.isFixed())) {
