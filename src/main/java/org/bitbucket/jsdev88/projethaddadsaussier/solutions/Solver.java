@@ -1,6 +1,7 @@
 package org.bitbucket.jsdev88.projethaddadsaussier.solutions;
 
 import java.io.IOException;
+import java.util.ArrayDeque;
 import java.util.Objects;
 import java.util.Stack;
 
@@ -17,7 +18,7 @@ public class Solver {
 		try {
 			long averageTime = 0;
 			for (int i = 0; i < 30; i++) {
-				Generator.generateLevel("NotSolution.txt", new Grid(10, 10));
+				Generator.generateLevel("NotSolution.txt", new Grid(50, 50));
 				long start = System.currentTimeMillis();
 				System.out.println(solveGrid("NotSolution.txt", "Solved.txt", "0"));
 				long stop = System.currentTimeMillis();
@@ -77,7 +78,7 @@ public class Solver {
 			return true; // check if the grid is already solution
 		if (!grid.allPieceHaveNeighbour())
 			return false; // check if there is a piece with no neighbor
-		Stack<Pair<Piece, Orientation>> pile;
+		ArrayDeque<Pair<Piece, Orientation>> pile;
 		// first we create a pile with the frst possible piece and its
 		// orientation
 		pile = createStackLeft2Right(grid);
@@ -121,8 +122,8 @@ public class Solver {
 	 *            the last piece not connected
 	 * @return
 	 */
-	public static Stack<Pair<Piece, Orientation>> addPiece2StackLeft2Right(Grid grid,
-			Stack<Pair<Piece, Orientation>> pile, Piece currentpiece, Piece lastPiece) {
+	public static ArrayDeque<Pair<Piece, Orientation>> addPiece2StackLeft2Right(Grid grid,
+			ArrayDeque<Pair<Piece, Orientation>> pile, Piece currentpiece, Piece lastPiece) {
 
 		if ((currentpiece.getPosX() > lastPiece.getPosX() && currentpiece.getPosY() == lastPiece.getPosY())
 				|| currentpiece.getPosY() > lastPiece.getPosY()) {
@@ -177,8 +178,8 @@ public class Solver {
 	 * @param pile
 	 * @return the updated stack
 	 */
-	public static Stack<Pair<Piece, Orientation>> checkAndAdd(Piece nextPiece, Grid grid,
-			Stack<Pair<Piece, Orientation>> pile) {
+	public static ArrayDeque<Pair<Piece, Orientation>> checkAndAdd(Piece nextPiece, Grid grid,
+			ArrayDeque<Pair<Piece, Orientation>> pile) {
 		if (nextPiece == null)
 			return pile;
 		for (Orientation ori : nextPiece.getPossibleOrientations()) {
@@ -427,10 +428,10 @@ public class Solver {
 	 *            default 0
 	 * @return a stack
 	 */
-	public static Stack<Pair<Piece, Orientation>> createStackLeft2Right(Grid grid) {
+	public static ArrayDeque<Pair<Piece, Orientation>> createStackLeft2Right(Grid grid) {
 		fixPieceOnGrid(grid);
 
-		Stack<Pair<Piece, Orientation>> pile = new Stack<>();
+		ArrayDeque<Pair<Piece, Orientation>> pile = new ArrayDeque<>();
 		Piece p = grid.getPiece(0, 0); // choix de gauche à droite
 		while (p != null && (p.getType() == PieceType.VOID || p.isFixed())) {
 			p = grid.getNextPiece(p);
@@ -459,7 +460,7 @@ public class Solver {
 	 * @param grid
 	 */
 	public static void fixAparticularPiece(Grid grid, Piece p) {
-		Stack<Piece> pileOfPiece2fix = new Stack<Piece>();
+		ArrayDeque<Piece> pileOfPiece2fix = new ArrayDeque<Piece>();
 
 		if (p.getType() == PieceType.VOID || p.getType() == PieceType.FOURCONN) {
 			p.setFixed(true);
@@ -499,7 +500,7 @@ public class Solver {
 	 * 
 	 * @param grid
 	 */
-	public static void fixNeighboursOnGrid(Stack<Piece> pileOfPiece2fix, Grid grid) {
+	public static void fixNeighboursOnGrid(ArrayDeque<Piece> pileOfPiece2fix, Grid grid) {
 		while (!pileOfPiece2fix.isEmpty()) {
 			Piece p = pileOfPiece2fix.pop();
 			if (!p.isFixed() && p.getType().getNbConnectors() == grid.numberOfFixedNeibours(p)) {
