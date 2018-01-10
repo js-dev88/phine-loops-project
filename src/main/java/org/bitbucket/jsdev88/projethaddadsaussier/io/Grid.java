@@ -226,7 +226,7 @@ public class Grid {
 	 * @param p
 	 * @return the number of  neighbors
 	 */
-	public int numberOfNeibours(Piece p) {
+	public int numberOfNeibours(Piece p) { 
 		int X = p.getPosX();
 		int Y = p.getPosY();
 		int count = 0;

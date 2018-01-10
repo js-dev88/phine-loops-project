@@ -330,7 +330,7 @@ public class Solver {
 					  || (ln == null &&  p.hasLeftConnector())
 					  || (tn == null &&  p.hasTopConnector())
 					  || (rn == null &&  p.hasRightConnector())
-					  || (bn == null &&  p.hasBottomConnector())
+					  || (bn == null &&  p.hasBottomConnector()) 
 					  ){
 						//System.out.println("delete : "+p+" orientation : "+p.getOrientation());
 						p.deleteFromPossibleOrientation(p.getOrientation());
