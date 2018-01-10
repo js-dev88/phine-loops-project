@@ -6,6 +6,7 @@ import java.util.Objects;
 import java.util.Stack;
 import java.util.function.Predicate;
 
+import org.bitbucket.jsdev88.projethaddadsaussier.io.GUITEST;
 import org.bitbucket.jsdev88.projethaddadsaussier.io.Grid;
 import org.bitbucket.jsdev88.projethaddadsaussier.utils.Orientation;
 import org.bitbucket.jsdev88.projethaddadsaussier.utils.Pair;
@@ -18,8 +19,9 @@ public class Solver {
 
 		try {
 			long averageTime = 0;
-			for (int i = 0; i < 30; i++) {
-				Generator.generateLevel("NotSolution.txt", new Grid(64, 64));
+
+			for (int i = 0; i < 1; i++) {
+				Generator.generateLevel("NotSolution.txt", new Grid(100, 100));
 				long start = System.currentTimeMillis();
 				System.out.println(solveGrid("NotSolution.txt", "Solved.txt", "0"));
 				long stop = System.currentTimeMillis();
@@ -36,13 +38,10 @@ public class Solver {
 			e.printStackTrace();
 		}
 
-		
-		/* try { 
-			 
-			 long start = System.currentTimeMillis();
-		  
-			
-			
+/*
+		  try { long start = System.currentTimeMillis();
+		  System.out.println(solveGrid("NotSolution.txt", "Solved.txt", "0"));
+
 		  long stop = System.currentTimeMillis(); System.out.println((stop -
 		  start)); } catch (IOException e) { // TODO Auto-generated catch block
 		 e.printStackTrace(); }*/
@@ -133,8 +132,11 @@ public class Solver {
 			
 		
 			/* DEBUG */
-			//System.out.println( pile.toString());
+
+			 System.out.println( pile.toString());
+
 			//System.out.println(grid.toString());
+			 //GUITEST.startGUITEST(grid);
 		}
 
 		return false;
@@ -421,8 +423,10 @@ public class Solver {
 	public static boolean naiveRecursiveSolver(int posX, int posY, Grid grid){	
 		Piece p;
 		
-		if (Checker.isSolution(grid) == null)
+		if (Checker.isSolution(grid) == null) {
+			//GUITEST.startGUITEST(grid);
 			return true; // check if the grid is already solution
+		}
 		if (!grid.allPieceHaveNeighbour())
 			return false; // check if there is a piece with no neighbor
 	
@@ -431,12 +435,13 @@ public class Solver {
 			int orientationsNumber = switchOrientations(p.getType().getValue());
 			for (int i = 0; i < orientationsNumber; i++) {
 				p.setOrientation(i);
-				grid.setPiece(posX, posY, p);
 				if (Checker.isSolution(grid) == null){
+					//System.out.println(grid);
 					return true;
 				}
 			}
-			System.out.println(Checker.isSolution(grid)+" je dois retourner false");
+			//System.out.println(grid);
+			System.out.println(Checker.isSolution(grid));
 			return false;
 		}
 		else{
@@ -444,14 +449,15 @@ public class Solver {
 				p = grid.getPiece(posX, posY);
 				int orientationsNumber = switchOrientations(p.getType().getValue());
 				for (int i = 0; i < orientationsNumber; i++) {
-					System.out.println("piece avant 1:"+grid.getPiece(posX, posY));
+					//System.out.println("piece avant 1:"+grid.getPiece(posX, posY));
 					p.setOrientation(i);
-					grid.setPiece(posX, posY, p);
-					System.out.println("piece apres 1:"+grid.getPiece(posX, posY));
-					System.out.println("valide : "+grid.isValidOrientation(posX, posY));
+					//System.out.println("piece apres 1:"+grid.getPiece(posX, posY));
+					//System.out.println("valide : "+grid.isValidOrientation(posX, posY));
 					if(grid.isValidOrientation(posX, posY)){
+						//System.out.println(grid);
 						if(naiveRecursiveSolver(posX+1, 0, grid)) return true;
-					}		
+					}	
+					//System.out.println(grid);
 				}
 				return false;
 			}
@@ -460,14 +466,15 @@ public class Solver {
 				p = grid.getPiece(posX, posY);
 				int orientationsNumber = switchOrientations(p.getType().getValue());
 				for (int i = 0; i < orientationsNumber; i++) {
-					System.out.println("piece avant 2:"+grid.getPiece(posX, posY));
+					//System.out.println("piece avant 2:"+grid.getPiece(posX, posY));
 					p.setOrientation(i);
-					grid.setPiece(posX, posY, p);
-					System.out.println("piece apres 2:"+grid.getPiece(posX, posY));
-					System.out.println("valide : "+grid.isValidOrientation(posX, posY));
+					//System.out.println("piece apres 2:"+grid.getPiece(posX, posY));
+					//System.out.println("valide : "+grid.isValidOrientation(posX, posY));
 					if(grid.isValidOrientation(posX, posY)){
+						//System.out.println(grid);
 						if(naiveRecursiveSolver(posX, posY+1, grid)) return true;
 					}
+					//System.out.println(grid);
 				}
 				return false;
 			}

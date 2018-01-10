@@ -356,19 +356,62 @@ public class Grid {
 	 * @return true if a connector of a piece is connected
 	 */
 	public boolean isValidOrientation(int line, int column) {
+		
+		Piece tn = this.topNeighbor(this.getPiece(line, column));
+		Piece ln = this.leftNeighbor(this.getPiece(line, column));
+		Piece rn = this.rightNeighbor(this.getPiece(line, column));
+		Piece bn = this.bottomNeighbor(this.getPiece(line, column));
+		
+	if(this.getPiece(line, column).getType() != PieceType.VOID) {
 		if (line == 0) {
-			if(this.getPiece(line, column).hasTopConnector()) return false;
+			if(column == 0) {
+				if(this.getPiece(line, column).hasLeftConnector() ) return false;	
+			}
+			else if (column == this.getWidth()-1) {
+				if(this.getPiece(line, column).hasRightConnector()) return false;
+			}
+			if(this.getPiece(line, column).hasTopConnector() ) return false;
+			if(!this.getPiece(line, column).hasLeftConnector() && ln != null && ln.hasRightConnector()) return false;
+			if(this.getPiece(line, column).hasLeftConnector() && ln != null && !ln.hasRightConnector()) return false;
+			
+		}
+		else if(line > 0 && line < this.getHeight()-1) {
+			if(column == 0) {
+				if(this.getPiece(line, column).hasLeftConnector() ) return false;
+				
+			}
+			else if (column == this.getWidth()-1) {
+				if(this.getPiece(line, column).hasRightConnector()) return false;
+			}
+	
+			if(!this.getPiece(line, column).hasLeftConnector() && ln != null && ln.hasRightConnector()) return false;
+			if(this.getPiece(line, column).hasLeftConnector() && ln != null && !ln.hasRightConnector()) return false;
+			if(!this.getPiece(line, column).hasTopConnector() && tn != null && tn.hasBottomConnector()) return false;
+			if(this.getPiece(line, column).hasTopConnector() && tn != null && !tn.hasBottomConnector()) return false;
+			
+			
 		}
 		else if (line == this.getHeight()-1) {
+			if(column == 0) {
+				if(this.getPiece(line, column).hasLeftConnector() ) return false;	
+			}
+			else if (column == this.getWidth()-1) {
+				if(this.getPiece(line, column).hasRightConnector()) return false;
+			}
 			if(this.getPiece(line, column).hasBottomConnector()) return false;
+			if(!this.getPiece(line, column).hasLeftConnector() && ln != null && ln.hasRightConnector()) return false;
+			if(this.getPiece(line, column).hasLeftConnector() && ln != null && !ln.hasRightConnector()) return false;
+			if(!this.getPiece(line, column).hasTopConnector() && tn != null && tn.hasBottomConnector()) return false;
+			if(this.getPiece(line, column).hasTopConnector() && tn != null && !tn.hasBottomConnector()) return false;
+			
 		}
-		else if (column == 0) {
-			if(this.getPiece(line, column).hasLeftConnector()) return false;
-		}
-		else if (column == this.getWidth()-1) {
-			if(this.getPiece(line, column).hasRightConnector()) return false;
-		}
-		return true;
+		if(this.getPiece(line, column).hasLeftConnector() && ln == null) return false;
+		if(this.getPiece(line, column).hasTopConnector() && tn == null) return false;
+		if(this.getPiece(line, column).hasRightConnector() && rn == null) return false;
+		if(this.getPiece(line, column).hasBottomConnector() && bn == null) return false;
+	}
+		
+	return true;
 	}
 	
 	
