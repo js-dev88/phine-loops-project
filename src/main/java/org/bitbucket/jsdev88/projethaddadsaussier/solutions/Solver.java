@@ -4,9 +4,6 @@ import java.io.IOException;
 import java.util.ArrayDeque;
 import java.util.Objects;
 import java.util.Stack;
-import java.util.function.Predicate;
-
-import org.bitbucket.jsdev88.projethaddadsaussier.io.GUITEST;
 import org.bitbucket.jsdev88.projethaddadsaussier.io.Grid;
 import org.bitbucket.jsdev88.projethaddadsaussier.utils.Orientation;
 import org.bitbucket.jsdev88.projethaddadsaussier.utils.Pair;
@@ -21,7 +18,7 @@ public class Solver {
 			long averageTime = 0;
 
 			for (int i = 0; i < 1; i++) {
-				Generator.generateLevel("NotSolution.txt", new Grid(100, 100));
+				Generator.generateLevel("NotSolution.txt", new Grid(10, 10));
 				long start = System.currentTimeMillis();
 				System.out.println(solveGrid("NotSolution.txt", "Solved.txt", "0"));
 				long stop = System.currentTimeMillis();
@@ -133,7 +130,7 @@ public class Solver {
 		
 			/* DEBUG */
 
-			 System.out.println( pile.toString());
+			 //System.out.println( pile.toString());
 
 			//System.out.println(grid.toString());
 			 //GUITEST.startGUITEST(grid);
