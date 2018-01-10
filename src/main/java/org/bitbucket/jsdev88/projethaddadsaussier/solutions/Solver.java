@@ -19,7 +19,7 @@ public class Solver {
 		try {
 			long averageTime = 0;
 			for (int i = 0; i < 1; i++) {
-				Generator.generateLevel("NotSolution.txt", new Grid(50, 50));
+				Generator.generateLevel("NotSolution.txt", new Grid(100, 100));
 				long start = System.currentTimeMillis();
 				System.out.println(solveGrid("NotSolution.txt", "Solved.txt", "0"));
 				long stop = System.currentTimeMillis();
@@ -59,8 +59,8 @@ public class Solver {
 	public static boolean solveGrid(String inputFile, String ouputFile, String pieceChoiceMethod) throws IOException {
 		boolean rez = false;
 		Grid grid = Checker.buildGrid(inputFile);
-		rez = naiveRecursiveSolver(0, 0, Objects.requireNonNull(grid));
-		//rez = solveIT(grid, pieceChoiceMethod);
+		//rez = naiveRecursiveSolver(0, 0, Objects.requireNonNull(grid));
+		rez = solveIT(grid, pieceChoiceMethod);
 		Generator.writeGridOnFile(ouputFile, grid);
 		return rez;
 	}
