@@ -10,6 +10,8 @@ public class Piece {
 	private Orientation orientation;
 	private LinkedList<Orientation> connectors;
 	private ArrayList<Orientation> possibleOrientations;
+	
+	
 	private boolean isFixed;
 
 	public Piece(int posY, int posX) {
@@ -20,7 +22,6 @@ public class Piece {
 		this.connectors = type.setConnectorsList(Orientation.NORTH);
 		this.isFixed = false;
 		this.possibleOrientations = type.getListOfPossibleOri();
-
 	}
 
 	public Piece(int posY, int posX, PieceType type, Orientation orientation) {
@@ -49,6 +50,14 @@ public class Piece {
 	
 	public ArrayList<Orientation> getPossibleOrientations() {
 		return this.possibleOrientations;
+	}
+	
+	public LinkedList<Orientation> getInvPossibleOrientation(){
+		 LinkedList<Orientation> invPossibleOrientations = new LinkedList<>();
+		for(Orientation ori : this.getPossibleOrientations()){
+			invPossibleOrientations.addFirst(ori);
+		}
+		return invPossibleOrientations;
 	}
 	
 	public void deleteFromPossibleOrientation(Orientation ori){
@@ -166,9 +175,11 @@ public class Piece {
 	public static void main(String[] args) {
 		Piece p = new Piece (0,0);
 		p.setType(PieceType.LTYPE);
-		p.setOrientation(2);
+		p.setPossibleOrientations( p.getType().getListOfPossibleOri());
 		System.out.println(p.toString());
 		System.out.println(p.hasBottomConnector());
+		System.out.println(p.getPossibleOrientations());
+		System.out.println(p.getInvPossibleOrientation());
 	}
 }
 

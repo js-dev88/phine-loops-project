@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.ArrayDeque;
 import java.util.Objects;
 import java.util.Stack;
+import java.util.function.Predicate;
 
 import org.bitbucket.jsdev88.projethaddadsaussier.io.Grid;
 import org.bitbucket.jsdev88.projethaddadsaussier.utils.Orientation;
@@ -18,7 +19,7 @@ public class Solver {
 		try {
 			long averageTime = 0;
 			for (int i = 0; i < 30; i++) {
-				Generator.generateLevel("NotSolution.txt", new Grid(40, 40));
+				Generator.generateLevel("NotSolution.txt", new Grid(64, 64));
 				long start = System.currentTimeMillis();
 				System.out.println(solveGrid("NotSolution.txt", "Solved.txt", "0"));
 				long stop = System.currentTimeMillis();
@@ -36,8 +37,12 @@ public class Solver {
 		}
 
 		
-		  /*try { long start = System.currentTimeMillis();
-		  System.out.println(solveGrid("NotSolution.txt", "Solved.txt", "0"));
+		/* try { 
+			 
+			 long start = System.currentTimeMillis();
+		  
+			
+			
 		  long stop = System.currentTimeMillis(); System.out.println((stop -
 		  start)); } catch (IOException e) { // TODO Auto-generated catch block
 		 e.printStackTrace(); }*/
@@ -73,7 +78,7 @@ public class Solver {
 	 */
 	public static boolean solveIT(Grid grid, String pieceChoiceMethod) {
 		Objects.requireNonNull(grid);
-
+		//System.out.println(grid.toString());
 		if (Checker.isSolution(grid) == null)
 			return true; // check if the grid is already solution
 		if (!grid.allPieceHaveNeighbour())
@@ -82,36 +87,60 @@ public class Solver {
 		// first we create a pile with the frst possible piece and its
 		// orientation
 		pile = createStackLeft2Right(grid);
-
+		if (Checker.isSolution(grid) == null)
+			return true;
+		
+		//System.out.println( pile.toString());
+		//System.out.println(grid.toString());
+		
+		Pair<Piece, Orientation> currentPiece;
 		while (!pile.isEmpty()) { // simulation of recursivity
-
-			Pair<Piece, Orientation> currentPiece = pile.pop(); // depile
+			
+			currentPiece = pile.pop(); 
+			
 			currentPiece.getKey().setOrientation(currentPiece.getValue().getValue());// set
 																						// the
 																						// orientation
 			grid.setPiece(currentPiece.getKey().getPosY(), currentPiece.getKey().getPosX(), currentPiece.getKey()); // update
 																													// the
 																													// grid
+			
 			Piece lastPiece = Checker.isSolution(grid);
 			if (lastPiece == null) {
 				/* DEBUG */
-				// System.out.println( pile.toString());
-				// System.out.println( grid.toString());
+				//System.out.println( pile.toString());
+				//System.out.println( grid.toString());
 				return true;
 
 			}
-			// search the next piece to test
+			
+			
 			pile = addPiece2StackLeft2Right(grid, pile, currentPiece.getKey(), lastPiece);
-
+			
+			
+			//Pair<Piece, Orientation> firstPick = pile.peek();
+			
+			
+			/*if(firstPick.getKey().getPosY() < currentPiece.getKey().getPosY() || firstPick.getKey().getPosX() < currentPiece.getKey().getPosX() ){
+				final Pair<Piece, Orientation> temp = firstPick; 
+				pile.removeIf((Pair<Piece, Orientation> p) -> p.getKey().getPosY() > temp.getKey().getPosY()-1);
+				System.out.println("retour");
+			}*/
+			/*System.out.println(currentPiece);
+			System.out.println(firstPick);
+			System.out.println(pile);*/
+			// search the next piece to test
+			
+		
 			/* DEBUG */
-			// System.out.println( pile.toString());
+			//System.out.println( pile.toString());
 			//System.out.println(grid.toString());
 		}
 
 		return false;
 
+	
 	}
-
 	/**
 	 * Add the next piece possible positions to the stack
 	 * 
@@ -124,59 +153,31 @@ public class Solver {
 	 */
 	public static ArrayDeque<Pair<Piece, Orientation>> addPiece2StackLeft2Right(Grid grid,
 			ArrayDeque<Pair<Piece, Orientation>> pile, Piece currentpiece, Piece lastPiece) {
-
-		if ((currentpiece.getPosX() > lastPiece.getPosX() && currentpiece.getPosY() == lastPiece.getPosY())
-				|| currentpiece.getPosY() > lastPiece.getPosY()) {
-			Piece tn = grid.topNeighbor(lastPiece);
-			Piece ln = grid.leftNeighbor(lastPiece);
-			Piece rn = grid.rightNeighbor(lastPiece);
-			Piece bn = grid.bottomNeighbor(lastPiece);
-			if (tn != null && ((lastPiece.hasTopConnector() && !tn.hasBottomConnector())
-					|| (!lastPiece.hasTopConnector() && tn.hasBottomConnector()))) {
-				return pile;
-			}
-			if (ln != null && ((lastPiece.hasLeftConnector() && !ln.hasRightConnector())
-					|| (!lastPiece.hasLeftConnector() && ln.hasRightConnector()))) {
-				return pile;
-			}
-			if (rn != null && ((lastPiece.hasRightConnector() && !rn.hasLeftConnector())
-					|| (!lastPiece.hasRightConnector() && rn.hasLeftConnector()))) {
-				return pile;
-			}
-			if (currentpiece.getPosX() > lastPiece.getPosX() && currentpiece.getPosY() == lastPiece.getPosY() + 1) {
-				if (bn != null && ((lastPiece.hasBottomConnector() && !bn.hasTopConnector())
-						|| (!lastPiece.hasBottomConnector() && bn.hasTopConnector()))) {
-					return pile;
-				}
-			}
-			if (currentpiece.getPosY() > lastPiece.getPosY() + 1) {
-				Pair<Piece, Orientation> forty_two = pile.peek();
-				while (forty_two.getKey().getPosX() > lastPiece.getPosX() + 1
-						&& forty_two.getKey().getPosY() > lastPiece.getPosY() + 1) {
-					forty_two = pile.pop();
-				}
-				return pile;
-			}
-		}
 		
 		Piece tn = grid.topNeighbor(currentpiece);
 		Piece ln = grid.leftNeighbor(currentpiece);
 		Piece rn = grid.rightNeighbor(currentpiece);
 		Piece bn = grid.bottomNeighbor(currentpiece);
 		
-		if(currentpiece.hasRightConnector() && rn != null && !rn.hasLeftConnector() && rn.isFixed()){
-			return pile;
-		}
-		if(currentpiece.hasLeftConnector() && ln != null && !ln.hasRightConnector()){
-			return pile;
-		}
-		if(currentpiece.hasTopConnector() && tn != null && !tn.hasBottomConnector()){
-			return pile;
-		}
-		if(currentpiece.hasBottomConnector() && bn != null && !bn.hasTopConnector() && bn.isFixed()){
-			return pile;
-		}
 		
+		
+		if(currentpiece.hasRightConnector() && rn != null && !rn.hasLeftConnector() && rn.isFixed())return pile;
+		if(currentpiece.hasLeftConnector() && ln != null && !ln.hasRightConnector())return pile;
+		if(currentpiece.hasTopConnector() && tn != null && !tn.hasBottomConnector())return pile;
+		if(currentpiece.hasBottomConnector() && bn != null && !bn.hasTopConnector() && bn.isFixed())return pile;
+		
+		if(!currentpiece.hasRightConnector() && rn != null && rn.hasLeftConnector() && rn.isFixed())return pile;
+		if(!currentpiece.hasLeftConnector() && ln != null && ln.hasRightConnector())return pile;
+		if(!currentpiece.hasTopConnector() && tn != null && tn.hasBottomConnector())return pile;
+		if(!currentpiece.hasBottomConnector() && bn != null && bn.hasTopConnector() && bn.isFixed())return pile;
+		
+		if(currentpiece.hasRightConnector() && rn == null) return pile;
+		if(currentpiece.hasLeftConnector() && ln == null) return pile;
+		if(currentpiece.hasTopConnector() && tn == null) return pile;
+		if(currentpiece.hasBottomConnector() && bn == null) return pile;
+		
+		
+
 		Piece nextPiece = grid.getNextPiece(currentpiece);
 
 		while (nextPiece != null && (nextPiece.getType() == PieceType.VOID || nextPiece.isFixed())) {
@@ -184,7 +185,13 @@ public class Solver {
 			if (nextPiece == null)
 				break;
 		}
-		pile = checkAndAdd(nextPiece, grid, pile);
+		
+		
+		for (Orientation ori : nextPiece.getPossibleOrientations()) {
+			nextPiece.setOrientation(ori.getValue());
+			pile = checkAndAdd(nextPiece, grid, pile);
+		}
+			
 
 		return pile;
 	}
@@ -199,243 +206,44 @@ public class Solver {
 	 */
 	public static ArrayDeque<Pair<Piece, Orientation>> checkAndAdd(Piece nextPiece, Grid grid,
 			ArrayDeque<Pair<Piece, Orientation>> pile) {
-		if (nextPiece == null)
-			return pile;
-		for (Orientation ori : nextPiece.getPossibleOrientations()) {
-			nextPiece.setOrientation(ori.getValue());
-			// check if it is a possible orientation
-			if (grid.hasNeighbour(nextPiece)) {
-				// check can connect to the left piece & upper piece
-				Piece ln = grid.leftNeighbor(nextPiece);
-				Piece tn = grid.topNeighbor(nextPiece);
-				Piece rn = grid.rightNeighbor(nextPiece);
-				Piece bn = grid.bottomNeighbor(nextPiece);
-
-				if (ln != null && ln.hasRightConnector()) {
-					if (tn != null && tn.hasBottomConnector()) {
-						if (rn != null && rn.isFixed() && rn.hasLeftConnector()) {
-							if (bn != null && bn.isFixed() && bn.hasTopConnector()) {
-								if (nextPiece.getConnectors().contains(Orientation.WEST)
-										&& nextPiece.getConnectors().contains(Orientation.EAST)
-										&& nextPiece.getConnectors().contains(Orientation.SOUTH)
-										&& nextPiece.getConnectors().contains(Orientation.NORTH)) {
-									pile.push(new Pair<Piece, Orientation>(nextPiece, ori));
-								}
-							} else {
-								if (nextPiece.getConnectors().contains(Orientation.WEST)
-										&& nextPiece.getConnectors().contains(Orientation.EAST)
-										&& nextPiece.getConnectors().contains(Orientation.NORTH)
-										&& !nextPiece.getConnectors().contains(Orientation.SOUTH)) {
-									pile.push(new Pair<Piece, Orientation>(nextPiece, ori));
-								}
-							}
-						} else if (bn != null && bn.isFixed() && bn.hasTopConnector()) {
-							if (nextPiece.getConnectors().contains(Orientation.WEST)
-									&& nextPiece.getConnectors().contains(Orientation.SOUTH)
-									&& nextPiece.getConnectors().contains(Orientation.NORTH)
-									&& !nextPiece.getConnectors().contains(Orientation.EAST)) {
-								pile.push(new Pair<Piece, Orientation>(nextPiece, ori));
-							}
-						} else {
-							if (bn != null && bn.isFixed() && !bn.hasTopConnector()) {
-								if (nextPiece.getConnectors().contains(Orientation.WEST)
-										&& nextPiece.getConnectors().contains(Orientation.NORTH)
-										&& !nextPiece.getConnectors().contains(Orientation.SOUTH)) {
-									pile.push(new Pair<Piece, Orientation>(nextPiece, ori));
-								}
-							} else if (rn != null && rn.isFixed() && !rn.hasLeftConnector()) {
-								if (nextPiece.getConnectors().contains(Orientation.WEST)
-										&& nextPiece.getConnectors().contains(Orientation.NORTH)
-										&& !nextPiece.getConnectors().contains(Orientation.EAST)) {
-									pile.push(new Pair<Piece, Orientation>(nextPiece, ori));
-								}
-
-							} else {
-
-								if (nextPiece.getConnectors().contains(Orientation.WEST)
-										&& nextPiece.getConnectors().contains(Orientation.NORTH)) {
-									pile.push(new Pair<Piece, Orientation>(nextPiece, ori));
-								}
-
-							}
-						}
-
-					} else {
-						if (rn != null && rn.isFixed() && rn.hasLeftConnector()) {
-							if (bn != null && bn.isFixed() && bn.hasTopConnector()) {
-								if (nextPiece.getConnectors().contains(Orientation.WEST)
-										&& nextPiece.getConnectors().contains(Orientation.EAST)
-										&& nextPiece.getConnectors().contains(Orientation.SOUTH)
-										&& !nextPiece.getConnectors().contains(Orientation.NORTH)) {
-									pile.push(new Pair<Piece, Orientation>(nextPiece, ori));
-								}
-							} else {
-								if (nextPiece.getConnectors().contains(Orientation.WEST)
-										&& nextPiece.getConnectors().contains(Orientation.EAST)
-										&& !nextPiece.getConnectors().contains(Orientation.NORTH)) {
-									pile.push(new Pair<Piece, Orientation>(nextPiece, ori));
-								}
-							}
-						} else if (bn != null && bn.isFixed() && bn.hasTopConnector()) {
-							if (nextPiece.getConnectors().contains(Orientation.WEST)
-									&& nextPiece.getConnectors().contains(Orientation.SOUTH)
-									&& !nextPiece.getConnectors().contains(Orientation.NORTH)) {
-								pile.push(new Pair<Piece, Orientation>(nextPiece, ori));
-							}
-						} else {
-							if (rn != null && rn.isFixed() && !rn.hasLeftConnector()) {
-								if (bn != null && bn.isFixed() && !bn.hasTopConnector()) {// modif
-									if (nextPiece.getConnectors().contains(Orientation.WEST)
-											&& !nextPiece.getConnectors().contains(Orientation.NORTH)
-											&& !nextPiece.getConnectors().contains(Orientation.EAST)
-											&& !nextPiece.getConnectors().contains(Orientation.SOUTH)) {
-										pile.push(new Pair<Piece, Orientation>(nextPiece, ori));
-									}
-								} else {
-									if (nextPiece.getConnectors().contains(Orientation.WEST)
-											&& !nextPiece.getConnectors().contains(Orientation.NORTH)
-											&& !nextPiece.getConnectors().contains(Orientation.EAST)) {
-										pile.push(new Pair<Piece, Orientation>(nextPiece, ori));
-									}
-								}
-
-							} else if (bn != null && bn.isFixed() && !bn.hasTopConnector()) {
-								if (nextPiece.getConnectors().contains(Orientation.WEST)
-										&& !nextPiece.getConnectors().contains(Orientation.NORTH)
-										&& !nextPiece.getConnectors().contains(Orientation.SOUTH)) {
-									pile.push(new Pair<Piece, Orientation>(nextPiece, ori));
-								}
-							} else {
-								if (nextPiece.getConnectors().contains(Orientation.WEST)
-										&& !nextPiece.getConnectors().contains(Orientation.NORTH)) {
-									pile.push(new Pair<Piece, Orientation>(nextPiece, ori));
-								}
-							}
-
-						}
-					}
-				} else if (tn != null && tn.hasBottomConnector()) {
-					if (rn != null && rn.isFixed() && rn.hasLeftConnector()) {
-						if (bn != null && bn.isFixed() && bn.hasTopConnector()) {
-							if (nextPiece.getConnectors().contains(Orientation.NORTH)
-									&& nextPiece.getConnectors().contains(Orientation.EAST)
-									&& nextPiece.getConnectors().contains(Orientation.SOUTH)
-									&& !nextPiece.getConnectors().contains(Orientation.WEST)) {
-								pile.push(new Pair<Piece, Orientation>(nextPiece, ori));
-							}
-						} else {// modif
-							if (bn != null && bn.isFixed() && !bn.hasTopConnector()) {
-								if (nextPiece.getConnectors().contains(Orientation.NORTH)
-										&& nextPiece.getConnectors().contains(Orientation.EAST)
-										&& !nextPiece.getConnectors().contains(Orientation.WEST)
-										&& !nextPiece.getConnectors().contains(Orientation.SOUTH)) {
-									pile.push(new Pair<Piece, Orientation>(nextPiece, ori));
-								}
-							} else {
-								if (nextPiece.getConnectors().contains(Orientation.NORTH)
-										&& nextPiece.getConnectors().contains(Orientation.EAST)
-										&& !nextPiece.getConnectors().contains(Orientation.WEST)) {
-									pile.push(new Pair<Piece, Orientation>(nextPiece, ori));
-								}
-							}
-
-						}
-					} else if (bn != null && bn.isFixed() && bn.hasTopConnector()) {
-						if (rn != null && rn.isFixed() && !rn.hasLeftConnector()) {// modif
-							if (nextPiece.getConnectors().contains(Orientation.NORTH)
-									&& nextPiece.getConnectors().contains(Orientation.SOUTH)
-									&& !nextPiece.getConnectors().contains(Orientation.WEST)
-									&& !nextPiece.getConnectors().contains(Orientation.EAST)) {
-								pile.push(new Pair<Piece, Orientation>(nextPiece, ori));
-							}
-						} else {
-							if (nextPiece.getConnectors().contains(Orientation.NORTH)
-									&& nextPiece.getConnectors().contains(Orientation.SOUTH)
-									&& !nextPiece.getConnectors().contains(Orientation.WEST)) {
-								pile.push(new Pair<Piece, Orientation>(nextPiece, ori));
-							}
-						}
-
-					} else {
-						if (nextPiece.getConnectors().contains(Orientation.NORTH)
-								&& !nextPiece.getConnectors().contains(Orientation.WEST)) {
-							pile.push(new Pair<Piece, Orientation>(nextPiece, ori));
-						}
-					}
-				} else {
-					if (rn != null && rn.hasLeftConnector() && rn.isFixed()) {
-						if (bn != null && bn.hasTopConnector() && bn.isFixed()) {
-							if (!nextPiece.getConnectors().contains(Orientation.NORTH)
-									&& !nextPiece.getConnectors().contains(Orientation.WEST)
-									&& nextPiece.getConnectors().contains(Orientation.EAST)
-									&& nextPiece.getConnectors().contains(Orientation.SOUTH)) {
-								pile.push(new Pair<Piece, Orientation>(nextPiece, ori));
-							}
-						} else {
-							if (bn != null && bn.isFixed() && !bn.hasTopConnector()) {// modif
-								if (!nextPiece.getConnectors().contains(Orientation.NORTH)
-										&& !nextPiece.getConnectors().contains(Orientation.WEST)
-										&& nextPiece.getConnectors().contains(Orientation.EAST)
-										&& !nextPiece.getConnectors().contains(Orientation.SOUTH)) {
-									pile.push(new Pair<Piece, Orientation>(nextPiece, ori));
-								}
-							} else {
-								if (!nextPiece.getConnectors().contains(Orientation.NORTH)
-										&& !nextPiece.getConnectors().contains(Orientation.WEST)
-										&& nextPiece.getConnectors().contains(Orientation.EAST)) {
-									pile.push(new Pair<Piece, Orientation>(nextPiece, ori));
-								}
-							}
-
-						}
-
-					} else if (bn != null && bn.hasTopConnector() && bn.isFixed()) {
-						if (rn != null && rn.isFixed() && !rn.hasLeftConnector()) {
-							if (!nextPiece.getConnectors().contains(Orientation.NORTH)
-									&& !nextPiece.getConnectors().contains(Orientation.WEST)
-									&& !nextPiece.getConnectors().contains(Orientation.EAST)
-									&& nextPiece.getConnectors().contains(Orientation.SOUTH)) {
-								pile.push(new Pair<Piece, Orientation>(nextPiece, ori));
-							}
-						} else {
-							if (!nextPiece.getConnectors().contains(Orientation.NORTH)
-									&& !nextPiece.getConnectors().contains(Orientation.WEST)
-									&& nextPiece.getConnectors().contains(Orientation.SOUTH)) {
-								pile.push(new Pair<Piece, Orientation>(nextPiece, ori));
-							}
-						}
-
-					} else {// modify //important win 3s !!!!!!
-						if (rn != null && rn.isFixed() && !rn.hasLeftConnector()) {
-							if (!nextPiece.getConnectors().contains(Orientation.NORTH)
-									&& !nextPiece.getConnectors().contains(Orientation.EAST)
-									&& !nextPiece.getConnectors().contains(Orientation.WEST))
-								pile.push(new Pair<Piece, Orientation>(nextPiece, ori));
-						} else if (bn != null && !bn.hasTopConnector() && bn.isFixed()) {
-							if (!nextPiece.getConnectors().contains(Orientation.NORTH)
-									&& !nextPiece.getConnectors().contains(Orientation.SOUTH)
-									&& !nextPiece.getConnectors().contains(Orientation.WEST))
-								pile.push(new Pair<Piece, Orientation>(nextPiece, ori));
-						} else {
-							if (bn != null && !bn.hasTopConnector()) {
-								if (!nextPiece.getConnectors().contains(Orientation.NORTH)
-										&& !nextPiece.getConnectors().contains(Orientation.WEST))
-									pile.push(new Pair<Piece, Orientation>(nextPiece, ori));
-							} else {
-								if (!nextPiece.getConnectors().contains(Orientation.NORTH)
-										&& !nextPiece.getConnectors().contains(Orientation.WEST))
-									pile.push(new Pair<Piece, Orientation>(nextPiece, ori));
-							}
-
-						}
-
-					}
-
-				}
-
+		
+		
+		
+		Piece ln = grid.leftNeighbor(nextPiece);
+		Piece tn = grid.topNeighbor(nextPiece);
+		Piece rn = grid.rightNeighbor(nextPiece);
+		Piece bn = grid.bottomNeighbor(nextPiece);
+		
+		
+			Pair<Piece, Orientation> p = new Pair<Piece, Orientation>(nextPiece, nextPiece.getOrientation());
+			
+			if (grid.hasNeighbour(nextPiece) && !pile.contains(p)) {
+				
+				
+				
+				if(nextPiece.hasLeftConnector() && ln != null && !ln.hasRightConnector())return pile;
+				if(nextPiece.hasTopConnector() && tn != null && !tn.hasBottomConnector())return pile;
+				if(nextPiece.hasRightConnector() && rn != null && !rn.hasLeftConnector() && rn.isFixed())return pile;
+				if(nextPiece.hasBottomConnector() && bn != null && !bn.hasTopConnector() && bn.isFixed())return pile;
+				
+				if(!nextPiece.hasRightConnector() && rn != null && rn.hasLeftConnector() && rn.isFixed())return pile;
+				if(!nextPiece.hasLeftConnector() && ln != null && ln.hasRightConnector())return pile;
+				if(!nextPiece.hasTopConnector() && tn != null && tn.hasBottomConnector())return pile;
+				if(!nextPiece.hasBottomConnector() && bn != null && bn.hasTopConnector() && bn.isFixed())return pile;
+				
+				if(nextPiece.hasRightConnector() && rn == null) return pile;
+				if(nextPiece.hasLeftConnector() && ln == null) return pile;
+				if(nextPiece.hasTopConnector() && tn == null) return pile;
+				if(nextPiece.hasBottomConnector() && bn == null) return pile;
+				
+				
+				
+				pile.push(p);
+				
+				
 			}
-
-		}
+			
+		
 		return pile;
 	}
 
@@ -455,6 +263,12 @@ public class Solver {
 		while (p != null && (p.getType() == PieceType.VOID || p.isFixed())) {
 			p = grid.getNextPiece(p);
 		}
+	    if(p==null) return pile;
+		//System.out.println("check "+p);
+		for (Orientation ori : p.getPossibleOrientations()) {
+			p.setOrientation(ori.getValue());
+			pile = checkAndAdd(p, grid, pile);
+		}
 		checkAndAdd(p, grid, pile);
 		return pile;
 
@@ -466,11 +280,22 @@ public class Solver {
 	 * @param grid
 	 */
 	public static void fixPieceOnGrid(Grid grid) {
+		long start = System.currentTimeMillis();
+		  
+		 
 		for (int i = 0; i < grid.getHeight(); i++) {
 			for (int j = 0; j < grid.getWidth(); j++) {
 				fixAparticularPiece(grid, grid.getPiece(i, j));
 			}
 		}
+		  long stop = System.currentTimeMillis();
+		  //System.out.println((stop -
+				//  start));
+		 /* for (int i = 0; i < grid.getHeight(); i++) {
+				for (int j = 0; j < grid.getWidth(); j++) {
+					System.out.println("Pice : "+grid.getPiece(i, j)+ "isfixed : "+grid.getPiece(i, j).isFixed());
+				}
+			}*/
 	}
 
 	/**
@@ -480,36 +305,53 @@ public class Solver {
 	 */
 	public static void fixAparticularPiece(Grid grid, Piece p) {
 		ArrayDeque<Piece> pileOfPiece2fix = new ArrayDeque<Piece>();
-
-		if (p.getType() == PieceType.VOID || p.getType() == PieceType.FOURCONN) {
-			p.setFixed(true);
-		} else if (!p.isFixed() && p.getType().getNbConnectors() == grid.numberOfNeibours(p)) {
-			while (!grid.hasNeighbour(p)) {
-				p.turn();
-			}
-			p.setFixed(true);
-			// System.out.println("1 :"+(p));
-		} else {
-
-			for (int i = 0; i < Orientation.values().length; i++) {
-				if (!grid.hasNeighbour(p))
-					p.deleteFromPossibleOrientation(p.getOrientation());
-				p.turn();
-			}
-
-			if (p.getPossibleOrientations().size() == 1) {
-				p.setOrientation(p.getPossibleOrientations().get(0).getValue());
+		
+		if(!p.isFixed()){
+			if (p.getType() == PieceType.VOID || p.getType() == PieceType.FOURCONN) {
 				p.setFixed(true);
-				// System.out.println("2 :"+(p));
-			}
+				//System.out.println("fix : void / fourconn : "+ p);
+			} else {
 
+				Piece ln = grid.leftNeighbor(p);
+				Piece tn = grid.topNeighbor(p);
+				Piece rn = grid.rightNeighbor(p);
+				Piece bn = grid.bottomNeighbor(p);
+				for (int i = 0; i < Orientation.values().length; i++) {
+					if ((ln != null && ln.isFixed() && ln.hasRightConnector() && !p.hasLeftConnector())
+					  || (tn != null && tn.isFixed() && tn.hasBottomConnector() && !p.hasTopConnector())
+					  || (rn != null && rn.isFixed() && rn.hasLeftConnector() && !p.hasRightConnector())
+					  || (bn != null && bn.isFixed() && bn.hasTopConnector() && !p.hasBottomConnector())
+					  || (ln != null && ln.isFixed() && !ln.hasRightConnector() && p.hasLeftConnector())
+					  || (tn != null && tn.isFixed() && !tn.hasBottomConnector() && p.hasTopConnector())
+					  || (rn != null && rn.isFixed() && !rn.hasLeftConnector() && p.hasRightConnector())
+					  || (bn != null && bn.isFixed() && !bn.hasTopConnector() && p.hasBottomConnector())
+					  || (ln == null &&  p.hasLeftConnector())
+					  || (tn == null &&  p.hasTopConnector())
+					  || (rn == null &&  p.hasRightConnector())
+					  || (bn == null &&  p.hasBottomConnector())
+					  ){
+						//System.out.println("delete : "+p+" orientation : "+p.getOrientation());
+						p.deleteFromPossibleOrientation(p.getOrientation());
+					}	
+						p.turn();
+				}
+
+			}
+			if(p.getPossibleOrientations().size() != 0)
+				p.setOrientation(p.getPossibleOrientations().get(0).getValue());
+		}
+		if (p.getPossibleOrientations().size() == 1) {
+			//System.out.println("Size == 1 " + p);
+			p.setOrientation(p.getPossibleOrientations().get(0).getValue());
+			p.setFixed(true);
+			
 		}
 		if (p.isFixed()) {
 			for (Piece p2 : grid.listOfNeighbours(p)) {
 				if (!pileOfPiece2fix.contains(p2) && !p2.isFixed())
 					pileOfPiece2fix.add(p2);
 			}
-			fixNeighboursOnGrid(pileOfPiece2fix, grid);
+			  fixNeighboursOnGrid(pileOfPiece2fix,grid);
 		}
 
 	}
@@ -522,24 +364,51 @@ public class Solver {
 	public static void fixNeighboursOnGrid(ArrayDeque<Piece> pileOfPiece2fix, Grid grid) {
 		while (!pileOfPiece2fix.isEmpty()) {
 			Piece p = pileOfPiece2fix.pop();
-			if (!p.isFixed() && p.getType().getNbConnectors() == grid.numberOfFixedNeibours(p)) {
-				int i = 0;
-				while (!grid.hasFixedNeighbour(p) && i < Orientation.values().length) {
-					p.turn();
-					i++;
+			 if(!p.isFixed()){
+				
+				 Piece ln = grid.leftNeighbor(p);
+					Piece tn = grid.topNeighbor(p);
+					Piece rn = grid.rightNeighbor(p);
+					Piece bn = grid.bottomNeighbor(p);
+					for (int i = 0; i < Orientation.values().length; i++) {
+						if ((ln != null && ln.isFixed() && ln.hasRightConnector() && !p.hasLeftConnector())
+						  || (tn != null && tn.isFixed() && tn.hasBottomConnector() && !p.hasTopConnector())
+						  || (rn != null && rn.isFixed() && rn.hasLeftConnector() && !p.hasRightConnector())
+						  || (bn != null && bn.isFixed() && bn.hasTopConnector() && !p.hasBottomConnector())
+						  || (ln != null && ln.isFixed() && !ln.hasRightConnector() && p.hasLeftConnector())
+						  || (tn != null && tn.isFixed() && !tn.hasBottomConnector() && p.hasTopConnector())
+						  || (rn != null && rn.isFixed() && !rn.hasLeftConnector() && p.hasRightConnector())
+						  || (bn != null && bn.isFixed() && !bn.hasTopConnector() && p.hasBottomConnector())
+						  || (ln == null &&  p.hasLeftConnector())
+						  || (tn == null &&  p.hasTopConnector())
+						  || (rn == null &&  p.hasRightConnector())
+						  || (bn == null &&  p.hasBottomConnector())
+						  ){
+							//System.out.println("2passes delete : "+p+" orientation : "+p.getOrientation());
+							p.deleteFromPossibleOrientation(p.getOrientation());
+						}	
+							p.turn();
+					}
+
 				}
-				if (grid.hasFixedNeighbour(p)) {
+			 if(p.getPossibleOrientations().size() != 0)
+				p.setOrientation(p.getPossibleOrientations().get(0).getValue());
+				if (p.getPossibleOrientations().size() == 1) {
+					//System.out.println("2eme passeSize == 1 " + p);
+					p.setOrientation(p.getPossibleOrientations().get(0).getValue());
 					p.setFixed(true);
-					// System.out.println("Add :"+(p));
+					
+				}
+				if (p.isFixed()) {
 					for (Piece p2 : grid.listOfNeighbours(p)) {
 						if (!pileOfPiece2fix.contains(p2) && !p2.isFixed())
 							pileOfPiece2fix.add(p2);
 					}
+					 
 				}
 
-			}
-
 		}
+		
 	}
 	
 	/**

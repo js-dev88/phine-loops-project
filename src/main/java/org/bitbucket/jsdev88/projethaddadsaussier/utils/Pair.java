@@ -1,5 +1,7 @@
 package org.bitbucket.jsdev88.projethaddadsaussier.utils;
 
+import java.util.Objects;
+
 public class Pair<K,V> {
 	private K key;
 	private V value;
@@ -29,5 +31,31 @@ public class Pair<K,V> {
 	public String toString() {
 		return this.getKey().toString() + " Orientation :" + this.getValue().toString();
 	}
+	
+	 @Override
+	    public boolean equals(final Object o) {
+	        if (this == o) {
+	            return true;
+	        }
+	        if (!(o instanceof Pair)) {
+	            return false;
+	        }
+
+	        final Pair<?, ?> pair = (Pair<?, ?>) o;
+
+	        if (key!= pair.key) {
+	            return false;
+	        }
+	        if (value != pair.value) {
+	            return false;
+	        }
+
+	        return true;
+	    }
+
+	    @Override
+	    public int hashCode() {
+	    	return Objects.hash(key, value);
+	    }
 	
 }
