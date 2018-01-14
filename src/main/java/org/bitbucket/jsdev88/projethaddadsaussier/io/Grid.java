@@ -371,8 +371,10 @@ public class Grid {
 				if(this.getPiece(line, column).hasRightConnector()) return false;
 			}
 			if(this.getPiece(line, column).hasTopConnector() ) return false;
-			if(!this.getPiece(line, column).hasLeftConnector() && ln != null && ln.hasRightConnector()) return false;
-			if(this.getPiece(line, column).hasLeftConnector() && ln != null && !ln.hasRightConnector()) return false;
+			if(!this.getPiece(line, column).hasRightConnector() && rn != null && rn.hasLeftConnector()) return false;
+			if(this.getPiece(line, column).hasRightConnector() && rn != null && !rn.hasLeftConnector()) return false;
+			if(!this.getPiece(line, column).hasBottomConnector() && bn != null && bn.hasTopConnector()) return false;
+			if(this.getPiece(line, column).hasBottomConnector() && bn != null && !bn.hasTopConnector()) return false;
 			
 		}
 		else if(line > 0 && line < this.getHeight()-1) {
@@ -384,10 +386,10 @@ public class Grid {
 				if(this.getPiece(line, column).hasRightConnector()) return false;
 			}
 	
-			if(!this.getPiece(line, column).hasLeftConnector() && ln != null && ln.hasRightConnector()) return false;
-			if(this.getPiece(line, column).hasLeftConnector() && ln != null && !ln.hasRightConnector()) return false;
-			if(!this.getPiece(line, column).hasTopConnector() && tn != null && tn.hasBottomConnector()) return false;
-			if(this.getPiece(line, column).hasTopConnector() && tn != null && !tn.hasBottomConnector()) return false;
+			if(!this.getPiece(line, column).hasRightConnector() && rn != null && rn.hasLeftConnector()) return false;
+			if(this.getPiece(line, column).hasRightConnector() && rn != null && !rn.hasLeftConnector()) return false;
+			if(!this.getPiece(line, column).hasBottomConnector() && bn != null && bn.hasTopConnector()) return false;
+			if(this.getPiece(line, column).hasBottomConnector() && bn != null && !bn.hasTopConnector()) return false;
 			
 			
 		}
@@ -399,10 +401,8 @@ public class Grid {
 				if(this.getPiece(line, column).hasRightConnector()) return false;
 			}
 			if(this.getPiece(line, column).hasBottomConnector()) return false;
-			if(!this.getPiece(line, column).hasLeftConnector() && ln != null && ln.hasRightConnector()) return false;
-			if(this.getPiece(line, column).hasLeftConnector() && ln != null && !ln.hasRightConnector()) return false;
-			if(!this.getPiece(line, column).hasTopConnector() && tn != null && tn.hasBottomConnector()) return false;
-			if(this.getPiece(line, column).hasTopConnector() && tn != null && !tn.hasBottomConnector()) return false;
+			if(!this.getPiece(line, column).hasRightConnector() && rn != null && rn.hasLeftConnector()) return false;
+			if(this.getPiece(line, column).hasRightConnector() && rn != null && !rn.hasLeftConnector()) return false;
 			
 		}
 		if(this.getPiece(line, column).hasLeftConnector() && ln == null) return false;
