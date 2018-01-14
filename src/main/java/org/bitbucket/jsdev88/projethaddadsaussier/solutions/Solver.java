@@ -4,9 +4,6 @@ import java.io.IOException;
 import java.util.ArrayDeque;
 import java.util.Objects;
 import java.util.Stack;
-import java.util.function.Predicate;
-
-import org.bitbucket.jsdev88.projethaddadsaussier.io.GUITEST;
 import org.bitbucket.jsdev88.projethaddadsaussier.io.Grid;
 import org.bitbucket.jsdev88.projethaddadsaussier.utils.Orientation;
 import org.bitbucket.jsdev88.projethaddadsaussier.utils.Pair;
@@ -22,6 +19,7 @@ public class Solver {
 
 			for (int i = 0; i < 1; i++) {
 				Generator.generateLevel("NotSolution.txt", new Grid(60, 60));
+
 				long start = System.currentTimeMillis();
 				System.out.println(solveGrid("NotSolution.txt", "Solved.txt", "0"));
 				long stop = System.currentTimeMillis();
@@ -133,7 +131,7 @@ public class Solver {
 		
 			/* DEBUG */
 
-			 System.out.println( pile.toString());
+			 //System.out.println( pile.toString());
 
 			//System.out.println(grid.toString());
 			 //GUITEST.startGUITEST(grid);
@@ -424,7 +422,7 @@ public class Solver {
 		Piece p;
 		
 		if (Checker.isSolution(grid) == null) {
-			GUITEST.startGUITEST(grid);
+			//GUITEST.startGUITEST(grid);
 			return true; // check if the grid is already solution
 		}
 		if (!grid.allPieceHaveNeighbour())
@@ -442,7 +440,7 @@ public class Solver {
 			}
 			//System.out.println(grid);
 			System.out.println(Checker.isSolution(grid));
-			GUITEST.startGUITEST(grid);
+			//sGUITEST.startGUITEST(grid);
 			return false;
 		}
 		else{
