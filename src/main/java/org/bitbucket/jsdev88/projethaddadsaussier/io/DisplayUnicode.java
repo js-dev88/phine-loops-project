@@ -13,25 +13,25 @@ import org.bitbucket.jsdev88.projethaddadsaussier.utils.PieceType;
  * architecture source :
  * http://thecodersbreakfast.net/index.php?post/2008/02/25/26-de-la-bonne-implementation-du-singleton-en-java
  */
-public class displayUnicode {
+public class DisplayUnicode {
 	private static HashMap<PieceType, HashMap<Orientation, String>> unicodeTable = new HashMap<PieceType, HashMap<Orientation, String>>();
 	/**
 	 * Private Constructor you can't build the table from outside
 	 * 
 	 */
-	private displayUnicode() {
+	private DisplayUnicode() {
 		buildTable();
 	}
 
 	/**
 	 * Unique instance pre-initialized If not called, not built
 	 */
-	private static displayUnicode INSTANCE = null;
+	private static DisplayUnicode INSTANCE = null;
 
 	/** Only one instance is built*/
 	private static void instanciate() {
 		if (INSTANCE == null) {
-			INSTANCE = new displayUnicode();
+			INSTANCE = new DisplayUnicode();
 		}
 	}
 	
@@ -78,13 +78,13 @@ public class displayUnicode {
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		displayUnicode.buildTable();
+		DisplayUnicode.buildTable();
 		for(Entry<PieceType, HashMap<Orientation, String>> pt : unicodeTable.entrySet()){
 			for(Entry<Orientation, String> o : pt.getValue().entrySet()){
 				System.out.println("Piece : "+pt.getKey()+ " Orientation : "+o.getKey()+" Unicode : "+  o.getValue());
 			}
 		}
-		System.out.println(displayUnicode.getUnicodeOfPiece(PieceType.ONECONN,Orientation.NORTH));
+		System.out.println(DisplayUnicode.getUnicodeOfPiece(PieceType.ONECONN,Orientation.NORTH));
 	}
 	
 

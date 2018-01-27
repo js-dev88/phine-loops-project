@@ -10,6 +10,7 @@ import org.apache.commons.cli.Option;
 import org.apache.commons.cli.Option.Builder;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
+import org.bitbucket.jsdev88.projethaddadsaussier.io.GUI;
 import org.bitbucket.jsdev88.projethaddadsaussier.io.Grid;
 import org.bitbucket.jsdev88.projethaddadsaussier.solutions.Checker;
 import org.bitbucket.jsdev88.projethaddadsaussier.solutions.Generator;
@@ -23,6 +24,7 @@ public class Main {
 	private static Integer maxcc = -1;
 
 	public static void main(String[] args) {
+		boolean gui = false;
 		Options options = new Options();
 		CommandLineParser parser = new DefaultParser();
 		CommandLine cmd = null;
@@ -35,6 +37,7 @@ public class Main {
 				"Store the generated or solved grid in <arg>. (Use only with --generate and --solve.)");
 		options.addOption("t", "threads", true, "Maximum number of solver threads. (Use only with --solve.)");
 		options.addOption("x", "nbcc", true, "Maximum number of connected components. (Use only with --generate.)");
+		options.addOption("i", "interface", true, "Launching the interface of the <arg> grid");
 		options.addOption("h", "help", false, "Display this help");
 
 		try {
@@ -47,7 +50,7 @@ public class Main {
 		}
 
 		try {
-			if (cmd.hasOption("g")) { //call the generator
+			if (cmd.hasOption("g")) { // call the generator
 				System.out.println("Running phineloop generator.");
 				String[] gridformat = cmd.getOptionValue("g").split("x");
 				width = Integer.parseInt(gridformat[0]);
@@ -56,16 +59,16 @@ public class Main {
 					throw new ParseException("Missing mandatory --output argument.");
 				outputFile = cmd.getOptionValue("o");
 
-				if (cmd.hasOption("x")) {//call the nbcc option
+				if (cmd.hasOption("x")) {// call the nbcc option
 					String nbcc = cmd.getOptionValue("x");
-					if(Integer.valueOf(nbcc)> Math.round((width*height-1 / 2))){
-							System.err.println("Maximum of connected component is limited to height * width /2");
-							HelpFormatter formatter = new HelpFormatter();
-							formatter.printHelp("phineloopgen", options);
-							System.exit(1);
-					}else{
-						try {	
-							Generator.generateLevel(outputFile, new Grid(width, height,Integer.valueOf(nbcc)));
+					if (Integer.valueOf(nbcc) > Math.round((width * height - 1 / 2))) {
+						System.err.println("Maximum of connected component is limited to height * width /2");
+						HelpFormatter formatter = new HelpFormatter();
+						formatter.printHelp("phineloopgen", options);
+						System.exit(1);
+					} else {
+						try {
+							Generator.generateLevel(outputFile, new Grid(width, height, Integer.valueOf(nbcc)));
 						} catch (IOException e) {
 							System.err.println("Erreur pendant la génération");
 						}
@@ -85,20 +88,14 @@ public class Main {
 					throw new ParseException("Missing mandatory --output argument.");
 				outputFile = cmd.getOptionValue("o");
 				boolean solved = false;
-				
+
 				try {
-					solved = Solver.solveGrid(inputFile, outputFile,"0");
+					solved = Solver.solveGrid(inputFile, outputFile, "0");
 				} catch (IOException e) {
 					System.err.println("Check files' name");
 				}
-				// load grid from inputFile, solve it and store result to
-				// outputFile...
-				// ...
-
 				System.out.println("SOLVED: " + solved);
-			}
-
-			else if (cmd.hasOption("c")) {
+			} else if (cmd.hasOption("c")) {
 				System.out.println("Running phineloop checker.");
 				inputFile = cmd.getOptionValue("c");
 				boolean solved = false;
@@ -109,6 +106,19 @@ public class Main {
 					solved = false;
 				}
 				System.out.println("SOLVED: " + solved);
+			} else if (cmd.hasOption("i")) {
+				System.out.println("Launching the interface...");
+				inputFile = cmd.getOptionValue("i");
+				System.out.println(inputFile);
+				gui = true;
+				try {
+					
+					GUI.startGUI(inputFile);
+				} catch (Exception e) {
+					System.err.println("Error during GUI launching");
+					e.printStackTrace();
+				}
+				
 			} else {
 				throw new ParseException(
 						"You must specify at least one of the following options: -generate -check -solve ");
@@ -119,6 +129,7 @@ public class Main {
 			formatter.printHelp("phineloopgen", options);
 			System.exit(1); // exit with error
 		}
-		System.exit(0); // exit with success
+		if(!gui)
+			System.exit(0); // exit with success
 	}
 }
