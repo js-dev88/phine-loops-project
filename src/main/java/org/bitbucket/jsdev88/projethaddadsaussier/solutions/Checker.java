@@ -54,7 +54,7 @@ public class Checker {
 	/**
 	 * Check if a grid is Solution
 	 * @param inputFile String from command line
-	 * @return true if al pieces are connected
+	 * @return true if all pieces are connected
 	 * @throws IOException
 	 */
 	public static boolean isSolution(String inputFile)throws IOException{
@@ -66,7 +66,11 @@ public class Checker {
 		}
 		return true;
 	}
-	
+	/**
+	 * Check if solution with the grid in parameters
+	 * @param grid2Test
+	 * @return
+	 */
 	public static Piece isSolution(Grid grid2Test){
 		for(Piece[] linep : grid2Test.getAllPieces()){
 			for(Piece p : linep){

@@ -15,7 +15,7 @@ public class PieceTest {
 	
 	@Test
 	public void getOrientationTest() {
-		Piece p = new Piece(0,0,PieceType.VOID,Orientation.EAST);
+		Piece p = new Piece(0, 0, PieceType.VOID, Orientation.EAST);
 		assertTrue(p.getOrientation() == Orientation.NORTH);
 	}
 	

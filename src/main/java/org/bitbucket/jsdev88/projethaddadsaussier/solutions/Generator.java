@@ -4,11 +4,14 @@ import java.io.*;
 
 import java.util.Random;
 
-
-import org.bitbucket.jsdev88.projethaddadsaussier.io.GUITEST;
 import org.bitbucket.jsdev88.projethaddadsaussier.io.Grid;
 import org.bitbucket.jsdev88.projethaddadsaussier.utils.Piece;
 import org.bitbucket.jsdev88.projethaddadsaussier.utils.PieceType;
+
+/**
+ * Generate a solution, number of connexe composant is not finished
+ *
+ */
 
 public class Generator {
 
@@ -20,8 +23,8 @@ public class Generator {
 	 * @throws IOException
 	 *             - if an I/O error occurs.
 	 * @return a File that contains a grid filled with pieces (a level)
-	 * @throws FileNotFoundException 
-	 * @throws UnsupportedEncodingException 
+	 * @throws FileNotFoundException
+	 * @throws UnsupportedEncodingException
 	 */
 	public static void generateLevel(String fileName, Grid inputGrid) throws IOException {
 		// Generate a solution with a specific
@@ -31,7 +34,7 @@ public class Generator {
 			int j = 0;
 			int savei = 0;
 			int savej = 0;
-			
+
 			int[] index;
 			Grid[] inputGrids = divideGrid(inputGrid);
 			for (Grid grid : inputGrids) {
@@ -42,58 +45,41 @@ public class Generator {
 				index = copyGrid(filledGrid, inputGrid, i, j);
 				i = (index[0] + 1) % inputGrid.getHeight();
 				j = (index[1] + 1) % inputGrid.getWidth();
-				if(i == savei){
-					i = (savei + filledGrid.getHeight())%inputGrid.getWidth();
+				if (i == savei) {
+					i = (savei + filledGrid.getHeight()) % inputGrid.getWidth();
 					savei = i;
-				}
-				else if (j == savej){
-					j = (savej + filledGrid.getWidth())%inputGrid.getWidth();
+				} else if (j == savej) {
+					j = (savej + filledGrid.getWidth()) % inputGrid.getWidth();
 					savej = j;
 				}
 
 				System.out.println("i : " + i + " - j : " + j);
 			}
 
-			/* DEBUG
-			 for (int z = 0; z < inputGrid.getHeight(); z++) { 
-				 for (int k = 0; k < inputGrid.getWidth(); k++) {
-					 System.out.println("z = "+z+" / k = "+k);
-					 if(inputGrid.getPiece(z, k) != null) System.out.println(inputGrid.getPiece(z, k)); } }
-			 */
-			
-			GUITEST.startGUITEST(inputGrid);
-		}
-		
-		// Generate a level with a random
-		// number of connected component
-		else {
-			// Generate a solution
+		} else {
+			// Generate a level with a random
+			// number of connected component
 			filledGrid = generateSolution(inputGrid);
-			/* DEBUG */
-			//writeGridOnFile("Solution.txt", inputGrid);
-			//GUITEST.startGUITEST(filledGrid);
-			// System.out.println(filledGrid.toString());
 			shuffle(filledGrid);
 			// Then we write the level on a file
 			writeGridOnFile(fileName, filledGrid);
-			//GUITEST.startGUITEST(filledGrid);
-			// System.out.println(filledGrid.toString());
+
 		}
 
 	}
 
-	
-	
 	/**
-	 * Write a  normalized file at the root of the jar
-	 * @param fileName from the command line
+	 * Write a normalized file at the root of the jar
+	 * 
+	 * @param fileName
+	 *            from the command line
 	 * @param inputGrid
-	 * @throws IOException 
-	 * @throws FileNotFoundException 
-	 * @throws UnsupportedEncodingException 
+	 * @throws IOException
+	 * @throws FileNotFoundException
+	 * @throws UnsupportedEncodingException
 	 */
-	public static void writeGridOnFile(String fileName, Grid inputGrid) throws IOException{
-		
+	public static void writeGridOnFile(String fileName, Grid inputGrid) throws IOException {
+
 		try (Writer writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(fileName), "utf-8"))) {
 			writer.write(String.valueOf(inputGrid.getWidth()));
 			writer.write(System.lineSeparator());
@@ -527,9 +513,9 @@ public class Generator {
 		p.setType(PossibleType[type]);
 	}
 
-	
 	/**
 	 * Shuffles the grid to build the level
+	 * 
 	 * @param grid
 	 * @return
 	 */
@@ -542,115 +528,121 @@ public class Generator {
 		}
 		return grid;
 	}
-	
+
 	/**
 	 * Divide the inputGrid into Grid[] containing nbcc*Grid
+	 * 
 	 * @param inputGrid
 	 * @return Grid[]
 	 */
 	public static Grid[] divideGrid(Grid inputGrid) {
-		int w = inputGrid.getWidth(); //width
-		int h = inputGrid.getHeight(); //height
-		int nbcc = inputGrid.getNbcc(); //nbcc
+		int w = inputGrid.getWidth(); // width
+		int h = inputGrid.getHeight(); // height
+		int nbcc = inputGrid.getNbcc(); // nbcc
 		Grid[] grids = new Grid[nbcc];
 		Random r = new Random();
 
-		if (nbcc % 2 == 0) { //pair number of cc
-			for (int i = 0; i < nbcc ; i = i + 2) {
-				int hOrw = r.nextInt(2); 
-				if(i == 0){// for the first two grids, we choose randomly between height and width, and we divide it
+		if (nbcc % 2 == 0) { // pair number of cc
+			for (int i = 0; i < nbcc; i = i + 2) {
+				int hOrw = r.nextInt(2);
+				if (i == 0) {// for the first two grids, we choose randomly
+								// between height and width, and we divide it
 					if (hOrw == 0) {
-						w = Math.round(w/2);
-					}else {
-						h = Math.round(h/2);
+						w = Math.round(w / 2);
+					} else {
+						h = Math.round(h / 2);
 					}
 					grids[i] = new Grid(w, h, 1);
-					grids[i+1] = new Grid(w, h, 1);
-					//DEBUG System.out.println("Grid "+i+" : w = "+w+" / h = "+h);
-					//DEBUG System.out.println("Grid "+(i+1)+" : w = "+w+" / h = "+h);
+					grids[i + 1] = new Grid(w, h, 1);
+					// DEBUG System.out.println("Grid "+i+" : w = "+w+" / h =
+					// "+h);
+					// DEBUG System.out.println("Grid "+(i+1)+" : w = "+w+" / h
+					// = "+h);
+				} else {// for the others grids, we divide the bigger one
+					if (w < h) {
+						h = Math.round(h / 2);
+						grids[i - 2].setHeight(h);// we have to change the
+													// height of the 2 grids
+													// that we divided
+						grids[i - 1].setHeight(h);
+					} else {
+						w = Math.round(w / 2);
+						grids[i - 2].setWidth(h);// we have to change the width
+													// of the 2 grids that we
+													// divided
+						grids[i - 1].setWidth(h);// NORMALEMENT C'EST W ICI,
+													// MAIS QUAND JE METS H CA
+													// COMPILE EN DONNANT DE LA
+													// MERDE QUAND JE METS W CA
+													// COMPILE PAS
+					}
+					grids[i] = new Grid(w, h, 1);
+					grids[i + 1] = new Grid(w, h, 1);
+					// DEBUG System.out.println("Grid "+(i-1)+" : w = "+w+" / h
+					// = "+h);
+					// DEBUG System.out.println("Grid "+(i-2)+" : w = "+w+" / h
+					// = "+h);
+					// DEBUG System.out.println("Grid "+i+" : w = "+w+" / h =
+					// "+h);
+					// DEBUG System.out.println("Grid "+(i+1)+" : w = "+w+" / h
+					// = "+h);
 				}
-				else{//for the others grids, we divide the bigger one 
-					if(w < h){
-						h = Math.round(h/2);
-						grids[i-2].setHeight(h);//we have to change the height of the 2 grids that we divided
-						grids[i-1].setHeight(h);
-					}
-					else{
-						w = Math.round(w/2);
-						grids[i-2].setWidth(h);//we have to change the width of the 2 grids that we divided
-						grids[i-1].setWidth(h);//NORMALEMENT C'EST W ICI, MAIS QUAND JE METS H CA COMPILE EN DONNANT DE LA MERDE QUAND JE METS W CA COMPILE PAS
-					}
-					grids[i] = new Grid(w, h, 1); 
-					grids[i+1] = new Grid(w, h, 1);
-					//DEBUG System.out.println("Grid "+(i-1)+" : w = "+w+" / h = "+h);
-					//DEBUG System.out.println("Grid "+(i-2)+" : w = "+w+" / h = "+h);
-					//DEBUG System.out.println("Grid "+i+" : w = "+w+" / h = "+h);
-					//DEBUG System.out.println("Grid "+(i+1)+" : w = "+w+" / h = "+h);
-				}
-				/* Ici je voulais ajuster la dernière Grid qui devait remplir tout l'espace qui reste, mais bon galere un peu ...
-				int width = widthCount(grids);
-				System.out.println("width = "+width);
-				if(width < inputGrid.getHeight()*inputGrid.getWidth()){
-					int missingCases = (inputGrid.getHeight()*inputGrid.getWidth()) - (width - grids[nbcc-1].getHeight()*grids[nbcc-1].getWidth());
-					System.out.println("missing  cases = "+missingCases);
-					if(w < h){
-						w = missingCases/h;
-						grids[nbcc-1].setWidth(w);
-					}
-					else{
-						h = missingCases/w;
-						grids[nbcc-1].setHeight(h);
-					}
-					System.out.println("grid "+(nbcc-1)+" / height : "+grids[nbcc-1].getHeight()+" width : "+grids[nbcc-1].getWidth());
-				}*/
+				/*
+				 * Ici je voulais ajuster la dernière Grid qui devait remplir
+				 * tout l'espace qui reste, mais bon galere un peu ... int width
+				 * = widthCount(grids); System.out.println("width = "+width);
+				 * if(width < inputGrid.getHeight()*inputGrid.getWidth()){ int
+				 * missingCases = (inputGrid.getHeight()*inputGrid.getWidth()) -
+				 * (width - grids[nbcc-1].getHeight()*grids[nbcc-1].getWidth());
+				 * System.out.println("missing  cases = "+missingCases); if(w <
+				 * h){ w = missingCases/h; grids[nbcc-1].setWidth(w); } else{ h
+				 * = missingCases/w; grids[nbcc-1].setHeight(h); }
+				 * System.out.println("grid "+(nbcc-1)+" / height : "+grids[nbcc
+				 * -1].getHeight()+" width : "+grids[nbcc-1].getWidth()); }
+				 */
 			}
-			//FIRST ALGO, don't work for big nbcc ..
+			// FIRST ALGO, don't work for big nbcc ..
 			/*
-			for(int i = 0; i < nbcc ; i++){
-				System.out.println("i = " +i);
-				if(i == nbcc-1){
-					if(w != inputGrid.getWidth() && ((nbcc-1)*w < inputGrid.getWidth())){
-						w = inputGrid.getWidth() - ((nbcc-1)*w);
-					}
-					else if(h != inputGrid.getHeight() && ((nbcc-1)*h < inputGrid.getHeight())){
-						h = inputGrid.getHeight() - ((nbcc-1)*h);
-					}
-				}
-				grids[i] = new Grid(w, h, 1);
-				System.out.println("Grid "+i+" : w = "+w+" / h = "+h);
-			}
-			*/
-			
-		} else { //impair number of cc
-			for (int i = 0; i < nbcc-1 ; i = i + 2) {
+			 * for(int i = 0; i < nbcc ; i++){ System.out.println("i = " +i);
+			 * if(i == nbcc-1){ if(w != inputGrid.getWidth() && ((nbcc-1)*w <
+			 * inputGrid.getWidth())){ w = inputGrid.getWidth() - ((nbcc-1)*w);
+			 * } else if(h != inputGrid.getHeight() && ((nbcc-1)*h <
+			 * inputGrid.getHeight())){ h = inputGrid.getHeight() -
+			 * ((nbcc-1)*h); } } grids[i] = new Grid(w, h, 1);
+			 * System.out.println("Grid "+i+" : w = "+w+" / h = "+h); }
+			 */
+
+		} else { // impair number of cc
+			for (int i = 0; i < nbcc - 1; i = i + 2) {
 				int hOrw = r.nextInt(2);
 
-				if (hOrw == 0) { //randomly choose between h or w to divide
-						w = w/2;
-					}else {
-					h = h/2;
+				if (hOrw == 0) { // randomly choose between h or w to divide
+					w = w / 2;
+				} else {
+					h = h / 2;
 				}
 			}
-			for(int i = 0; i < nbcc-1 ; i++){
-				//DEBUG System.out.println("Grid "+i+" : w = "+w+" / h = "+h);
+			for (int i = 0; i < nbcc - 1; i++) {
+				// DEBUG System.out.println("Grid "+i+" : w = "+w+" / h = "+h);
 				grids[i] = new Grid(w, h, 1);
 			}
-			if(w != inputGrid.getWidth() && ((nbcc-1)*w < inputGrid.getWidth())){
-				w = inputGrid.getWidth() - ((nbcc-1)*w);
+			if (w != inputGrid.getWidth() && ((nbcc - 1) * w < inputGrid.getWidth())) {
+				w = inputGrid.getWidth() - ((nbcc - 1) * w);
+			} else if (h != inputGrid.getHeight() && ((nbcc - 1) * h < inputGrid.getHeight())) {
+				h = inputGrid.getHeight() - ((nbcc - 1) * h);
 			}
-			else if(h != inputGrid.getHeight() && ((nbcc-1)*h < inputGrid.getHeight())){
-				h = inputGrid.getHeight() - ((nbcc-1)*h);
-			}
-			grids[nbcc-1] = new Grid (w, h, 1);
-			System.out.println("Grid "+(nbcc-1)+" : w = "+w+" / h = "+h);
+			grids[nbcc - 1] = new Grid(w, h, 1);
+			System.out.println("Grid " + (nbcc - 1) + " : w = " + w + " / h = " + h);
 		}
 
 		return grids;
 	}
-	
+
 	/**
 	 * Copy the contents of the filledGrids into the inputGrid
-	 * @param filledGrid, inputGrid, line & column
+	 * 
+	 * @param filledGrid,
+	 *            inputGrid, line & column
 	 * @return int[] index of the last line & column that we filled
 	 */
 	public static int[] copyGrid(Grid filledGrid, Grid inputGrid, int i, int j) {
@@ -658,21 +650,25 @@ public class Generator {
 		int hmax = inputGrid.getHeight();
 		int wmax = inputGrid.getWidth();
 
-		if (inputGrid.getHeight() != filledGrid.getHeight()) hmax = filledGrid.getHeight() + i; //on doit augmenter le hmax pour arriver à la fin de la grille initiale
-		if (inputGrid.getWidth() != filledGrid.getWidth()) wmax = filledGrid.getWidth() + j;
+		if (inputGrid.getHeight() != filledGrid.getHeight())
+			hmax = filledGrid.getHeight() + i; // we must adjust hmax to have the height of the original grid
+		if (inputGrid.getWidth() != filledGrid.getWidth())
+			wmax = filledGrid.getWidth() + j;
 
-		int tmpi = 0;//variable temporaire pour stocker denier index de ligne
+		int tmpi = 0;// temporary variable to stock the last index
 		int tmpj = 0;
 
-		//DEBUG System.out.println("copyGrid : i =" + i + " & j = " + j);
-		//DEBUG System.out.println("hmax = " + hmax + " - wmax = " + wmax);
+		// DEBUG System.out.println("copyGrid : i =" + i + " & j = " + j);
+		// DEBUG System.out.println("hmax = " + hmax + " - wmax = " + wmax);
 		for (int x = i; x < hmax; x++) {
 			for (int y = j; y < wmax; y++) {
-				//DEBUG System.out.println("x = " + x + " - y = " + y);
+				// DEBUG System.out.println("x = " + x + " - y = " + y);
 				p = filledGrid.getPiece(x - i, y - j);
-				//DEBUG System.out.println("x = " + x + " - y = " + y);System.out.println(p);
+				// DEBUG System.out.println("x = " + x + " - y = " +
+				// y);System.out.println(p);
 				inputGrid.setPiece(x, y, new Piece(x, y, p.getType(), p.getOrientation()));
-				//DEBUG System.out.println("x = " + x + " - y = " + y);System.out.println(inputGrid.getPiece(x, y));
+				// DEBUG System.out.println("x = " + x + " - y = " +
+				// y);System.out.println(inputGrid.getPiece(x, y));
 				tmpj = y;
 			}
 			tmpi = x;
@@ -680,19 +676,15 @@ public class Generator {
 		System.out.println("tmpi =" + tmpi + " & tmpj = " + tmpj);
 		return new int[] { tmpi, tmpj };
 	}
-	
+
 	/*
-	public static int widthCount(Grid[] grids){
-		int somme = 0;
-		int cpt = 0;
-		for(Grid grid : grids){
-			System.out.println("grid : "+cpt+" / width : "+(grid.getHeight()*grid.getWidth()));
-			somme = somme + (grid.getHeight()*grid.getWidth());
-			cpt++;
-		}
-		return somme;
-	}*/
-	public static void main(String[] args) {
+	 * public static int widthCount(Grid[] grids){ int somme = 0; int cpt = 0;
+	 * for(Grid grid : grids){
+	 * System.out.println("grid : "+cpt+" / width : "+(grid.getHeight()*grid.
+	 * getWidth())); somme = somme + (grid.getHeight()*grid.getWidth()); cpt++;
+	 * } return somme; }
+	 */
+	/*public static void main(String[] args) {
 		try {
 			generateLevel("NotSolution.txt", new Grid(10, 10, 4));
 		} catch (UnsupportedEncodingException e) {
@@ -702,6 +694,6 @@ public class Generator {
 		} catch (IOException e) {
 			System.out.println("Can't generate the file");
 		}
-		
-	}
+
+	}*/
 }

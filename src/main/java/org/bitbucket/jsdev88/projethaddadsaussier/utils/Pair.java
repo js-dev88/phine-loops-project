@@ -1,7 +1,12 @@
 package org.bitbucket.jsdev88.projethaddadsaussier.utils;
 
 import java.util.Objects;
-
+/**
+ * A list of pairs is necessary for the stack alimentation
+ *
+ * @param <K> the Piece
+ * @param <V> the orientation
+ */
 public class Pair<K,V> {
 	private K key;
 	private V value;
@@ -33,7 +38,7 @@ public class Pair<K,V> {
 	}
 	
 	 @Override
-	    public boolean equals(final Object o) {
+	public boolean equals(final Object o) {
 	        if (this == o) {
 	            return true;
 	        }

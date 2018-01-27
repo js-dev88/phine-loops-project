@@ -3,7 +3,6 @@ package org.bitbucket.jsdev88.projethaddadsaussier.solutions;
 import java.io.IOException;
 import java.util.ArrayDeque;
 import java.util.Objects;
-import java.util.Stack;
 import org.bitbucket.jsdev88.projethaddadsaussier.io.Grid;
 import org.bitbucket.jsdev88.projethaddadsaussier.utils.Orientation;
 import org.bitbucket.jsdev88.projethaddadsaussier.utils.Pair;
@@ -12,40 +11,36 @@ import org.bitbucket.jsdev88.projethaddadsaussier.utils.PieceType;
 
 public class Solver {
 
-	public static void main(String[] args) {
+	/*
+	 * public static void main(String[] args) {
+	 * 
+	 * try { long averageTime = 0;
+	 * 
+	 * for (int i = 0; i < 1; i++) { Generator.generateLevel("NotSolution.txt",
+	 * new Grid(4, 4));
+	 * 
+	 * long start = System.currentTimeMillis();
+	 * System.out.println(solveGrid("NotSolution.txt", "Solved.txt", "0")); long
+	 * stop = System.currentTimeMillis(); averageTime += (stop - start);
+	 * System.out.println((stop - start)); if ((stop - start) > 20000) {
+	 * System.out.println("passed"); break; } }
+	 * System.out.println("Average time to runs 30 grid" + averageTime / 30 +
+	 * " ms");
+	 * 
+	 * } catch (IOException e) { // TODO Auto-generated catch block
+	 * e.printStackTrace(); }
+	 */
 
-		try {
-			long averageTime = 0;
+	/*
+	 * try { long start = System.currentTimeMillis();
+	 * System.out.println(solveGrid("NotSolution.txt", "Solved.txt", "0"));
+	 * 
+	 * long stop = System.currentTimeMillis(); System.out.println((stop -
+	 * start)); } catch (IOException e) { // TODO Auto-generated catch block
+	 * e.printStackTrace(); }
+	 */
 
-			for (int i = 0; i < 1; i++) {
-				Generator.generateLevel("NotSolution.txt", new Grid(60, 60));
-
-				long start = System.currentTimeMillis();
-				System.out.println(solveGrid("NotSolution.txt", "Solved.txt", "0"));
-				long stop = System.currentTimeMillis();
-				averageTime += (stop - start);
-				System.out.println((stop - start));
-				if ((stop - start) > 20000) {
-					System.out.println("passed");
-					break;
-				}
-			}
-			System.out.println("Average time to runs 30 grid" + averageTime / 30 + " ms");
-
-		} catch (IOException e) { // TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-
-/*
-		  try { long start = System.currentTimeMillis();
-		  System.out.println(solveGrid("NotSolution.txt", "Solved.txt", "0"));
-
-		  long stop = System.currentTimeMillis(); System.out.println((stop -
-		  start)); } catch (IOException e) { // TODO Auto-generated catch block
-		 e.printStackTrace(); }*/
-		 
-
-	}
+	// }
 
 	/**
 	 * General function to call in first
@@ -60,7 +55,8 @@ public class Solver {
 	public static boolean solveGrid(String inputFile, String ouputFile, String pieceChoiceMethod) throws IOException {
 		boolean rez = false;
 		Grid grid = Checker.buildGrid(inputFile);
-		//rez = naiveRecursiveSolver(grid.getHeight()-1, grid.getWidth()-1, Objects.requireNonNull(grid));
+		// rez = naiveRecursiveSolver(grid.getHeight()-1, grid.getWidth()-1,
+		// Objects.requireNonNull(grid));
 		rez = solveIT(grid, pieceChoiceMethod);
 		Generator.writeGridOnFile(ouputFile, grid);
 		return rez;
@@ -75,7 +71,7 @@ public class Solver {
 	 */
 	public static boolean solveIT(Grid grid, String pieceChoiceMethod) {
 		Objects.requireNonNull(grid);
-		//System.out.println(grid.toString());
+		System.out.println(grid.toString());
 		if (Checker.isSolution(grid) == null)
 			return true; // check if the grid is already solution
 		if (!grid.allPieceHaveNeighbour())
@@ -84,63 +80,64 @@ public class Solver {
 		// first we create a pile with the frst possible piece and its
 		// orientation
 		pile = createStackLeft2Right(grid);
-		if (Checker.isSolution(grid) == null)
+		if (Checker.isSolution(grid) == null) {
+			System.out.println(grid.toString());
 			return true;
-		
-		//System.out.println( pile.toString());
-		//System.out.println(grid.toString());
-		
+		}
+
+		// System.out.println( pile.toString());
+
 		Pair<Piece, Orientation> currentPiece;
 		while (!pile.isEmpty()) { // simulation of recursivity
-			
-			currentPiece = pile.pop(); 
-			
+
+			currentPiece = pile.pop();
+
 			currentPiece.getKey().setOrientation(currentPiece.getValue().getValue());// set
 																						// the
 																						// orientation
 			grid.setPiece(currentPiece.getKey().getPosY(), currentPiece.getKey().getPosX(), currentPiece.getKey()); // update
 																													// the
 																													// grid
-			
+
 			Piece lastPiece = Checker.isSolution(grid);
 			if (lastPiece == null) {
 				/* DEBUG */
-				//System.out.println( pile.toString());
-				//System.out.println( grid.toString());
+				// System.out.println( pile.toString());
+				System.out.println(grid.toString());
 				return true;
 
 			}
-			
-			
+
 			pile = addPiece2StackLeft2Right(grid, pile, currentPiece.getKey(), lastPiece);
-			
-			
-			//Pair<Piece, Orientation> firstPick = pile.peek();
-			
-			
-			/*if(firstPick.getKey().getPosY() < currentPiece.getKey().getPosY() || firstPick.getKey().getPosX() < currentPiece.getKey().getPosX() ){
-				final Pair<Piece, Orientation> temp = firstPick; 
-				pile.removeIf((Pair<Piece, Orientation> p) -> p.getKey().getPosY() > temp.getKey().getPosY()-1);
-				System.out.println("retour");
-			}*/
-			/*System.out.println(currentPiece);
-			System.out.println(firstPick);
-			System.out.println(pile);*/
+
+			// Pair<Piece, Orientation> firstPick = pile.peek();
+
+			/*
+			 * if(firstPick.getKey().getPosY() < currentPiece.getKey().getPosY()
+			 * || firstPick.getKey().getPosX() < currentPiece.getKey().getPosX()
+			 * ){ final Pair<Piece, Orientation> temp = firstPick;
+			 * pile.removeIf((Pair<Piece, Orientation> p) ->
+			 * p.getKey().getPosY() > temp.getKey().getPosY()-1);
+			 * System.out.println("retour"); }
+			 */
+			/*
+			 * System.out.println(currentPiece); System.out.println(firstPick);
+			 * System.out.println(pile);
+			 */
 			// search the next piece to test
-			
-		
+
 			/* DEBUG */
 
-			 //System.out.println( pile.toString());
+			// System.out.println( pile.toString());
 
-			//System.out.println(grid.toString());
-			 //GUITEST.startGUITEST(grid);
+			System.out.println(grid.toString());
+			// GUITEST.startGUITEST(grid);
 		}
 
 		return false;
 
-	
 	}
+
 	/**
 	 * Add the next piece possible positions to the stack
 	 * 
@@ -153,30 +150,38 @@ public class Solver {
 	 */
 	public static ArrayDeque<Pair<Piece, Orientation>> addPiece2StackLeft2Right(Grid grid,
 			ArrayDeque<Pair<Piece, Orientation>> pile, Piece currentpiece, Piece lastPiece) {
-		
+
 		Piece tn = grid.topNeighbor(currentpiece);
 		Piece ln = grid.leftNeighbor(currentpiece);
 		Piece rn = grid.rightNeighbor(currentpiece);
 		Piece bn = grid.bottomNeighbor(currentpiece);
-		
-		
-		
-		if(currentpiece.hasRightConnector() && rn != null && !rn.hasLeftConnector() && rn.isFixed())return pile;
-		if(currentpiece.hasLeftConnector() && ln != null && !ln.hasRightConnector())return pile;
-		if(currentpiece.hasTopConnector() && tn != null && !tn.hasBottomConnector())return pile;
-		if(currentpiece.hasBottomConnector() && bn != null && !bn.hasTopConnector() && bn.isFixed())return pile;
-		
-		if(!currentpiece.hasRightConnector() && rn != null && rn.hasLeftConnector() && rn.isFixed())return pile;
-		if(!currentpiece.hasLeftConnector() && ln != null && ln.hasRightConnector())return pile;
-		if(!currentpiece.hasTopConnector() && tn != null && tn.hasBottomConnector())return pile;
-		if(!currentpiece.hasBottomConnector() && bn != null && bn.hasTopConnector() && bn.isFixed())return pile;
-		
-		if(currentpiece.hasRightConnector() && rn == null) return pile;
-		if(currentpiece.hasLeftConnector() && ln == null) return pile;
-		if(currentpiece.hasTopConnector() && tn == null) return pile;
-		if(currentpiece.hasBottomConnector() && bn == null) return pile;
-		
-		
+
+		if (currentpiece.hasRightConnector() && rn != null && !rn.hasLeftConnector() && rn.isFixed())
+			return pile;
+		if (currentpiece.hasLeftConnector() && ln != null && !ln.hasRightConnector())
+			return pile;
+		if (currentpiece.hasTopConnector() && tn != null && !tn.hasBottomConnector())
+			return pile;
+		if (currentpiece.hasBottomConnector() && bn != null && !bn.hasTopConnector() && bn.isFixed())
+			return pile;
+
+		if (!currentpiece.hasRightConnector() && rn != null && rn.hasLeftConnector() && rn.isFixed())
+			return pile;
+		if (!currentpiece.hasLeftConnector() && ln != null && ln.hasRightConnector())
+			return pile;
+		if (!currentpiece.hasTopConnector() && tn != null && tn.hasBottomConnector())
+			return pile;
+		if (!currentpiece.hasBottomConnector() && bn != null && bn.hasTopConnector() && bn.isFixed())
+			return pile;
+
+		if (currentpiece.hasRightConnector() && rn == null)
+			return pile;
+		if (currentpiece.hasLeftConnector() && ln == null)
+			return pile;
+		if (currentpiece.hasTopConnector() && tn == null)
+			return pile;
+		if (currentpiece.hasBottomConnector() && bn == null)
+			return pile;
 
 		Piece nextPiece = grid.getNextPiece(currentpiece);
 
@@ -185,13 +190,11 @@ public class Solver {
 			if (nextPiece == null)
 				break;
 		}
-		
-		
+
 		for (Orientation ori : nextPiece.getPossibleOrientations()) {
 			nextPiece.setOrientation(ori.getValue());
 			pile = checkAndAdd(nextPiece, grid, pile);
 		}
-			
 
 		return pile;
 	}
@@ -206,44 +209,47 @@ public class Solver {
 	 */
 	public static ArrayDeque<Pair<Piece, Orientation>> checkAndAdd(Piece nextPiece, Grid grid,
 			ArrayDeque<Pair<Piece, Orientation>> pile) {
-		
-		
-		
+
 		Piece ln = grid.leftNeighbor(nextPiece);
 		Piece tn = grid.topNeighbor(nextPiece);
 		Piece rn = grid.rightNeighbor(nextPiece);
 		Piece bn = grid.bottomNeighbor(nextPiece);
-		
-		
-			Pair<Piece, Orientation> p = new Pair<Piece, Orientation>(nextPiece, nextPiece.getOrientation());
-			
-			if (grid.hasNeighbour(nextPiece) && !pile.contains(p)) {
-				
-				
-				
-				if(nextPiece.hasLeftConnector() && ln != null && !ln.hasRightConnector())return pile;
-				if(nextPiece.hasTopConnector() && tn != null && !tn.hasBottomConnector())return pile;
-				if(nextPiece.hasRightConnector() && rn != null && !rn.hasLeftConnector() && rn.isFixed())return pile;
-				if(nextPiece.hasBottomConnector() && bn != null && !bn.hasTopConnector() && bn.isFixed())return pile;
-				
-				if(!nextPiece.hasRightConnector() && rn != null && rn.hasLeftConnector() && rn.isFixed())return pile;
-				if(!nextPiece.hasLeftConnector() && ln != null && ln.hasRightConnector())return pile;
-				if(!nextPiece.hasTopConnector() && tn != null && tn.hasBottomConnector())return pile;
-				if(!nextPiece.hasBottomConnector() && bn != null && bn.hasTopConnector() && bn.isFixed())return pile;
-				
-				if(nextPiece.hasRightConnector() && rn == null) return pile;
-				if(nextPiece.hasLeftConnector() && ln == null) return pile;
-				if(nextPiece.hasTopConnector() && tn == null) return pile;
-				if(nextPiece.hasBottomConnector() && bn == null) return pile;
-				
-				
-				
-				pile.push(p);
-				
-				
-			}
-			
-		
+
+		Pair<Piece, Orientation> p = new Pair<Piece, Orientation>(nextPiece, nextPiece.getOrientation());
+
+		if (grid.hasNeighbour(nextPiece) && !pile.contains(p)) {
+
+			if (nextPiece.hasLeftConnector() && ln != null && !ln.hasRightConnector())
+				return pile;
+			if (nextPiece.hasTopConnector() && tn != null && !tn.hasBottomConnector())
+				return pile;
+			if (nextPiece.hasRightConnector() && rn != null && !rn.hasLeftConnector() && rn.isFixed())
+				return pile;
+			if (nextPiece.hasBottomConnector() && bn != null && !bn.hasTopConnector() && bn.isFixed())
+				return pile;
+
+			if (!nextPiece.hasRightConnector() && rn != null && rn.hasLeftConnector() && rn.isFixed())
+				return pile;
+			if (!nextPiece.hasLeftConnector() && ln != null && ln.hasRightConnector())
+				return pile;
+			if (!nextPiece.hasTopConnector() && tn != null && tn.hasBottomConnector())
+				return pile;
+			if (!nextPiece.hasBottomConnector() && bn != null && bn.hasTopConnector() && bn.isFixed())
+				return pile;
+
+			if (nextPiece.hasRightConnector() && rn == null)
+				return pile;
+			if (nextPiece.hasLeftConnector() && ln == null)
+				return pile;
+			if (nextPiece.hasTopConnector() && tn == null)
+				return pile;
+			if (nextPiece.hasBottomConnector() && bn == null)
+				return pile;
+
+			pile.push(p);
+
+		}
+
 		return pile;
 	}
 
@@ -263,8 +269,9 @@ public class Solver {
 		while (p != null && (p.getType() == PieceType.VOID || p.isFixed())) {
 			p = grid.getNextPiece(p);
 		}
-	    if(p==null) return pile;
-		//System.out.println("check "+p);
+		if (p == null)
+			return pile;
+		// System.out.println("check "+p);
 		for (Orientation ori : p.getPossibleOrientations()) {
 			p.setOrientation(ori.getValue());
 			pile = checkAndAdd(p, grid, pile);
@@ -280,22 +287,11 @@ public class Solver {
 	 * @param grid
 	 */
 	public static void fixPieceOnGrid(Grid grid) {
-		long start = System.currentTimeMillis();
-		  
-		 
 		for (int i = 0; i < grid.getHeight(); i++) {
 			for (int j = 0; j < grid.getWidth(); j++) {
 				fixAparticularPiece(grid, grid.getPiece(i, j));
 			}
 		}
-		  long stop = System.currentTimeMillis();
-		  //System.out.println((stop -
-				//  start));
-		 /* for (int i = 0; i < grid.getHeight(); i++) {
-				for (int j = 0; j < grid.getWidth(); j++) {
-					System.out.println("Pice : "+grid.getPiece(i, j)+ "isfixed : "+grid.getPiece(i, j).isFixed());
-				}
-			}*/
 	}
 
 	/**
@@ -305,11 +301,11 @@ public class Solver {
 	 */
 	public static void fixAparticularPiece(Grid grid, Piece p) {
 		ArrayDeque<Piece> pileOfPiece2fix = new ArrayDeque<Piece>();
-		
-		if(!p.isFixed()){
+
+		if (!p.isFixed()) {
 			if (p.getType() == PieceType.VOID || p.getType() == PieceType.FOURCONN) {
 				p.setFixed(true);
-				//System.out.println("fix : void / fourconn : "+ p);
+				// System.out.println("fix : void / fourconn : "+ p);
 			} else {
 
 				Piece ln = grid.leftNeighbor(p);
@@ -318,40 +314,38 @@ public class Solver {
 				Piece bn = grid.bottomNeighbor(p);
 				for (int i = 0; i < Orientation.values().length; i++) {
 					if ((ln != null && ln.isFixed() && ln.hasRightConnector() && !p.hasLeftConnector())
-					  || (tn != null && tn.isFixed() && tn.hasBottomConnector() && !p.hasTopConnector())
-					  || (rn != null && rn.isFixed() && rn.hasLeftConnector() && !p.hasRightConnector())
-					  || (bn != null && bn.isFixed() && bn.hasTopConnector() && !p.hasBottomConnector())
-					  || (ln != null && ln.isFixed() && !ln.hasRightConnector() && p.hasLeftConnector())
-					  || (tn != null && tn.isFixed() && !tn.hasBottomConnector() && p.hasTopConnector())
-					  || (rn != null && rn.isFixed() && !rn.hasLeftConnector() && p.hasRightConnector())
-					  || (bn != null && bn.isFixed() && !bn.hasTopConnector() && p.hasBottomConnector())
-					  || (ln == null &&  p.hasLeftConnector())
-					  || (tn == null &&  p.hasTopConnector())
-					  || (rn == null &&  p.hasRightConnector())
-					  || (bn == null &&  p.hasBottomConnector()) 
-					  ){
-						//System.out.println("delete : "+p+" orientation : "+p.getOrientation());
+							|| (tn != null && tn.isFixed() && tn.hasBottomConnector() && !p.hasTopConnector())
+							|| (rn != null && rn.isFixed() && rn.hasLeftConnector() && !p.hasRightConnector())
+							|| (bn != null && bn.isFixed() && bn.hasTopConnector() && !p.hasBottomConnector())
+							|| (ln != null && ln.isFixed() && !ln.hasRightConnector() && p.hasLeftConnector())
+							|| (tn != null && tn.isFixed() && !tn.hasBottomConnector() && p.hasTopConnector())
+							|| (rn != null && rn.isFixed() && !rn.hasLeftConnector() && p.hasRightConnector())
+							|| (bn != null && bn.isFixed() && !bn.hasTopConnector() && p.hasBottomConnector())
+							|| (ln == null && p.hasLeftConnector()) || (tn == null && p.hasTopConnector())
+							|| (rn == null && p.hasRightConnector()) || (bn == null && p.hasBottomConnector())) {
+						// System.out.println("delete : "+p+" orientation :
+						// "+p.getOrientation());
 						p.deleteFromPossibleOrientation(p.getOrientation());
-					}	
-						p.turn();
+					}
+					p.turn();
 				}
 
 			}
-			if(p.getPossibleOrientations().size() != 0)
+			if (p.getPossibleOrientations().size() != 0)
 				p.setOrientation(p.getPossibleOrientations().get(0).getValue());
 		}
 		if (p.getPossibleOrientations().size() == 1) {
-			//System.out.println("Size == 1 " + p);
+			// System.out.println("Size == 1 " + p);
 			p.setOrientation(p.getPossibleOrientations().get(0).getValue());
 			p.setFixed(true);
-			
+
 		}
 		if (p.isFixed()) {
 			for (Piece p2 : grid.listOfNeighbours(p)) {
 				if (!pileOfPiece2fix.contains(p2) && !p2.isFixed())
 					pileOfPiece2fix.add(p2);
 			}
-			  fixNeighboursOnGrid(pileOfPiece2fix,grid);
+			fixNeighboursOnGrid(pileOfPiece2fix, grid);
 		}
 
 	}
@@ -364,99 +358,101 @@ public class Solver {
 	public static void fixNeighboursOnGrid(ArrayDeque<Piece> pileOfPiece2fix, Grid grid) {
 		while (!pileOfPiece2fix.isEmpty()) {
 			Piece p = pileOfPiece2fix.pop();
-			 if(!p.isFixed()){
-				
-				 Piece ln = grid.leftNeighbor(p);
-					Piece tn = grid.topNeighbor(p);
-					Piece rn = grid.rightNeighbor(p);
-					Piece bn = grid.bottomNeighbor(p);
-					for (int i = 0; i < Orientation.values().length; i++) {
-						if ((ln != null && ln.isFixed() && ln.hasRightConnector() && !p.hasLeftConnector())
-						  || (tn != null && tn.isFixed() && tn.hasBottomConnector() && !p.hasTopConnector())
-						  || (rn != null && rn.isFixed() && rn.hasLeftConnector() && !p.hasRightConnector())
-						  || (bn != null && bn.isFixed() && bn.hasTopConnector() && !p.hasBottomConnector())
-						  || (ln != null && ln.isFixed() && !ln.hasRightConnector() && p.hasLeftConnector())
-						  || (tn != null && tn.isFixed() && !tn.hasBottomConnector() && p.hasTopConnector())
-						  || (rn != null && rn.isFixed() && !rn.hasLeftConnector() && p.hasRightConnector())
-						  || (bn != null && bn.isFixed() && !bn.hasTopConnector() && p.hasBottomConnector())
-						  || (ln == null &&  p.hasLeftConnector())
-						  || (tn == null &&  p.hasTopConnector())
-						  || (rn == null &&  p.hasRightConnector())
-						  || (bn == null &&  p.hasBottomConnector())
-						  ){
-							//System.out.println("2passes delete : "+p+" orientation : "+p.getOrientation());
-							p.deleteFromPossibleOrientation(p.getOrientation());
-						}	
-							p.turn();
-					}
+			if (!p.isFixed()) {
 
-				}
-			 if(p.getPossibleOrientations().size() != 0)
-				p.setOrientation(p.getPossibleOrientations().get(0).getValue());
-				if (p.getPossibleOrientations().size() == 1) {
-					//System.out.println("2eme passeSize == 1 " + p);
-					p.setOrientation(p.getPossibleOrientations().get(0).getValue());
-					p.setFixed(true);
-					
-				}
-				if (p.isFixed()) {
-					for (Piece p2 : grid.listOfNeighbours(p)) {
-						if (!pileOfPiece2fix.contains(p2) && !p2.isFixed())
-							pileOfPiece2fix.add(p2);
+				Piece ln = grid.leftNeighbor(p);
+				Piece tn = grid.topNeighbor(p);
+				Piece rn = grid.rightNeighbor(p);
+				Piece bn = grid.bottomNeighbor(p);
+				for (int i = 0; i < Orientation.values().length; i++) {
+					if ((ln != null && ln.isFixed() && ln.hasRightConnector() && !p.hasLeftConnector())
+							|| (tn != null && tn.isFixed() && tn.hasBottomConnector() && !p.hasTopConnector())
+							|| (rn != null && rn.isFixed() && rn.hasLeftConnector() && !p.hasRightConnector())
+							|| (bn != null && bn.isFixed() && bn.hasTopConnector() && !p.hasBottomConnector())
+							|| (ln != null && ln.isFixed() && !ln.hasRightConnector() && p.hasLeftConnector())
+							|| (tn != null && tn.isFixed() && !tn.hasBottomConnector() && p.hasTopConnector())
+							|| (rn != null && rn.isFixed() && !rn.hasLeftConnector() && p.hasRightConnector())
+							|| (bn != null && bn.isFixed() && !bn.hasTopConnector() && p.hasBottomConnector())
+							|| (ln == null && p.hasLeftConnector()) || (tn == null && p.hasTopConnector())
+							|| (rn == null && p.hasRightConnector()) || (bn == null && p.hasBottomConnector())) {
+						// System.out.println("2passes delete : "+p+"
+						// orientation : "+p.getOrientation());
+						p.deleteFromPossibleOrientation(p.getOrientation());
 					}
-					 
+					p.turn();
 				}
+
+			}
+			if (p.getPossibleOrientations().size() != 0)
+				p.setOrientation(p.getPossibleOrientations().get(0).getValue());
+			if (p.getPossibleOrientations().size() == 1) {
+				// System.out.println("2eme passeSize == 1 " + p);
+				p.setOrientation(p.getPossibleOrientations().get(0).getValue());
+				p.setFixed(true);
+
+			}
+			if (p.isFixed()) {
+				for (Piece p2 : grid.listOfNeighbours(p)) {
+					if (!pileOfPiece2fix.contains(p2) && !p2.isFixed())
+						pileOfPiece2fix.add(p2);
+				}
+
+			}
 
 		}
-		
+
 	}
-	
+
 	/**
-	 * Solver V2
-	 * Naive, recursive 
+	 * Solver V2 Naive, recursive
+	 * 
 	 * @param grid
-	 * @param posX, posY (initially 0 & 0 because of naive)
+	 * @param posX,
+	 *            posY (initially 0 & 0 because of naive)
 	 * @return true if the grid is resolved
 	 */
-	public static boolean naiveRecursiveSolver(int posX, int posY, Grid grid){	
+	public static boolean naiveRecursiveSolver(int posX, int posY, Grid grid) {
 		Piece p;
-		
+
 		if (Checker.isSolution(grid) == null) {
-			//GUITEST.startGUITEST(grid);
+			// GUITEST.startGUITEST(grid);
 			return true; // check if the grid is already solution
 		}
 		if (!grid.allPieceHaveNeighbour())
 			return false; // check if there is a piece with no neighbor
-	
+
 		if (posX == 0 && posY == 0) {
 			p = grid.getPiece(posX, posY);
 			int orientationsNumber = switchOrientations(p.getType().getValue());
 			for (int i = 0; i < orientationsNumber; i++) {
 				p.setOrientation(i);
-				if (Checker.isSolution(grid) == null){
-					//System.out.println(grid);
+				if (Checker.isSolution(grid) == null) {
+					// System.out.println(grid);
 					return true;
 				}
 			}
-			//System.out.println(grid);
+			// System.out.println(grid);
 			System.out.println(Checker.isSolution(grid));
-			//sGUITEST.startGUITEST(grid);
+			// sGUITEST.startGUITEST(grid);
 			return false;
-		}
-		else{
+		} else {
 			if (posY == 0) {
 				p = grid.getPiece(posX, posY);
 				int orientationsNumber = switchOrientations(p.getType().getValue());
 				for (int i = 0; i < orientationsNumber; i++) {
-					//System.out.println("piece avant 1:"+grid.getPiece(posX, posY));
+					// System.out.println("piece avant 1:"+grid.getPiece(posX,
+					// posY));
 					p.setOrientation(i);
-					//System.out.println("piece apres 1:"+grid.getPiece(posX, posY));
-					//System.out.println("valide : "+grid.isValidOrientation(posX, posY));
-					if(grid.isValidOrientation(posX, posY)){
-						//System.out.println(grid);
-						if(naiveRecursiveSolver(posX-1, grid.getWidth()-1, grid)) return true;
-					}	
-					//System.out.println(grid);
+					// System.out.println("piece apres 1:"+grid.getPiece(posX,
+					// posY));
+					// System.out.println("valide :
+					// "+grid.isValidOrientation(posX, posY));
+					if (grid.isValidOrientation(posX, posY)) {
+						// System.out.println(grid);
+						if (naiveRecursiveSolver(posX - 1, grid.getWidth() - 1, grid))
+							return true;
+					}
+					// System.out.println(grid);
 				}
 				return false;
 			}
@@ -465,26 +461,31 @@ public class Solver {
 				p = grid.getPiece(posX, posY);
 				int orientationsNumber = switchOrientations(p.getType().getValue());
 				for (int i = 0; i < orientationsNumber; i++) {
-					//System.out.println("piece avant 2:"+grid.getPiece(posX, posY));
+					// System.out.println("piece avant 2:"+grid.getPiece(posX,
+					// posY));
 					p.setOrientation(i);
-					//System.out.println("piece apres 2:"+grid.getPiece(posX, posY));
-					//System.out.println("valide : "+grid.isValidOrientation(posX, posY));
-					if(grid.isValidOrientation(posX, posY)){
-						//System.out.println(grid);
-						if(naiveRecursiveSolver(posX, posY-1, grid)) return true;
+					// System.out.println("piece apres 2:"+grid.getPiece(posX,
+					// posY));
+					// System.out.println("valide :
+					// "+grid.isValidOrientation(posX, posY));
+					if (grid.isValidOrientation(posX, posY)) {
+						// System.out.println(grid);
+						if (naiveRecursiveSolver(posX, posY - 1, grid))
+							return true;
 					}
-					//System.out.println(grid);
+					// System.out.println(grid);
 				}
 				return false;
 			}
-		}	
+		}
 	}
-	
+
 	/**
 	 * number of possible orientations for a piece type
 	 * 
-	 * @param value of the piece type 
-	 * @return number of orientations 
+	 * @param value
+	 *            of the piece type
+	 * @return number of orientations
 	 */
 	public static int switchOrientations(int value) {
 

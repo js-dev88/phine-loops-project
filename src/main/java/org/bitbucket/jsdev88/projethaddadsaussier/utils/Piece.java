@@ -3,15 +3,17 @@ package org.bitbucket.jsdev88.projethaddadsaussier.utils;
 import java.util.ArrayList;
 import java.util.LinkedList;
 
+/**
+ * Handling of pieces wit general functions
+ */
 public class Piece {
-	private int posX;//j
-	private int posY;//i
+	private int posX;// j
+	private int posY;// i
 	private PieceType type;
 	private Orientation orientation;
 	private LinkedList<Orientation> connectors;
 	private ArrayList<Orientation> possibleOrientations;
-	
-	
+
 	private boolean isFixed;
 
 	public Piece(int posY, int posX) {
@@ -47,21 +49,21 @@ public class Piece {
 	public void setPossibleOrientations(ArrayList<Orientation> possibleOrientations) {
 		this.possibleOrientations = possibleOrientations;
 	}
-	
+
 	public ArrayList<Orientation> getPossibleOrientations() {
 		return this.possibleOrientations;
 	}
-	
-	public LinkedList<Orientation> getInvPossibleOrientation(){
-		 LinkedList<Orientation> invPossibleOrientations = new LinkedList<>();
-		for(Orientation ori : this.getPossibleOrientations()){
+
+	public LinkedList<Orientation> getInvPossibleOrientation() {
+		LinkedList<Orientation> invPossibleOrientations = new LinkedList<>();
+		for (Orientation ori : this.getPossibleOrientations()) {
 			invPossibleOrientations.addFirst(ori);
 		}
 		return invPossibleOrientations;
 	}
-	
-	public void deleteFromPossibleOrientation(Orientation ori){
-		if(this.possibleOrientations.contains(ori)){
+
+	public void deleteFromPossibleOrientation(Orientation ori) {
+		if (this.possibleOrientations.contains(ori)) {
 			this.possibleOrientations.remove(ori);
 		}
 	}
@@ -69,13 +71,12 @@ public class Piece {
 	public void setFixed(boolean isFixed) {
 		this.isFixed = isFixed;
 	}
-	
 
 	public boolean isFixed() {
 		return isFixed;
 	}
 
-	public int getPosX() { //get j
+	public int getPosX() { // get j
 		return posX;
 	}
 
@@ -83,7 +84,7 @@ public class Piece {
 		this.posX = posX;
 	}
 
-	public int getPosY() { //get i
+	public int getPosY() { // get i
 		return posY;
 	}
 
@@ -111,7 +112,6 @@ public class Piece {
 	public LinkedList<Orientation> getConnectors() {
 		return connectors;
 	}
-
 
 	public boolean hasTopConnector() {
 		for (Orientation ori : this.getConnectors()) {
@@ -148,10 +148,6 @@ public class Piece {
 		}
 		return false;
 	}
-	
-	
-	
-	
 
 	/**
 	 * Turn the piece 90° on the right and redefine the connectors's position
@@ -163,24 +159,12 @@ public class Piece {
 
 	@Override
 	public String toString() {
-		String s = "["+this.getPosY()+", "+this.getPosX()+"] "+ this.getType()+" ";
+		String s = "[" + this.getPosY() + ", " + this.getPosX() + "] " + this.getType() + " ";
 		for (Orientation ori : this.getConnectors()) {
 			s += " " + ori.toString();
 		}
-		s+= " Orientation / "+this.getOrientation();
+		s += " Orientation / " + this.getOrientation();
 		return s;
 	}
-	
-	
-	public static void main(String[] args) {
-		Piece p = new Piece (0,0);
-		p.setType(PieceType.LTYPE);
-		p.setPossibleOrientations( p.getType().getListOfPossibleOri());
-		System.out.println(p.toString());
-		System.out.println(p.hasBottomConnector());
-		System.out.println(p.getPossibleOrientations());
-		System.out.println(p.getInvPossibleOrientation());
-	}
+
 }
-
-

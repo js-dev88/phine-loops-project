@@ -6,6 +6,11 @@ import org.bitbucket.jsdev88.projethaddadsaussier.utils.Orientation;
 import org.bitbucket.jsdev88.projethaddadsaussier.utils.Piece;
 import org.bitbucket.jsdev88.projethaddadsaussier.utils.PieceType;
 
+/**
+ * Grid handler and peces'functions which depends of the grid
+ * 
+ *
+ */
 public class Grid {
 	private int width; // j
 	private int height; // i
@@ -144,10 +149,12 @@ public class Grid {
 		return true;
 
 	}
-	
+
 	/**
 	 * Check if a piece has a fixed neighbor for each one of its connecotrs
-	 * @param p the piece
+	 * 
+	 * @param p
+	 *            the piece
 	 * @return true if there is a fixed piece for each connector
 	 */
 	public boolean hasFixedNeighbour(Piece p) {
@@ -178,7 +185,14 @@ public class Grid {
 		}
 		return bool;
 	}
-	
+
+	/**
+	 * Check if a piece has a at least one fixed neighbor
+	 * 
+	 * @param p
+	 *            the piece
+	 * @return true if there is a fixed piece for each connector
+	 */
 	public boolean hasAtLeast1FixedNeighbour(Piece p) {
 		for (Orientation ori : p.getConnectors()) {
 			int oppPieceY = ori.getOpposedPieceCoordinates(p)[0];// i
@@ -188,7 +202,7 @@ public class Grid {
 				if (neigh.isFixed()) {
 					for (Orientation oriOppPiece : neigh.getConnectors()) {
 						if (ori == oriOppPiece.getOpposedOrientation()) {
-							return  true;
+							return true;
 						}
 					}
 				}
@@ -201,7 +215,9 @@ public class Grid {
 
 	/**
 	 * list of neighbors
+	 * 
 	 * @param p
+	 *            the piece
 	 * @return the list of neighbors
 	 */
 	public ArrayList<Piece> listOfNeighbours(Piece p) {
@@ -219,14 +235,14 @@ public class Grid {
 		}
 		return lp;
 	}
-	
-	
+
 	/**
-	 *
+	 * this function returns the number of neighbors
+	 * 
 	 * @param p
-	 * @return the number of  neighbors
+	 * @return the number of neighbors
 	 */
-	public int numberOfNeibours(Piece p) { 
+	public int numberOfNeibours(Piece p) {
 		int X = p.getPosX();
 		int Y = p.getPosY();
 		int count = 0;
@@ -241,6 +257,12 @@ public class Grid {
 		return count;
 	}
 
+	/**
+	 * this function returns the number of fixed neighbors
+	 * 
+	 * @param p
+	 * @return the number of neighbors
+	 */
 	public int numberOfFixedNeibours(Piece p) {
 		int X = p.getPosX();
 		int Y = p.getPosY();
@@ -331,7 +353,7 @@ public class Grid {
 	}
 
 	/**
-	 * Check if a piece is connected
+	 * Check if a piece is totally connected
 	 * 
 	 * @param line
 	 * @param column
@@ -347,7 +369,7 @@ public class Grid {
 		}
 		return true;
 	}
-	
+
 	/**
 	 * Check if a piece position is valid
 	 * 
@@ -356,67 +378,83 @@ public class Grid {
 	 * @return true if a connector of a piece is connected
 	 */
 	public boolean isValidOrientation(int line, int column) {
-		
+
 		Piece tn = this.topNeighbor(this.getPiece(line, column));
 		Piece ln = this.leftNeighbor(this.getPiece(line, column));
 		Piece rn = this.rightNeighbor(this.getPiece(line, column));
 		Piece bn = this.bottomNeighbor(this.getPiece(line, column));
-		
-	if(this.getPiece(line, column).getType() != PieceType.VOID) {
-		if (line == 0) {
-			if(column == 0) {
-				if(this.getPiece(line, column).hasLeftConnector() ) return false;	
+
+		if (this.getPiece(line, column).getType() != PieceType.VOID) {
+			if (line == 0) {
+				if (column == 0) {
+					if (this.getPiece(line, column).hasLeftConnector())
+						return false;
+				} else if (column == this.getWidth() - 1) {
+					if (this.getPiece(line, column).hasRightConnector())
+						return false;
+				}
+				if (this.getPiece(line, column).hasTopConnector())
+					return false;
+				if (!this.getPiece(line, column).hasRightConnector() && rn != null && rn.hasLeftConnector())
+					return false;
+				if (this.getPiece(line, column).hasRightConnector() && rn != null && !rn.hasLeftConnector())
+					return false;
+				if (!this.getPiece(line, column).hasBottomConnector() && bn != null && bn.hasTopConnector())
+					return false;
+				if (this.getPiece(line, column).hasBottomConnector() && bn != null && !bn.hasTopConnector())
+					return false;
+
+			} else if (line > 0 && line < this.getHeight() - 1) {
+				if (column == 0) {
+					if (this.getPiece(line, column).hasLeftConnector())
+						return false;
+
+				} else if (column == this.getWidth() - 1) {
+					if (this.getPiece(line, column).hasRightConnector())
+						return false;
+				}
+
+				if (!this.getPiece(line, column).hasRightConnector() && rn != null && rn.hasLeftConnector())
+					return false;
+				if (this.getPiece(line, column).hasRightConnector() && rn != null && !rn.hasLeftConnector())
+					return false;
+				if (!this.getPiece(line, column).hasBottomConnector() && bn != null && bn.hasTopConnector())
+					return false;
+				if (this.getPiece(line, column).hasBottomConnector() && bn != null && !bn.hasTopConnector())
+					return false;
+
+			} else if (line == this.getHeight() - 1) {
+				if (column == 0) {
+					if (this.getPiece(line, column).hasLeftConnector())
+						return false;
+				} else if (column == this.getWidth() - 1) {
+					if (this.getPiece(line, column).hasRightConnector())
+						return false;
+				}
+				if (this.getPiece(line, column).hasBottomConnector())
+					return false;
+				if (!this.getPiece(line, column).hasRightConnector() && rn != null && rn.hasLeftConnector())
+					return false;
+				if (this.getPiece(line, column).hasRightConnector() && rn != null && !rn.hasLeftConnector())
+					return false;
+
 			}
-			else if (column == this.getWidth()-1) {
-				if(this.getPiece(line, column).hasRightConnector()) return false;
-			}
-			if(this.getPiece(line, column).hasTopConnector() ) return false;
-			if(!this.getPiece(line, column).hasRightConnector() && rn != null && rn.hasLeftConnector()) return false;
-			if(this.getPiece(line, column).hasRightConnector() && rn != null && !rn.hasLeftConnector()) return false;
-			if(!this.getPiece(line, column).hasBottomConnector() && bn != null && bn.hasTopConnector()) return false;
-			if(this.getPiece(line, column).hasBottomConnector() && bn != null && !bn.hasTopConnector()) return false;
-			
+			if (this.getPiece(line, column).hasLeftConnector() && ln == null)
+				return false;
+			if (this.getPiece(line, column).hasTopConnector() && tn == null)
+				return false;
+			if (this.getPiece(line, column).hasRightConnector() && rn == null)
+				return false;
+			if (this.getPiece(line, column).hasBottomConnector() && bn == null)
+				return false;
 		}
-		else if(line > 0 && line < this.getHeight()-1) {
-			if(column == 0) {
-				if(this.getPiece(line, column).hasLeftConnector() ) return false;
-				
-			}
-			else if (column == this.getWidth()-1) {
-				if(this.getPiece(line, column).hasRightConnector()) return false;
-			}
-	
-			if(!this.getPiece(line, column).hasRightConnector() && rn != null && rn.hasLeftConnector()) return false;
-			if(this.getPiece(line, column).hasRightConnector() && rn != null && !rn.hasLeftConnector()) return false;
-			if(!this.getPiece(line, column).hasBottomConnector() && bn != null && bn.hasTopConnector()) return false;
-			if(this.getPiece(line, column).hasBottomConnector() && bn != null && !bn.hasTopConnector()) return false;
-			
-			
-		}
-		else if (line == this.getHeight()-1) {
-			if(column == 0) {
-				if(this.getPiece(line, column).hasLeftConnector() ) return false;	
-			}
-			else if (column == this.getWidth()-1) {
-				if(this.getPiece(line, column).hasRightConnector()) return false;
-			}
-			if(this.getPiece(line, column).hasBottomConnector()) return false;
-			if(!this.getPiece(line, column).hasRightConnector() && rn != null && rn.hasLeftConnector()) return false;
-			if(this.getPiece(line, column).hasRightConnector() && rn != null && !rn.hasLeftConnector()) return false;
-			
-		}
-		if(this.getPiece(line, column).hasLeftConnector() && ln == null) return false;
-		if(this.getPiece(line, column).hasTopConnector() && tn == null) return false;
-		if(this.getPiece(line, column).hasRightConnector() && rn == null) return false;
-		if(this.getPiece(line, column).hasBottomConnector() && bn == null) return false;
+
+		return true;
 	}
-		
-	return true;
-	}
-	
-	
+
 	/**
 	 * Find the left neighbor
+	 * 
 	 * @param p
 	 * @return the neighbor or null if no neighbor
 	 */
@@ -429,8 +467,10 @@ public class Grid {
 		}
 		return null;
 	}
+
 	/**
-	 * Find the left neighbor
+	 * Find the top neighbor
+	 * 
 	 * @param p
 	 * @return the neighbor or null if no neighbor
 	 */
@@ -443,8 +483,10 @@ public class Grid {
 		}
 		return null;
 	}
+
 	/**
 	 * Find the right neighbor
+	 * 
 	 * @param p
 	 * @return the neighbor or null if no neighbor
 	 */
@@ -457,8 +499,10 @@ public class Grid {
 		}
 		return null;
 	}
+
 	/**
 	 * Find the bottom neighbor
+	 * 
 	 * @param p
 	 * @return the neighbor or null if no neighbor
 	 */
@@ -471,14 +515,14 @@ public class Grid {
 		}
 		return null;
 	}
-	
+
 	@Override
 	public String toString() {
 
 		String s = "";
 		for (int i = 0; i < height; i++) {
 			for (int j = 0; j < width; j++) {
-				s += displayUnicode.getUnicodeOfPiece(pieces[i][j].getType(), pieces[i][j].getOrientation());
+				s += DisplayUnicode.getUnicodeOfPiece(pieces[i][j].getType(), pieces[i][j].getOrientation());
 			}
 			s += "\n";
 		}
