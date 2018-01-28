@@ -14,9 +14,9 @@ public class Solver {
 	
 	public static void main(String[] args) {
 	 
-	 try { 
+	 /*try { 
 		  long averageTime = 0;  
-		  for (int i = 0; i < 20; i++) { Generator.generateLevel("NotSolution.txt", new Grid(60, 60));
+		  for (int i = 0; i < 20; i++) { Generator.generateLevel("NotSolution.txt", new Grid(50, 50));
 		  long start = System.currentTimeMillis();
 		  System.out.println(solveGrid("NotSolution.txt", "Solved.txt", 0,1)); long
 		  stop = System.currentTimeMillis(); averageTime += (stop - start);
@@ -25,7 +25,7 @@ public class Solver {
 		  System.out.println("Average time to runs 30 grid" + averageTime / 30 + " ms");
 	  } catch (IOException e) { 
 		  e.printStackTrace(); 
-	  }
+	  }*/
 
 	/*try { long start = System.currentTimeMillis();
 	 System.out.println(solveGrid("NotSolution.txt", "Solved.txt", 0,1));
@@ -521,7 +521,7 @@ public class Solver {
 				}
 			}
 			// System.out.println(grid);
-			System.out.println(Checker.isSolution(grid));
+			//System.out.println(Checker.isSolution(grid));
 			// sGUITEST.startGUITEST(grid);
 			return false;
 		} else {
