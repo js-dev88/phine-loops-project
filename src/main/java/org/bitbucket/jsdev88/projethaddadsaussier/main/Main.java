@@ -24,7 +24,9 @@ public class Main {
 	private static Integer width = -1;
 	private static Integer height = -1;
 	private static Integer maxcc = -1;
-
+	private static Integer nbThread = 1;
+	private static Integer algo = 0;
+	
 	public static void main(String[] args) {
 		boolean gui = false;
 		Options options = new Options();
@@ -38,6 +40,7 @@ public class Main {
 		options.addOption("o", "output", true,
 				"Store the generated or solved grid in <arg>. (Use only with --generate and --solve.)");
 		options.addOption("t", "threads", true, "Maximum number of solver threads. (Use only with --solve.)");
+		options.addOption("a", "algorithm", true, "Algorithm of choice of piece");
 		options.addOption("x", "nbcc", true, "Maximum number of connected components. (Use only with --generate.)");
 		options.addOption("i", "interface", true, "Launching the interface of the <arg> grid");
 		options.addOption("h", "help", false, "Display this help");
@@ -65,7 +68,7 @@ public class Main {
 
 				if (cmd.hasOption("x")) {// call the nbcc option
 					String nbcc = cmd.getOptionValue("x");
-					if (Integer.valueOf(nbcc) > Math.round((width * height - 1 / 2))) {
+					if (Integer.valueOf(nbcc) > Math.round((float)width * (float)height - 1 / 2)) {
 						System.err.println("Maximum of connected component is limited to height * width /2");
 						HelpFormatter formatter = new HelpFormatter();
 						formatter.printHelp("phineloopgen", options);
@@ -89,12 +92,26 @@ public class Main {
 				System.out.println("Running phineloop solver.");
 				inputFile = cmd.getOptionValue("s");
 				if (!cmd.hasOption("o"))
-					throw new ParseException("Missing mandatory --output argument.");
+					throw new ParseException("Output file is missing");
 				outputFile = cmd.getOptionValue("o");
+				if(cmd.hasOption("t")){
+					nbThread = Integer.parseInt(cmd.getOptionValue("t"));
+					if(nbThread < 1 || nbThread > 4)
+						throw new ParseException("Choose number of threads between 1 - 4 threads");
+				}else{
+					nbThread = 1;
+				}
+				if(cmd.hasOption("a")){
+					algo = Integer.parseInt(cmd.getOptionValue("a"));
+					if(algo <0 || algo >2)
+						throw new ParseException("Choose algorithm between 0 - 2 threads");
+				}else{
+					algo = 0;
+				}
 				boolean solved = false;
 
 				try {
-					solved = Solver.solveGrid(inputFile, outputFile, "0");
+					solved = Solver.solveGrid(inputFile, outputFile, algo,nbThread);
 				} catch (IOException e) {
 					System.err.println("Check files' name");
 				}
@@ -123,7 +140,7 @@ public class Main {
 					e.printStackTrace();
 				}
 
-			} else {
+			}else{
 				throw new ParseException(
 						"You must specify at least one of the following options: -generate -check -solve ");
 			}
@@ -133,7 +150,7 @@ public class Main {
 			formatter.printHelp("phineloopgen", options);
 			System.exit(1); // exit with error
 		}
-		if (!gui)// if there is a gui this line messes up the all thing
+		if(!gui) // if there is a gui this line messes up the all thing
 			System.exit(0); // exit with success
 	}
 }

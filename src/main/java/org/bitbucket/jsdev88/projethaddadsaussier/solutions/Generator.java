@@ -548,9 +548,9 @@ public class Generator {
 				if (i == 0) {// for the first two grids, we choose randomly
 								// between height and width, and we divide it
 					if (hOrw == 0) {
-						w = Math.round(w / 2);
+						w = Math.round((float)w / 2);
 					} else {
-						h = Math.round(h / 2);
+						h = Math.round((float)h / 2);
 					}
 					grids[i] = new Grid(w, h, 1);
 					grids[i + 1] = new Grid(w, h, 1);
@@ -560,13 +560,13 @@ public class Generator {
 					// = "+h);
 				} else {// for the others grids, we divide the bigger one
 					if (w < h) {
-						h = Math.round(h / 2);
+						h = Math.round((float)h / 2);
 						grids[i - 2].setHeight(h);// we have to change the
 													// height of the 2 grids
 													// that we divided
 						grids[i - 1].setHeight(h);
 					} else {
-						w = Math.round(w / 2);
+						w = Math.round((float)w / 2);
 						grids[i - 2].setWidth(h);// we have to change the width
 													// of the 2 grids that we
 													// divided

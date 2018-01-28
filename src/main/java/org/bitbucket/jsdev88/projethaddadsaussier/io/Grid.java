@@ -31,7 +31,7 @@ public class Grid {
 		pieces = new Piece[height][width];
 	}
 
-	public Integer getWidth() {
+	public int getWidth() {
 		return width;
 	}
 
@@ -39,7 +39,7 @@ public class Grid {
 		this.width = width;
 	}
 
-	public Integer getHeight() {
+	public int getHeight() {
 		return height;
 	}
 
@@ -310,7 +310,6 @@ public class Grid {
 	 * @return the piece or null if p is the last piece
 	 */
 	public Piece getNextPiece(Piece p) {
-
 		int i = p.getPosY();
 		int j = p.getPosX();
 		if (j < this.getWidth() - 1) {
@@ -318,6 +317,30 @@ public class Grid {
 		} else {
 			if (i < this.getHeight() - 1) {
 				p = this.getPiece(i + 1, 0);
+			} else {
+				return null;
+			}
+
+		}
+		return p;
+	}
+	
+	/**
+	 * Return the next piece of the current piece right2left and bottom2top
+	 * 
+	 * @param p
+	 *            the current piece
+	 * @return the piece or null if p is the last piece
+	 */
+	public Piece getNextPieceInv(Piece p) {
+
+		int i = p.getPosY();
+		int j = p.getPosX();
+		if (j > 0) {
+			p = this.getPiece(i, j - 1);
+		} else {
+			if (i > 0) {
+				p = this.getPiece(i - 1, this.getWidth()-1);
 			} else {
 				return null;
 			}

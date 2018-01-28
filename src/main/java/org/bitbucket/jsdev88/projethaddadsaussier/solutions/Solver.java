@@ -11,36 +11,32 @@ import org.bitbucket.jsdev88.projethaddadsaussier.utils.PieceType;
 
 public class Solver {
 
-	/*
-	 * public static void main(String[] args) {
-	 * 
-	 * try { long averageTime = 0;
-	 * 
-	 * for (int i = 0; i < 1; i++) { Generator.generateLevel("NotSolution.txt",
-	 * new Grid(4, 4));
-	 * 
-	 * long start = System.currentTimeMillis();
-	 * System.out.println(solveGrid("NotSolution.txt", "Solved.txt", "0")); long
-	 * stop = System.currentTimeMillis(); averageTime += (stop - start);
-	 * System.out.println((stop - start)); if ((stop - start) > 20000) {
-	 * System.out.println("passed"); break; } }
-	 * System.out.println("Average time to runs 30 grid" + averageTime / 30 +
-	 * " ms");
-	 * 
-	 * } catch (IOException e) { // TODO Auto-generated catch block
-	 * e.printStackTrace(); }
-	 */
+	
+	public static void main(String[] args) {
+	 
+	 try { 
+		  long averageTime = 0;  
+		  for (int i = 0; i < 20; i++) { Generator.generateLevel("NotSolution.txt", new Grid(60, 60));
+		  long start = System.currentTimeMillis();
+		  System.out.println(solveGrid("NotSolution.txt", "Solved.txt", 0,1)); long
+		  stop = System.currentTimeMillis(); averageTime += (stop - start);
+		  System.out.println((stop - start)); if ((stop - start) > 20000) {
+		  System.out.println("passed"); break; } }
+		  System.out.println("Average time to runs 30 grid" + averageTime / 30 + " ms");
+	  } catch (IOException e) { 
+		  e.printStackTrace(); 
+	  }
 
-	/*
-	 * try { long start = System.currentTimeMillis();
-	 * System.out.println(solveGrid("NotSolution.txt", "Solved.txt", "0"));
-	 * 
-	 * long stop = System.currentTimeMillis(); System.out.println((stop -
-	 * start)); } catch (IOException e) { // TODO Auto-generated catch block
-	 * e.printStackTrace(); }
-	 */
+	/*try { long start = System.currentTimeMillis();
+	 System.out.println(solveGrid("NotSolution.txt", "Solved.txt", 0,1));
+	  
+	  long stop = System.currentTimeMillis(); System.out.println((stop -
+	  start)); } catch (IOException e) { 
+	 e.printStackTrace(); 
+	 }*/
+	 
 
-	// }
+	}
 
 	/**
 	 * General function to call in first
@@ -52,14 +48,26 @@ public class Solver {
 	 * @return true if the grid is solved
 	 * @throws IOException
 	 */
-	public static boolean solveGrid(String inputFile, String ouputFile, String pieceChoiceMethod) throws IOException {
+	public static boolean solveGrid(String inputFile, String ouputFile, Integer pieceChoiceMethod, Integer nbThread) throws IOException {
 		boolean rez = false;
 		Grid grid = Checker.buildGrid(inputFile);
-		// rez = naiveRecursiveSolver(grid.getHeight()-1, grid.getWidth()-1,
-		// Objects.requireNonNull(grid));
-		rez = solveIT(grid, pieceChoiceMethod);
-		Generator.writeGridOnFile(ouputFile, grid);
-		return rez;
+	
+		switch(pieceChoiceMethod){
+		case 0 : rez = solveIT(grid, pieceChoiceMethod);
+			     Generator.writeGridOnFile(ouputFile, grid);
+			break;
+		case 1 : rez = naiveRecursiveSolver(grid.getHeight()-1, grid.getWidth()-1, Objects.requireNonNull(grid));
+			     Generator.writeGridOnFile(ouputFile, grid);
+		    break;
+		case 2 : rez = solveIT(grid, pieceChoiceMethod);
+	             Generator.writeGridOnFile(ouputFile, grid);
+	        break; 
+		default : rez = solveIT(grid, pieceChoiceMethod);
+			      Generator.writeGridOnFile(ouputFile, grid);
+			break;
+		}
+
+		return rez;	
 	}
 
 	/**
@@ -68,74 +76,69 @@ public class Solver {
 	 * @param grid
 	 * @param pieceChoiceMethod
 	 * @return true if the grid is resolved
+	 * @throws IOException 
 	 */
-	public static boolean solveIT(Grid grid, String pieceChoiceMethod) {
+	public static boolean solveIT(Grid grid, Integer pieceChoiceMethod) throws IOException {
 		Objects.requireNonNull(grid);
-		System.out.println(grid.toString());
-		if (Checker.isSolution(grid) == null)
+		//System.out.println(grid.toString());
+		if (Checker.isSolution(grid))
 			return true; // check if the grid is already solution
 		if (!grid.allPieceHaveNeighbour())
 			return false; // check if there is a piece with no neighbor
+		//fix the pieces
+		fixPieceOnGrid(grid);
 		ArrayDeque<Pair<Piece, Orientation>> pile;
-		// first we create a pile with the frst possible piece and its
+		// first we create a pile with the first possible piece and its
 		// orientation
-		pile = createStackLeft2Right(grid);
-		if (Checker.isSolution(grid) == null) {
-			System.out.println(grid.toString());
+		
+		switch(pieceChoiceMethod){
+		case 0 : pile = createStackLeft2Right(grid);
+			break;
+		case 2 : pile = createStackRight2Left(grid);
+		    break;
+		default : pile = createStackLeft2Right(grid);
+			break;
+		}
+		
+		
+		
+		if (Checker.isSolution(grid)) {
+			//System.out.println(grid.toString());
 			return true;
 		}
 
-		// System.out.println( pile.toString());
+		 //System.out.println( pile.toString());
 
 		Pair<Piece, Orientation> currentPiece;
 		while (!pile.isEmpty()) { // simulation of recursivity
 
 			currentPiece = pile.pop();
-
-			currentPiece.getKey().setOrientation(currentPiece.getValue().getValue());// set
-																						// the
-																						// orientation
-			grid.setPiece(currentPiece.getKey().getPosY(), currentPiece.getKey().getPosX(), currentPiece.getKey()); // update
-																													// the
-																													// grid
-
-			Piece lastPiece = Checker.isSolution(grid);
-			if (lastPiece == null) {
+			// set the orientation
+			currentPiece.getKey().setOrientation(currentPiece.getValue().getValue());
+			// update the grid
+			grid.setPiece(currentPiece.getKey().getPosY(), currentPiece.getKey().getPosX(), currentPiece.getKey()); 
+			
+			if (Checker.isSolution(grid)) {
 				/* DEBUG */
 				// System.out.println( pile.toString());
-				System.out.println(grid.toString());
+				//System.out.println(grid.toString());
 				return true;
 
 			}
-
-			pile = addPiece2StackLeft2Right(grid, pile, currentPiece.getKey(), lastPiece);
-
-			// Pair<Piece, Orientation> firstPick = pile.peek();
-
-			/*
-			 * if(firstPick.getKey().getPosY() < currentPiece.getKey().getPosY()
-			 * || firstPick.getKey().getPosX() < currentPiece.getKey().getPosX()
-			 * ){ final Pair<Piece, Orientation> temp = firstPick;
-			 * pile.removeIf((Pair<Piece, Orientation> p) ->
-			 * p.getKey().getPosY() > temp.getKey().getPosY()-1);
-			 * System.out.println("retour"); }
-			 */
-			/*
-			 * System.out.println(currentPiece); System.out.println(firstPick);
-			 * System.out.println(pile);
-			 */
-			// search the next piece to test
-
+			switch(pieceChoiceMethod){
+			case 0 : pile = addPiece2StackLeft2Right(grid, pile, currentPiece.getKey());
+				break;
+			case 2 : pile = addPiece2StackRight2Left(grid, pile, currentPiece.getKey());
+			    break;
+			default : pile = addPiece2StackLeft2Right(grid, pile, currentPiece.getKey());
+			break;
+			}
+		
 			/* DEBUG */
-
-			// System.out.println( pile.toString());
-
-			System.out.println(grid.toString());
-			// GUITEST.startGUITEST(grid);
+			//System.out.println( pile.toString());
+			//System.out.println(grid.toString());
 		}
-
 		return false;
-
 	}
 
 	/**
@@ -147,106 +150,50 @@ public class Solver {
 	 * @param lastPiece
 	 *            the last piece not connected
 	 * @return
+	 * @throws IOException 
 	 */
 	public static ArrayDeque<Pair<Piece, Orientation>> addPiece2StackLeft2Right(Grid grid,
-			ArrayDeque<Pair<Piece, Orientation>> pile, Piece currentpiece, Piece lastPiece) {
+			ArrayDeque<Pair<Piece, Orientation>> pile, Piece currentpiece) throws IOException {
 
-		Piece tn = grid.topNeighbor(currentpiece);
-		Piece ln = grid.leftNeighbor(currentpiece);
-		Piece rn = grid.rightNeighbor(currentpiece);
-		Piece bn = grid.bottomNeighbor(currentpiece);
+		if(isEligible2PileLeft2Right(grid, currentpiece)){
+			Piece nextPiece = grid.getNextPiece(currentpiece);
 
-		if (currentpiece.hasRightConnector() && rn != null && !rn.hasLeftConnector() && rn.isFixed())
-			return pile;
-		if (currentpiece.hasLeftConnector() && ln != null && !ln.hasRightConnector())
-			return pile;
-		if (currentpiece.hasTopConnector() && tn != null && !tn.hasBottomConnector())
-			return pile;
-		if (currentpiece.hasBottomConnector() && bn != null && !bn.hasTopConnector() && bn.isFixed())
-			return pile;
-
-		if (!currentpiece.hasRightConnector() && rn != null && rn.hasLeftConnector() && rn.isFixed())
-			return pile;
-		if (!currentpiece.hasLeftConnector() && ln != null && ln.hasRightConnector())
-			return pile;
-		if (!currentpiece.hasTopConnector() && tn != null && tn.hasBottomConnector())
-			return pile;
-		if (!currentpiece.hasBottomConnector() && bn != null && bn.hasTopConnector() && bn.isFixed())
-			return pile;
-
-		if (currentpiece.hasRightConnector() && rn == null)
-			return pile;
-		if (currentpiece.hasLeftConnector() && ln == null)
-			return pile;
-		if (currentpiece.hasTopConnector() && tn == null)
-			return pile;
-		if (currentpiece.hasBottomConnector() && bn == null)
-			return pile;
-
-		Piece nextPiece = grid.getNextPiece(currentpiece);
-
-		while (nextPiece != null && (nextPiece.getType() == PieceType.VOID || nextPiece.isFixed())) {
-			nextPiece = grid.getNextPiece(nextPiece);
-			if (nextPiece == null)
-				break;
+			while (nextPiece != null && (nextPiece.getType() == PieceType.VOID || nextPiece.isFixed())) {
+				nextPiece = grid.getNextPiece(nextPiece);
+				if (nextPiece == null)
+					break;
+			}
+			
+			try{
+				for (Orientation ori : nextPiece.getPossibleOrientations()) {
+					nextPiece.setOrientation(ori.getValue());
+					pile = checkAndAddLeft2Right(nextPiece, grid, pile);
+				}
+			}catch(NullPointerException e){
+				throw new IOException("Findbugs was right");
+			}
 		}
-
-		for (Orientation ori : nextPiece.getPossibleOrientations()) {
-			nextPiece.setOrientation(ori.getValue());
-			pile = checkAndAdd(nextPiece, grid, pile);
-		}
-
 		return pile;
 	}
 
 	/**
-	 * Filtering the possible orientations, ugly but works
+	 * Filtering the possible orientations algo 1
 	 * 
 	 * @param nextPiece
 	 * @param grid
 	 * @param pile
 	 * @return the updated stack
 	 */
-	public static ArrayDeque<Pair<Piece, Orientation>> checkAndAdd(Piece nextPiece, Grid grid,
+	public static ArrayDeque<Pair<Piece, Orientation>> checkAndAddLeft2Right(Piece nextPiece, Grid grid,
 			ArrayDeque<Pair<Piece, Orientation>> pile) {
 
-		Piece ln = grid.leftNeighbor(nextPiece);
-		Piece tn = grid.topNeighbor(nextPiece);
-		Piece rn = grid.rightNeighbor(nextPiece);
-		Piece bn = grid.bottomNeighbor(nextPiece);
 
 		Pair<Piece, Orientation> p = new Pair<Piece, Orientation>(nextPiece, nextPiece.getOrientation());
 
 		if (grid.hasNeighbour(nextPiece) && !pile.contains(p)) {
 
-			if (nextPiece.hasLeftConnector() && ln != null && !ln.hasRightConnector())
-				return pile;
-			if (nextPiece.hasTopConnector() && tn != null && !tn.hasBottomConnector())
-				return pile;
-			if (nextPiece.hasRightConnector() && rn != null && !rn.hasLeftConnector() && rn.isFixed())
-				return pile;
-			if (nextPiece.hasBottomConnector() && bn != null && !bn.hasTopConnector() && bn.isFixed())
-				return pile;
-
-			if (!nextPiece.hasRightConnector() && rn != null && rn.hasLeftConnector() && rn.isFixed())
-				return pile;
-			if (!nextPiece.hasLeftConnector() && ln != null && ln.hasRightConnector())
-				return pile;
-			if (!nextPiece.hasTopConnector() && tn != null && tn.hasBottomConnector())
-				return pile;
-			if (!nextPiece.hasBottomConnector() && bn != null && bn.hasTopConnector() && bn.isFixed())
-				return pile;
-
-			if (nextPiece.hasRightConnector() && rn == null)
-				return pile;
-			if (nextPiece.hasLeftConnector() && ln == null)
-				return pile;
-			if (nextPiece.hasTopConnector() && tn == null)
-				return pile;
-			if (nextPiece.hasBottomConnector() && bn == null)
-				return pile;
-
-			pile.push(p);
+			if(isEligible2PileLeft2Right(grid,nextPiece ))
+				pile.push(p);
 
 		}
 
@@ -257,15 +204,12 @@ public class Solver {
 	 * insert the first piece with all the possibles orientations
 	 * 
 	 * @param grid
-	 * @param pieceChoiceMethod
-	 *            default 0
+	 * 
 	 * @return a stack
 	 */
 	public static ArrayDeque<Pair<Piece, Orientation>> createStackLeft2Right(Grid grid) {
-		fixPieceOnGrid(grid);
-
 		ArrayDeque<Pair<Piece, Orientation>> pile = new ArrayDeque<>();
-		Piece p = grid.getPiece(0, 0); // choix de gauche à droite
+		Piece p = grid.getPiece(0, 0); 
 		while (p != null && (p.getType() == PieceType.VOID || p.isFixed())) {
 			p = grid.getNextPiece(p);
 		}
@@ -274,11 +218,156 @@ public class Solver {
 		// System.out.println("check "+p);
 		for (Orientation ori : p.getPossibleOrientations()) {
 			p.setOrientation(ori.getValue());
-			pile = checkAndAdd(p, grid, pile);
+			pile = checkAndAddLeft2Right(p, grid, pile);
 		}
-		checkAndAdd(p, grid, pile);
+		checkAndAddLeft2Right(p, grid, pile);
 		return pile;
+	}
+	
+	/**
+	 * FIltering the pile algorithm 1
+	 * @param grid
+	 * @param currentpiece
+	 * @return true if the piece is eligible
+	 */
+	public static boolean isEligible2PileLeft2Right(Grid grid,Piece currentpiece){
+		Piece ln = grid.leftNeighbor(currentpiece);
+		Piece tn = grid.topNeighbor(currentpiece);
+		Piece rn = grid.rightNeighbor(currentpiece);
+		Piece bn = grid.bottomNeighbor(currentpiece);
+		if (currentpiece.hasLeftConnector() && ln != null && !ln.hasRightConnector())
+			return false;
+		if (currentpiece.hasTopConnector() && tn != null && !tn.hasBottomConnector())
+			return false;
+		if (currentpiece.hasRightConnector() && rn != null && !rn.hasLeftConnector() && rn.isFixed())
+			return false;
+		if (currentpiece.hasBottomConnector() && bn != null && !bn.hasTopConnector() && bn.isFixed())
+			return false;
 
+		if (!currentpiece.hasRightConnector() && rn != null && rn.hasLeftConnector() && rn.isFixed())
+			return false;
+		if (!currentpiece.hasLeftConnector() && ln != null && ln.hasRightConnector())
+			return false;
+		if (!currentpiece.hasTopConnector() && tn != null && tn.hasBottomConnector())
+			return false;
+		if (!currentpiece.hasBottomConnector() && bn != null && bn.hasTopConnector() && bn.isFixed())
+			return false;
+
+		if (currentpiece.hasRightConnector() && rn == null)
+			return false;
+		if (currentpiece.hasLeftConnector() && ln == null)
+			return false;
+		if (currentpiece.hasTopConnector() && tn == null)
+			return false;
+		if (currentpiece.hasBottomConnector() && bn == null)
+			return false;
+		
+		return true;
+	}
+	
+	/**
+	 * insert the first piece with all the possibles orientations algorithm 2
+	 * 
+	 * @param grid
+	 * 
+	 * @return a stack
+	 */
+	public static ArrayDeque<Pair<Piece, Orientation>> createStackRight2Left(Grid grid) {
+		ArrayDeque<Pair<Piece, Orientation>> pile = new ArrayDeque<>();
+		Piece p = grid.getPiece(grid.getWidth()-1, grid.getHeight()-1); 
+		while (p != null && (p.getType() == PieceType.VOID || p.isFixed())) {
+			p = grid.getNextPieceInv(p);
+		}
+		if (p == null)
+			return pile;
+		// System.out.println("check "+p);
+		for (Orientation ori : p.getPossibleOrientations()) {
+			p.setOrientation(ori.getValue());
+			pile = checkAndAddRight2Left(p, grid, pile);
+		}
+		checkAndAddRight2Left(p, grid, pile);
+		return pile;
+	}
+	/**
+	 * Filtering the possible orientations algorithm 2
+	 * 
+	 * @param nextPiece
+	 * @param grid
+	 * @param pile
+	 * @return the updated stack
+	 */
+	public static ArrayDeque<Pair<Piece, Orientation>> checkAndAddRight2Left(Piece nextPiece, Grid grid,
+			ArrayDeque<Pair<Piece, Orientation>> pile) {
+		Pair<Piece, Orientation> p = new Pair<Piece, Orientation>(nextPiece, nextPiece.getOrientation());
+		if (grid.hasNeighbour(nextPiece) && !pile.contains(p)) {
+			
+			if(isEligible2PileRight2Left(grid, nextPiece)){
+				pile.push(p);
+			}	
+		}
+		return pile;
+	}
+	
+	/**
+	 * Add the next piece possible positions to the stack algorithm 2
+	 * 
+	 * @param grid
+	 * @param pile
+	 * @param currentpiece
+	 * @param lastPiece
+	 *            the last piece not connected
+	 * @return
+	 * @throws IOException 
+	 */
+	public static ArrayDeque<Pair<Piece, Orientation>> addPiece2StackRight2Left(Grid grid,
+			ArrayDeque<Pair<Piece, Orientation>> pile, Piece currentpiece) throws IOException {
+
+		if(isEligible2PileRight2Left(grid, currentpiece)){
+			Piece nextPiece = grid.getNextPieceInv(currentpiece);
+
+			while (nextPiece != null && (nextPiece.getType() == PieceType.VOID || nextPiece.isFixed())) {
+				nextPiece = grid.getNextPieceInv(nextPiece);
+				if (nextPiece == null)
+					break;
+			}
+			
+			try{
+				for (Orientation ori : nextPiece.getPossibleOrientations()) {
+					nextPiece.setOrientation(ori.getValue());
+					pile = checkAndAddRight2Left(nextPiece, grid, pile);
+				}
+			}catch(NullPointerException e){
+				throw new IOException("Findbugs was right");
+			}
+		}
+		return pile;
+	}
+	
+	/**
+	 * FIltering the pile
+	 * @param grid
+	 * @param currentpiece
+	 * @return true if the piece is eligible
+	 */
+	public static boolean isEligible2PileRight2Left(Grid grid,Piece currentpiece){
+		Piece ln = grid.leftNeighbor(currentpiece);
+		Piece tn = grid.topNeighbor(currentpiece);
+		Piece rn = grid.rightNeighbor(currentpiece);
+		Piece bn = grid.bottomNeighbor(currentpiece);
+		if (currentpiece.hasLeftConnector() && ln != null && !ln.hasRightConnector() && ln.isFixed())	return false;
+		if (currentpiece.hasTopConnector() && tn != null && !tn.hasBottomConnector() && tn.isFixed())	return false;
+		if (currentpiece.hasRightConnector() && rn != null && !rn.hasLeftConnector() )	return false;
+		if (currentpiece.hasBottomConnector() && bn != null && !bn.hasTopConnector() )	return false;
+		if (!currentpiece.hasRightConnector() && rn != null && rn.hasLeftConnector() )	return false;
+		if (!currentpiece.hasLeftConnector() && ln != null && ln.hasRightConnector() && ln.isFixed())	return false;
+		if (!currentpiece.hasTopConnector() && tn != null && tn.hasBottomConnector()  && tn.isFixed())	return false;
+		if (!currentpiece.hasBottomConnector() && bn != null && bn.hasTopConnector() ) return false;
+		if (currentpiece.hasRightConnector() && rn == null)return false;
+		if (currentpiece.hasLeftConnector() && ln == null)	return false;
+		if (currentpiece.hasTopConnector() && tn == null)	return false;
+		if (currentpiece.hasBottomConnector() && bn == null)	return false;
+		
+		return true;
 	}
 
 	/**
@@ -414,7 +503,7 @@ public class Solver {
 	public static boolean naiveRecursiveSolver(int posX, int posY, Grid grid) {
 		Piece p;
 
-		if (Checker.isSolution(grid) == null) {
+		if (Checker.isSolution(grid)) {
 			// GUITEST.startGUITEST(grid);
 			return true; // check if the grid is already solution
 		}
@@ -426,7 +515,7 @@ public class Solver {
 			int orientationsNumber = switchOrientations(p.getType().getValue());
 			for (int i = 0; i < orientationsNumber; i++) {
 				p.setOrientation(i);
-				if (Checker.isSolution(grid) == null) {
+				if (Checker.isSolution(grid)) {
 					// System.out.println(grid);
 					return true;
 				}

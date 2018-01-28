@@ -33,10 +33,10 @@ public class Checker {
 			 
 			 for(int i =0; i < height; i++){//populate the grid
 				 for(int j = 0; j< width; j++){
-					 String[] tab = reader.readLine().trim().split("\\s+");
-					 typePiece = Integer.valueOf(tab[0]);
-					 orientation = Integer.valueOf(tab[1]);;
 					 try{
+						 String[] tab = reader.readLine().trim().split("\\s+"); // findbugs warning => null pointer exception is handled 5 lines below
+						 typePiece = Integer.valueOf(tab[0]);
+						 orientation = Integer.valueOf(tab[1]);
 						 grid.setPiece(i, j, new Piece(i,j,typePiece, orientation));
 					 }catch(NullPointerException e){
 						 throw new IOException("File is not in the correct format");
@@ -71,13 +71,13 @@ public class Checker {
 	 * @param grid2Test
 	 * @return
 	 */
-	public static Piece isSolution(Grid grid2Test){
+	public static boolean isSolution(Grid grid2Test){
 		for(Piece[] linep : grid2Test.getAllPieces()){
 			for(Piece p : linep){
-				if(!grid2Test.isTotallyConnected(p)) return p;
+				if(!grid2Test.isTotallyConnected(p)) return false;
 			}
 		}
-		return null;
+		return true;
 	}
 	
 }

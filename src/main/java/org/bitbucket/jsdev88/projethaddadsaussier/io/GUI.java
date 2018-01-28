@@ -94,7 +94,7 @@ public class GUI {
 
 						// The grid is resolved, play music and display a
 						// message
-						if (Checker.isSolution(grid) == null) {
+						if (Checker.isSolution(grid)) {
 
 							Random r = new Random();
 							if (r.nextInt(2) == 0) {
