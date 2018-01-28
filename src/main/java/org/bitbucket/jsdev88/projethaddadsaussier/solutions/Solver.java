@@ -14,21 +14,21 @@ public class Solver {
 	
 	public static void main(String[] args) {
 	 
-	 /*try { 
+	/*try { 
 		  long averageTime = 0;  
-		  for (int i = 0; i < 20; i++) { Generator.generateLevel("NotSolution.txt", new Grid(50, 50));
+		  for (int i = 0; i < 20; i++) { Generator.generateLevel("NotSolution.txt", new Grid(80, 80));
 		  long start = System.currentTimeMillis();
-		  System.out.println(solveGrid("NotSolution.txt", "Solved.txt", 0,1)); long
+		  System.out.println(solveGrid("NotSolution.txt", "Solved.txt", 2,1)); long
 		  stop = System.currentTimeMillis(); averageTime += (stop - start);
 		  System.out.println((stop - start)); if ((stop - start) > 20000) {
-		  System.out.println("passed"); break; } }
-		  System.out.println("Average time to runs 30 grid" + averageTime / 30 + " ms");
+		  System.out.println("passed");  } }
+		  System.out.println("Average time to runs 20 grids" + averageTime / 20 + " ms");
 	  } catch (IOException e) { 
 		  e.printStackTrace(); 
 	  }*/
 
 	/*try { long start = System.currentTimeMillis();
-	 System.out.println(solveGrid("NotSolution.txt", "Solved.txt", 0,1));
+	 System.out.println(solveGrid("test.dat", "Solved.txt", 2,1));
 	  
 	  long stop = System.currentTimeMillis(); System.out.println((stop -
 	  start)); } catch (IOException e) { 

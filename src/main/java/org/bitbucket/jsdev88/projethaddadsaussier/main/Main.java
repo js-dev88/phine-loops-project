@@ -25,7 +25,7 @@ public class Main {
 	private static Integer height = -1;
 	private static Integer maxcc = -1;
 	private static Integer nbThread = 1;
-	private static Integer algo = 0;
+	private static Integer algo = 2;
 	
 	public static void main(String[] args) {
 		boolean gui = false;
@@ -111,7 +111,7 @@ public class Main {
 					if(algo <0 || algo >2)
 						throw new ParseException("Choose algorithm between 0 - 2 threads");
 				}else{
-					algo = 0;
+					algo = 2;
 				}
 				boolean solved = false;
 
