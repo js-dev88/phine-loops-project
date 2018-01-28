@@ -16,7 +16,7 @@ public class Solver {
 	 
 	/*try { 
 		  long averageTime = 0;  
-		  for (int i = 0; i < 20; i++) { Generator.generateLevel("NotSolution.txt", new Grid(80, 80));
+		  for (int i = 0; i < 20; i++) { Generator.generateLevel("NotSolution.txt", new Grid(50, 50));
 		  long start = System.currentTimeMillis();
 		  System.out.println(solveGrid("NotSolution.txt", "Solved.txt", 2,1)); long
 		  stop = System.currentTimeMillis(); averageTime += (stop - start);

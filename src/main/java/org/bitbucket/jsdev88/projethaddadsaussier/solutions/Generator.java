@@ -38,10 +38,10 @@ public class Generator {
 			int[] index;
 			Grid[] inputGrids = divideGrid(inputGrid);
 			for (Grid grid : inputGrids) {
-				System.out.println("Grid width : " + grid.getWidth() + " / Grid height : " + grid.getHeight());
+				//System.out.println("Grid width : " + grid.getWidth() + " / Grid height : " + grid.getHeight());
 				filledGrid = generateSolution(grid);
-				System.out.println("FilledGrid width : " + filledGrid.getWidth() + " / FilledGrid height : "
-						+ filledGrid.getHeight());
+				//DEBUGSystem.out.println("FilledGrid width : " + filledGrid.getWidth() + " / FilledGrid height : "
+						//+ filledGrid.getHeight());
 				index = copyGrid(filledGrid, inputGrid, i, j);
 				i = (index[0] + 1) % inputGrid.getHeight();
 				j = (index[1] + 1) % inputGrid.getWidth();
@@ -53,8 +53,11 @@ public class Generator {
 					savej = j;
 				}
 
-				System.out.println("i : " + i + " - j : " + j);
+				//DEBUGSystem.out.println("i : " + i + " - j : " + j);
 			}
+			shuffle(inputGrid);
+			// Then we write the level on a file
+			writeGridOnFile(fileName, inputGrid);
 
 		} else {
 			// Generate a level with a random
@@ -632,7 +635,7 @@ public class Generator {
 				h = inputGrid.getHeight() - ((nbcc - 1) * h);
 			}
 			grids[nbcc - 1] = new Grid(w, h, 1);
-			System.out.println("Grid " + (nbcc - 1) + " : w = " + w + " / h = " + h);
+			//DEBUGSystem.out.println("Grid " + (nbcc - 1) + " : w = " + w + " / h = " + h);
 		}
 
 		return grids;
@@ -673,7 +676,7 @@ public class Generator {
 			}
 			tmpi = x;
 		}
-		System.out.println("tmpi =" + tmpi + " & tmpj = " + tmpj);
+		//DEBUGSystem.out.println("tmpi =" + tmpi + " & tmpj = " + tmpj);
 		return new int[] { tmpi, tmpj };
 	}
 
