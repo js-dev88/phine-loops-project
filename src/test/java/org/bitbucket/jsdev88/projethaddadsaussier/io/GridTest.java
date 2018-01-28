@@ -3,8 +3,7 @@ package org.bitbucket.jsdev88.projethaddadsaussier.io;
 import static org.junit.Assert.*;
 
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.BlockJUnit4ClassRunner;
+
 
 public class GridTest {
 
