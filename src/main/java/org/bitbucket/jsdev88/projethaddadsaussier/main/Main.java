@@ -58,8 +58,13 @@ public class Main {
 			if (cmd.hasOption("g")) { // call the generator
 				System.out.println("Running phineloop generator.");
 				String[] gridformat = cmd.getOptionValue("g").split("x");
-				width = Integer.parseInt(gridformat[0]);
-				height = Integer.parseInt(gridformat[1]);
+				try{
+					width = Integer.parseInt(gridformat[0]);
+					height = Integer.parseInt(gridformat[1]);
+				} catch (NumberFormatException e) {
+					throw new ParseException("Wrong input parameters");
+				}
+				
 				if (width < 0 || height < 0)
 					throw new ParseException("Negatives arguments are forbidden.");
 				if (!cmd.hasOption("o"))
@@ -77,7 +82,7 @@ public class Main {
 						try {
 							Generator.generateLevel(outputFile, new Grid(width, height, Integer.valueOf(nbcc)));
 						} catch (IOException e) {
-							System.err.println("Erreur during generation");
+							System.err.println("Error during generation");
 						}
 					}
 				} else {
