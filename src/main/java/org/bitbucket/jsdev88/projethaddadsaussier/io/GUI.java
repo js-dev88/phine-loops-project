@@ -103,6 +103,7 @@ public class GUI {
 								EasterEgg.FORABDEL.play();
 							}
 							JOptionPane.showMessageDialog(frame, "Grid is solved !");
+							System.exit(0);
 						}
 
 					}
