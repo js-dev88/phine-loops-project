@@ -6,4 +6,4 @@ Dans le cadre d’un projet universitaire en rapport avec la Programmation Avanc
 3. Un solveur de niveau.
 4. Une visualisation d’un niveau.
 
-(https://github.com/js-dev88/phine-loops-project/blob/master/doc/Capture.JPG)
+![alt text](https://github.com/js-dev88/phine-loops-project/blob/master/doc/Capture.JPG "image")
